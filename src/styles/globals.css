@@ -1,0 +1,186 @@
+/* ── Hide scrollbars globally (mobile touch-scroll UX) ─────────────────────── */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Design System Tokens ───────────────────────────────────────────────────── */
+:root {
+  /* Bridge to Tailwind base layer — ensures body gets dark background */
+  --background: #070707;
+  --foreground: #E3E3E3;
+
+  /* Typography — font families (single source of truth) */
+  /* Fallback must stay sans-serif: Titillium Web is a humanist sans, and a serif
+     fallback (previously `Georgia, serif`) visibly flips headings/buttons to serif
+     whenever the Google Fonts webfont is slow, blocked, or offline. */
+  --font-family-primary: 'Titillium Web', sans-serif;
+  --font-family-secondary: 'Open Sans', sans-serif;
+  --font-display: var(--font-family-primary);
+  --font-body: var(--font-family-secondary);
+
+  /* Typography — display scale */
+  --text-display-xl-size: 40px;
+  --text-display-xl-weight: 300;
+  --text-display-xl-line-height: 42px;
+  --text-display-xl-tracking: -1.6px;
+
+  --text-display-lg-size: 36px;
+  --text-display-lg-weight: 600;
+  --text-display-lg-line-height: 1.1;
+
+  --text-heading-xl-size: 24px;
+  --text-heading-xl-weight: 400;
+  --text-heading-xl-line-height: 28.8px;
+
+  --text-heading-lg-size: 20px;
+  --text-heading-lg-weight: 600;
+  --text-heading-lg-line-height: 24px;
+
+  --text-heading-md-size: 18px;
+  --text-heading-md-weight: 600;
+  --text-heading-md-line-height: 1.2;
+
+  --text-body-lg-size: 16px;
+  --text-body-lg-weight: 400;
+  --text-body-lg-line-height: 1.5;
+
+  --text-body-md-size: 14px;
+  --text-body-md-weight: 400;
+  --text-body-md-line-height: 20px;
+
+  --text-body-sm-size: 12px;
+  --text-body-sm-weight: 400;
+  --text-body-sm-line-height: 1.4;
+
+  --text-label-size: 14px;
+  --text-label-weight: 400;
+  --text-label-line-height: 14px;
+
+  /* Colors — backgrounds */
+  --color-bg-base: #070707;
+  --color-bg-surface: #111111;
+  --color-bg-surface-alt: #181818;
+  --color-bg-overlay: rgba(255, 255, 255, 0.05);
+  --color-bg-overlay-md: rgba(41, 41, 41, 0.60);
+
+  /* Colors — text */
+  --color-text-primary: #E3E3E3;
+  --color-text-secondary: #999999;
+  --color-text-disabled: #666666;
+  --color-text-inverse: #070707;
+  --color-text-white: #FFFFFF;
+
+  /* Colors — borders */
+  --color-border-primary: #999999;
+  --color-border-secondary: #2A2A2A;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-border-divider: #3D3D3D;
+
+  /* Colors — interactive */
+  --color-action-primary-bg: #E3E3E3;
+  --color-action-primary-text: #070707;
+  --color-action-secondary-border: #E3E3E3;
+  --color-action-secondary-text: #D9D9D9;
+
+  /* Colors — status */
+  --color-status-pending: #FFB700;
+  --color-status-success: #16BE76;
+  --color-status-error: #DD5050;
+
+  /* Colors — ambient glows */
+  --color-glow-green: #00FF91;
+  --color-glow-blue: #0091FF;
+  --glow-blur: 135.11px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border radius */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 60px;
+  --radius-full: 9999px;
+}
+
+/* All button text renders at 600 weight across the entire workflow.
+   Overrides inline weights on button labels (spans/p inside buttons). */
+button,
+button * {
+  font-weight: 600 !important;
+}
+
+/* ── Figma export font-name shim ─────────────────────────────────────────────
+   Figma Make emits text styles as `font-['Titillium_Web:SemiBold',sans-serif]`
+   — its internal "Family:Style" notation. That is NOT a valid CSS family name:
+   the @font-face rules register plain 'Titillium Web' plus a numeric weight, so
+   "Titillium Web:SemiBold" matches nothing and every one of these silently falls
+   through to the generic sans-serif. 3,078 occurrences across 168 files.
+
+   Fixed here rather than in src/imports/: those files are Figma output and are
+   overwritten on each re-export, and ~40% of screens are still to be generated.
+   These selectors match the literal class string, so newly exported screens get
+   corrected automatically with no codemod to re-run.
+
+   Deliberately unlayered — Tailwind utilities live in @layer utilities, so these
+   win on cascade origin without needing !important.
+
+   Weight handling differs by family, based on what the exports actually emit:
+   - Titillium Web rows carry NO Tailwind weight class (1 of 1206 does), so the
+     weight has to come from the style name. SemiBold = 600: the design-system
+     variable font/weight/semibold says 500, but Titillium Web has no 500 face
+     and requesting it degrades to 400/Regular. Verified in-browser.
+   - Open Sans / SF Pro rows DO carry a correct weight class (font-normal,
+     font-bold, font-[590] …), so only the family is corrected and the existing
+     weight class is left to stand.
+   -------------------------------------------------------------------------- */
+
+/* Titillium Web — family + weight (no weight class present in the exports) */
+[class*="Titillium_Web:ExtraLight"] { font-family: var(--font-family-primary); font-weight: 200; }
+[class*="Titillium_Web:Light"]      { font-family: var(--font-family-primary); font-weight: 300; }
+[class*="Titillium_Web:Regular"]    { font-family: var(--font-family-primary); font-weight: 400; }
+[class*="Titillium_Web:SemiBold"]   { font-family: var(--font-family-primary); font-weight: 600; }
+[class*="Titillium_Web:Bold"]       { font-family: var(--font-family-primary); font-weight: 700; }
+
+/* Open Sans — family only; the exports already set a correct weight class,
+   and :Italic already carries Tailwind's `italic`. */
+[class*="Open_Sans:Light"]    { font-family: var(--font-family-secondary); }
+[class*="Open_Sans:Regular"]  { font-family: var(--font-family-secondary); }
+[class*="Open_Sans:Medium"]   { font-family: var(--font-family-secondary); }
+[class*="Open_Sans:SemiBold"] { font-family: var(--font-family-secondary); }
+[class*="Open_Sans:Bold"]     { font-family: var(--font-family-secondary); }
+[class*="Open_Sans:Italic"]   { font-family: var(--font-family-secondary); }
+
+/* SF Pro — iOS status-bar chrome imitating the system UI font. Not a webfont;
+   map to the platform stack. Weight class (e.g. font-[590]) is left alone. */
+[class*="SF_Pro:"],
+[class*="SF_Pro_Display:"],
+[class*="SF_Pro_Text:"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+/* Strays — Inter is Figma's default font for an unstyled text layer and Roboto
+   is the Android/Google default; neither is in the DrumWave design system, and
+   both appear only on company-name rows a designer typed without applying a
+   style (e.g. "Spirit" sits among four Titillium SemiBold airline rows).
+   Folded into the primary typeface to hold the two-typeface rule.
+   Inter:Medium is forced to 600 so "Spirit" matches its SemiBold siblings —
+   without it, Titillium has no 500 face and the row renders lighter than the
+   rest of the list. Fix these at the source in Figma; see pitfalls.md. */
+[class*="Inter:Regular"]  { font-family: var(--font-family-primary); }
+[class*="Inter:Medium"]   { font-family: var(--font-family-primary); font-weight: 600; }
+[class*="Roboto:Regular"] { font-family: var(--font-family-primary); }

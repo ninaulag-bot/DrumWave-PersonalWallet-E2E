@@ -1,0 +1,7 @@
+/* Weights here must cover every style the Figma exports reference — see the
+   font-name shim at the bottom of globals.css for the full mapping.
+   Titillium Web has no 500 face (its axis is 200/300/400/600/700), so requesting
+   500 silently renders 400; SemiBold is 600. Open Sans previously loaded only
+   400+600, leaving Open_Sans:Bold (172 uses), :Light (5) and :Italic (4) with no
+   face to resolve to. */
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
