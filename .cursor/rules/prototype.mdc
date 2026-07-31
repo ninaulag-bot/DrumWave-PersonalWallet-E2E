@@ -1,0 +1,40 @@
+---
+description: Core rules for the DrumWave investor prototype
+alwaysApply: true
+---
+
+# This is a fake prototype, not an application
+
+No backend, no database, no auth, no real user. Every screen is a facade.
+All data is invented and hardcoded. It exists to show investors how the
+product would work.
+
+- Never build logic: no validation, no error handling, no gating, no
+  data fetching, no persistence.
+- Every button that advances the flow is always enabled and always works.
+- Inputs are typeable but meaningless. Nothing reads their values.
+- Never add what wasn't asked for. No loading states, no empty states,
+  no edge cases.
+- Simpler is correct, not a compromise.
+
+# Never verify in a browser
+
+Do NOT open a browser, drive CDP, call Runtime.evaluate, use Playwright
+or Puppeteer, take screenshots, measure the DOM (getBoundingClientRect,
+computed styles, scroll heights), or read PNG files to confirm an asset.
+
+The dev server is running and the preview is open on a second screen. I
+will look myself. Find the value in the code, change it, report the line,
+stop. The only acceptable check is a parse/type check.
+
+This applies especially to spacing, padding, and layout tasks.
+
+# Scope
+
+Never read a whole file to make a small change. App.tsx is ~7,000 lines;
+baked exports under src/imports/ are thousands of lines each and heavily
+duplicated. Only edit files I reference with @. Don't search the codebase
+unless I ask you to find something.
+
+If a location hint is ambiguous, ask which file in one line. Don't search
+five candidates to find out.
