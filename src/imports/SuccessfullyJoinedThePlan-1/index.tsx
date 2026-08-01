@@ -293,7 +293,7 @@ function Group2() {
 function Frame19() {
   return (
     <div className="content-stretch flex items-center pt-[1.946px] relative shrink-0">
-      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[28px] text-white whitespace-nowrap">Fitness</p>
+      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[28px] text-white whitespace-nowrap">Smart</p>
     </div>
   );
 }
@@ -668,7 +668,6 @@ function Frame26() {
   return (
     <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 w-full">
       <Frame16 />
-      <Frame15 />
     </div>
   );
 }

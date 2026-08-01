@@ -3,7 +3,7 @@ import { ManagePlanContext } from "./manage-plan-context";
 import { GoBackContext } from "./go-back-context";
 import { CashBalanceContext } from "./cash-balance-context";
 import svgPaths from "./svg-wsyr8xliho";
-import imgRectangle35007 from "./99718c8ae26cc5d3c0512ec59d45859d4d9bff7a.png";
+import imgRectangle35007 from "./health-card-crowd.png";
 import imgLogo1 from "./fc64752b39e40f9f67396ff9f994e3ee74625853.png";
 import imgScreenshot20260219At122918Pm1 from "./4504bc971ef7007833e0d2441add20ed0d273310.png";
 import imgFrame2095588103 from "./f9e8d7ad2db3694d4ad80113b62de33982c16b26.png";

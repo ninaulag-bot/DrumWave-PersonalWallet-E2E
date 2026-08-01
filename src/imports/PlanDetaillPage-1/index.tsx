@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { SmartJoinPlanContext, SmartPlanDetailBackContext } from "./smart-plan-context";
 import svgPaths from "./svg-ea6u6w4vqd";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
-import imgImage3 from "./2ecd5d81e460c7d3d3cebba32104639d894d3f78.png";
+import imgImage3 from "../dsavings-fitness-card.png";
 import imgFrame2095588103 from "./f9e8d7ad2db3694d4ad80113b62de33982c16b26.png";
 import imgScreenshot20251202At22639Pm1 from "./4d5a6cbe125eda5f4043f5bcc1d8821a46227412.png";
 import imgFrame2095588104 from "./f472d1b36845b43b2500d400f1df89646f59a9a3.png";

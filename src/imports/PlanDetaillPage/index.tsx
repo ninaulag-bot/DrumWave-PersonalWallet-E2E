@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { JoinPlanContext, PlanDetailBackContext, PlanDetailCloseContext } from "./join-plan-context";
 import svgPaths from "./svg-hfxtqmo847";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
-import imgImage3 from "./2ecd5d81e460c7d3d3cebba32104639d894d3f78.png";
+import imgDsavingsSmartCard from "../dsavings-smart-card.png";
 import imgFrame2095588103 from "./f9e8d7ad2db3694d4ad80113b62de33982c16b26.png";
 import imgScreenshot20251202At22639Pm1 from "./4d5a6cbe125eda5f4043f5bcc1d8821a46227412.png";
 import imgFrame2095588104 from "./f472d1b36845b43b2500d400f1df89646f59a9a3.png";
@@ -825,68 +825,13 @@ function Default() {
 
 function Health() {
   return (
-    <div className="bg-[blue] h-[214px] overflow-clip relative rounded-[16px] shrink-0 w-[342px]" data-name="Health">
-      <div className="-translate-x-1/2 absolute flex h-[460px] items-center justify-center left-[calc(50%-4.5px)] top-[-133px] w-[411px]">
-        <div className="-scale-y-100 flex-none rotate-180">
-          <div className="h-[460px] relative w-[411px]">
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <img alt="" className="absolute h-[116.25%] left-[-15.06%] max-w-none top-[-9.21%] w-[130.12%]" src={imgImage3} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="absolute h-[217px] left-0 mix-blend-multiply top-0 w-[345px]" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 345 217' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-0.51284 15.565 -24.747 -0.78619 172.5 108.5)'><stop stop-color='rgba(217,217,217,0)' offset='0'/><stop stop-color='rgba(109,109,236,0.5)' offset='0.5'/><stop stop-color='rgba(81,81,241,0.625)' offset='0.625'/><stop stop-color='rgba(54,54,246,0.75)' offset='0.75'/><stop stop-color='rgba(27,27,250,0.875)' offset='0.875'/><stop stop-color='rgba(14,14,253,0.9375)' offset='0.9375'/><stop stop-color='rgba(0,0,255,1)' offset='1'/></radialGradient></defs></svg>\")" }} />
-      <div className="absolute h-[161px] left-[202px] top-[145px] w-[189px]">
-        <div className="absolute inset-[-31.06%_-26.46%]">
-          <svg className="block size-full" fill="none" height="261" preserveAspectRatio="none" viewBox="0 0 289 261" width="289">
-            <foreignObject height="261" width="289" x="0" y="0">
-              <div style={{ backdropFilter: "blur(2px)", clipPath: "url(#bgblur_0_217_28893_clip_path)", height: "100%", width: "100%" }} xmlns="http://www.w3.org/1999/xhtml" />
-            </foreignObject>
-            <g filter="url(#filter0_f_217_28893)" id="Ellipse 2" data-figma-bg-blur-radius="4">
-              <ellipse cx="144.5" cy="130.5" fill="var(--fill-0, #0000FF)" fillOpacity="0.09" rx="94.5" ry="80.5" />
-            </g>
-            <defs>
-              <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="261" id="filter0_f_217_28893" width="289" x="0" y="0">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
-                <feGaussianBlur result="effect1_foregroundBlur_217_28893" stdDeviation="25" />
-              </filter>
-              <clipPath id="bgblur_0_217_28893_clip_path" transform="translate(0 0)">
-                <ellipse cx="144.5" cy="130.5" rx="94.5" ry="80.5" />
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="absolute h-[161px] left-[-85px] top-[-42px] w-[189px]">
-        <div className="absolute inset-[-31.06%_-26.46%]">
-          <svg className="block size-full" fill="none" height="261" preserveAspectRatio="none" viewBox="0 0 289 261" width="289">
-            <foreignObject height="261" width="289" x="0" y="0">
-              <div style={{ backdropFilter: "blur(2px)", clipPath: "url(#bgblur_0_217_28893_clip_path)", height: "100%", width: "100%" }} xmlns="http://www.w3.org/1999/xhtml" />
-            </foreignObject>
-            <g filter="url(#filter0_f_217_28893)" id="Ellipse 2" data-figma-bg-blur-radius="4">
-              <ellipse cx="144.5" cy="130.5" fill="var(--fill-0, #0000FF)" fillOpacity="0.09" rx="94.5" ry="80.5" />
-            </g>
-            <defs>
-              <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="261" id="filter0_f_217_28893" width="289" x="0" y="0">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
-                <feGaussianBlur result="effect1_foregroundBlur_217_28893" stdDeviation="25" />
-              </filter>
-              <clipPath id="bgblur_0_217_28893_clip_path" transform="translate(0 0)">
-                <ellipse cx="144.5" cy="130.5" rx="94.5" ry="80.5" />
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="absolute flex h-[189.958px] items-center justify-center left-[-78px] top-[-85px] w-[213.792px]">
-        <div className="flex-none rotate-[-30.1deg]">
-          <div className="bg-[#0037ff] blur-[41.632px] h-[114.955px] opacity-70 relative w-[180.479px]" />
-        </div>
-      </div>
-      <Default />
-    </div>
+    <img
+      alt=""
+      data-name="Health"
+      className="h-[214px] rounded-[16px] shrink-0 w-[342px]"
+      style={{ objectFit: "cover" }}
+      src={imgDsavingsSmartCard}
+    />
   );
 }
 
@@ -1926,13 +1871,6 @@ export default function PlanDetaillPage() {
       </div>
       <ProfileHeader />
       <Frame73 />
-      <div className="absolute bottom-0 h-[21px] left-0 w-[390px]" data-name="Home Indicator">
-        <div className="-translate-x-1/2 absolute bottom-[8px] flex h-[5px] items-center justify-center left-1/2 w-[144px]">
-          <div className="-scale-y-100 flex-none rotate-180">
-            <div className="bg-white h-[5px] relative rounded-[100px] w-[144px]" data-name="Home Indicator" />
-          </div>
-        </div>
-      </div>
       <div className="absolute content-stretch flex flex-col items-start left-0 top-0 w-[390px]" data-name="Navigation Bar - iPhone (Compact Size Class)">
         <div className="content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-full" data-name="Status Bar - iPhone">
           <Frame />

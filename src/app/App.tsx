@@ -50,12 +50,12 @@ import { PlanDetailScreen } from "@/app/components/PlanDetailScreen";
 import { DspPlanNotSelectedScreen } from "@/app/components/DspPlanNotSelectedScreen";
 import { TermsConditionsScreen } from "@/app/components/TermsConditionsScreen";
 import { SuccessfullyJoinedScreen } from "@/app/components/SuccessfullyJoinedScreen";
-import { DspPageScreen } from "@/app/components/DspPageScreen";
 import { JoinAnotherPlanScreen } from "@/app/components/JoinAnotherPlanScreen";
 import { SmartPlanDetailScreen } from "@/app/components/SmartPlanDetailScreen";
 import { Smart2PlanDetailScreen } from "@/app/components/Smart2PlanDetailScreen";
 import { DspLandingScreen } from "@/app/components/DspLandingScreen";
 import { SmartTermsConditionsScreen } from "@/app/components/SmartTermsConditionsScreen";
+import { PlanJoinedIntroScreen } from "@/app/components/PlanJoinedIntroScreen";
 import { SmartSuccessfullyJoinedScreen } from "@/app/components/SmartSuccessfullyJoinedScreen";
 import { RequestYourDataScreen } from "@/app/components/RequestYourDataScreen";
 import { DaHomeScreen } from "@/app/components/DaHomeScreen";
@@ -7823,12 +7823,13 @@ export default function App() {
         {step === 44 && <DspPlanNotSelectedScreen />}
         {step === 45 && <TermsConditionsScreen onBack={() => setStep(43)} onAccept={() => setStep(46)} />}
         {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
-        {step === 47 && <DspPageScreen onBack={() => setStep(46)} onManageMyPlan={() => { setManagePlanBackDest(47); setStep(59); }} onCashBalance={() => setStep(66)} />}
+        {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
         {step === 48 && <JoinAnotherPlanScreen onViewSmartDetails={() => setStep(50)} />}
         {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(42)} />}
         {step === 50 && <Smart2PlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(48)} />}
         {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} />}
-        {step === 52 && <SmartTermsConditionsScreen onAccept={() => setStep(53)} />}
+        {step === 52 && <SmartTermsConditionsScreen onAccept={() => setStep(54)} />}
+        {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(53)} />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} />}
         {step === 56 && <DspLanding1Screen onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}

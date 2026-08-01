@@ -12,6 +12,8 @@ export function StatusBar({
   return (
     <div className="px-[16px] pt-[21px] pb-[0px]"
       style={{
+        position: "relative",
+        zIndex: 1,
         width: "100%",
         height: 54,
         paddingTop: 21,

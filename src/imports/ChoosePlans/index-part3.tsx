@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { FitnessDetailsContext, ChoosePlansCloseContext, SmartDetailsContext } from "./view-details-context";
+import { ChoosePlansCloseContext, SmartDetailsContext } from "./view-details-context";
 import svgPaths from "./svg-74jtjgnxu4";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
 import imgImages11 from "./bb80436df31fe1a0f59e410c852ef085fea1277f.png";
@@ -786,12 +786,10 @@ export function Content13() {
 }
 
 export function Frame233() {
-  const onViewDetails = useContext(FitnessDetailsContext);
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
       <button
         type="button"
-        onClick={onViewDetails}
         className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full cursor-pointer"
         data-name="Button"
       >
@@ -3477,7 +3475,7 @@ export function Frame() {
 
 export function ChoosePlans1() {
   return (
-    <div className="absolute bg-[#070707] h-[2374px] left-[-0.01px] overflow-clip top-0 w-[390px]" data-name="Choose plans">
+    <div className="absolute bg-[#070707] h-[2168px] left-[-0.01px] overflow-clip top-0 w-[390px]" data-name="Choose plans">
       <div className="absolute left-[calc(37.5%+30.75px)] size-[329.733px] top-[1169px]">
         <div className="absolute inset-[-45.49%]">
           <svg className="block size-full" fill="none" height="629.733" preserveAspectRatio="none" viewBox="0 0 629.733 629.733" width="629.733">

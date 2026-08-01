@@ -1,11 +1,15 @@
 import { useContext } from "react";
 import { ScreenWithNavBar } from "../../app/components/ScreenWithNavBar";
 import svgPaths from "./svg-m5uou8o78c";
+import offerSvgPaths from "../PlanDetaillPage/svg-hfxtqmo847";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
 import imgScreenshot20251212At104517Am1 from "./27d5db072f946ec46f639d9feb7531c20e747423.png";
 import imgNoiseAnimation from "./b1b492b467327e373268d8c777b3bb8b425c81c9.png";
 import imgShapeOfTheChaseLogo500X3111 from "./b4e477134626ae69deca38617213557dbba6fe4d.png";
 import imgScreenshot20251202At22639Pm1 from "./4d5a6cbe125eda5f4043f5bcc1d8821a46227412.png";
+import imgTeslaCarBg1 from "../PlanDetaillPage/f472d1b36845b43b2500d400f1df89646f59a9a3.png";
+import imgTeslaCarBg2 from "../PlanDetaillPage/d3215bd4f8237e9211ad92ca35aed46057bbaf54.png";
+import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
 import { LearnMoreContext } from "./learn-more-context";
 import { GoToHomeContext } from "./go-to-home-context";
 import { ManageMyPlanContext } from "./manage-my-plan-context";
@@ -454,7 +458,6 @@ function Frame85() {
   return (
     <div className="absolute content-stretch flex flex-col gap-[4px] items-start left-[24px] top-[22px] w-[137.299px]">
       <Frame14 />
-      <Frame13 />
     </div>
   );
 }
@@ -542,7 +545,6 @@ function Group13() {
   return (
     <div className="absolute contents left-[-1px] top-[-1px]">
       <Frame69 />
-      <p className="[word-break:break-word] absolute font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] left-[22px] not-italic text-[#e3e3e3] text-[18px] top-[168px] w-[297px]">{`Carolina Smith `}</p>
     </div>
   );
 }
@@ -641,7 +643,6 @@ function Frame87() {
           </svg>
         </div>
       </div>
-      <Group9 />
     </div>
   );
 }
@@ -1325,11 +1326,235 @@ function Frame82() {
   );
 }
 
+function TeslaOfferHeaderText() {
+  return (
+    <div className="h-[76px] relative shrink-0 w-full" data-name="Header for offers">
+      <p className="[word-break:break-word] absolute font-['Titillium_Web:Regular',sans-serif] inset-0 leading-[1.2] not-italic text-[32px] text-white">Lorem ipsum dolor sit amet consectetur</p>
+      <div className="absolute flex inset-[67.11%_16.27%_5.26%_76.61%] items-center justify-center" style={{ containerType: "size" }}>
+        <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+          <div className="overflow-clip relative size-full" data-name="Material / arrow_back_ios">
+            <div className="absolute inset-[8.33%_50.94%_8.33%_0]" data-name="Vector">
+              <svg className="absolute block inset-0 size-full" fill="none" height="17.5" preserveAspectRatio="none" viewBox="0 0 10.827 17.5" width="10.827">
+                <path d={offerSvgPaths.p2ca33800} fill="var(--fill-0, #999999)" id="Vector" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferHeaderGroup() {
+  return (
+    <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
+      <TeslaOfferHeaderText />
+      <div className="h-[34px] relative shrink-0 w-full" data-name="Text under title">
+        <p className="[word-break:break-word] absolute font-['Open_Sans:Regular',sans-serif] font-normal inset-0 leading-[1.2] text-[14px] text-white" style={{ fontVariationSettings: '"wdth" 100' }}>{`Lorem ipsum dolor sit amet consectetur. Ante accumsan ac turpis semper elit ligula `}</p>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferHeaderWrap() {
+  return (
+    <div className="-translate-x-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-[301px] w-[310px]">
+      <TeslaOfferHeaderGroup />
+    </div>
+  );
+}
+
+function TeslaOfferBadgeLogo() {
+  return (
+    <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
+      <div className="bg-white border-[0.585px] border-[rgba(203,203,203,0.2)] border-solid col-1 ml-0 mt-0 relative rounded-[58.537px] row-1 size-[24px]" data-name="Screenshot 2025-12-02 at 2.26.39 PM 1" />
+      <div className="col-1 h-[13.654px] ml-[4.8px] mt-[6.6px] relative row-1 w-[14.133px]" data-name="Tesla_Motors.svg 1">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[135.09%] left-[-0.58%] max-w-none top-0 w-[101.17%]" src={imgTeslaMotorsSvg1} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferBadgeName() {
+  return (
+    <div className="content-stretch flex items-center justify-between relative shrink-0 w-[67px]">
+      <TeslaOfferBadgeLogo />
+      <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">Tesla</p>
+    </div>
+  );
+}
+
+function TeslaOfferEnrichedBubbles() {
+  return (
+    <div className="h-[12.065px] relative shrink-0 w-[27px]" data-name="bubbles">
+      <svg className="absolute block inset-0 size-full" fill="none" height="12.0649" preserveAspectRatio="none" viewBox="0 0 26.9997 12.0649" width="26.9997">
+        <g id="bubbles">
+          <circle cx="25.3222" cy="3.51608" fill="var(--fill-0, white)" id="Ellipse 14772" r="1.67744" />
+          <circle cx="22.8056" cy="9.38922" fill="var(--fill-0, white)" id="Ellipse 14770" r="2.51616" />
+          <circle cx="15.0986" cy="3.35496" fill="var(--fill-0, white)" id="Ellipse 14769" r="3.35488" />
+          <circle cx="5.03232" cy="7.03255" fill="var(--fill-0, white)" id="Ellipse 14768" r="5.03232" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+function TeslaOfferEnrichedLabel() {
+  return (
+    <div className="content-stretch flex gap-[8px] items-center relative shrink-0">
+      <TeslaOfferEnrichedBubbles />
+      <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-end leading-[0] not-italic relative shrink-0 text-[10px] text-white tracking-[0.8px] uppercase whitespace-nowrap">
+        <p className="leading-[1.2]">enriched with data</p>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferEnrichedWrap() {
+  return (
+    <div className="content-stretch flex items-center justify-end relative shrink-0 w-[183.5px]">
+      <TeslaOfferEnrichedLabel />
+    </div>
+  );
+}
+
+function TeslaOfferBadgeRow() {
+  return (
+    <div className="relative shrink-0 w-full">
+      <div className="bg-clip-padding border-0 border-[transparent] border-solid content-stretch flex items-center justify-between relative size-full">
+        <TeslaOfferBadgeName />
+        <TeslaOfferEnrichedWrap />
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferHero() {
+  return (
+    <div className="h-[456px] mb-[-1px] relative rounded-tl-[24px] rounded-tr-[24px] shrink-0 w-full">
+      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-tl-[24px] rounded-tr-[24px]">
+        <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+          <img alt="" className="absolute h-[109.31%] left-[-78.66%] max-w-none top-0 w-[257.31%]" src={imgTeslaCarBg1} />
+        </div>
+        <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+          <img alt="" className="absolute h-[118.67%] left-[-144.17%] max-w-none top-[-22.6%] w-[270.45%]" src={imgTeslaCarBg2} />
+        </div>
+        <div className="absolute bg-gradient-to-b from-[28%] from-[rgba(0,0,0,0)] inset-0 rounded-tl-[24px] rounded-tr-[24px] to-[71.269%] to-[rgba(0,0,0,0.4)]" />
+      </div>
+      <div className="overflow-clip relative rounded-[inherit] size-full">
+        <div className="absolute bg-gradient-to-b bottom-0 from-[4.398%] from-[rgba(22,22,22,0)] h-[240px] left-0 to-[#111] to-[66.907%] w-[342px]" />
+        <TeslaOfferHeaderWrap />
+        <div className="absolute backdrop-blur-[2.5px] content-stretch flex flex-col items-start left-[16px] pl-[9px] pr-[17px] py-[9px] rounded-[40px] top-[16px] w-[310px]" style={{ backgroundImage: "linear-gradient(90.3442deg, rgba(0, 0, 0, 0.4) 1.6349%, rgb(66, 81, 112) 99.977%)" }} data-name="Dropdown for enriched with data">
+          <div aria-hidden className="absolute border border-[rgba(101,117,156,0.3)] border-solid inset-0 pointer-events-none rounded-[40px]" />
+          <TeslaOfferBadgeRow />
+        </div>
+      </div>
+      <div aria-hidden className="absolute border border-[#2a2a2a] border-solid inset-0 pointer-events-none rounded-tl-[24px] rounded-tr-[24px]" />
+    </div>
+  );
+}
+
+function TeslaOfferBenefitAmount() {
+  return (
+    <div className="content-stretch flex gap-[2px] items-center relative shrink-0 text-[#00ff91]">
+      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] flex flex-col justify-center relative shrink-0" style={{ fontVariationSettings: '"wdth" 100' }}>
+        <p className="leading-[1.2]">+</p>
+      </div>
+      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] flex flex-col justify-center relative shrink-0" style={{ fontVariationSettings: '"wdth" 100' }}>
+        <p className="leading-[1.2]">$</p>
+      </div>
+      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] flex flex-col justify-center relative shrink-0" style={{ fontVariationSettings: '"wdth" 100' }}>
+        <p className="leading-[1.2]">20</p>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferBenefitRow() {
+  return (
+    <div className="[word-break:break-word] content-stretch flex font-['Open_Sans:Regular',sans-serif] font-normal gap-[8px] items-center leading-[0] relative shrink-0 text-[16px] tracking-[-0.64px] whitespace-nowrap">
+      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] flex flex-col justify-center relative shrink-0 text-[#e3e3e3]" style={{ fontVariationSettings: '"wdth" 100' }}>
+        <p className="leading-[1.2]">Data and cash benefit</p>
+      </div>
+      <TeslaOfferBenefitAmount />
+    </div>
+  );
+}
+
+function TeslaOfferBenefitWrap() {
+  return (
+    <div className="content-stretch flex items-center justify-center relative shrink-0 w-full">
+      <TeslaOfferBenefitRow />
+    </div>
+  );
+}
+
+function TeslaOfferClaimButton() {
+  return (
+    <div className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]">
+      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[18px] text-white tracking-[0.36px] whitespace-nowrap">
+        <p className="leading-[1.2]">Claim offer</p>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferFooter() {
+  return (
+    <div className="bg-[#111] relative rounded-bl-[24px] rounded-br-[24px] shrink-0 w-full">
+      <div aria-hidden className="absolute border border-[#2a2a2a] border-solid inset-0 pointer-events-none rounded-bl-[24px] rounded-br-[24px]" />
+      <div className="content-stretch flex flex-col gap-[16px] items-start px-[16px] py-[20px] relative size-full">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-[310px]" data-name="Company and benefit">
+          <TeslaOfferBenefitWrap />
+        </div>
+        <div className="h-[36px] relative shrink-0 w-[310px]" data-name="Offer CTAs">
+          <TeslaOfferClaimButton />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeslaOfferCard() {
+  return (
+    <div className="content-stretch flex flex-col items-center relative shrink-0 w-[342px]" data-name="Offer cards">
+      <TeslaOfferHero />
+      <TeslaOfferFooter />
+    </div>
+  );
+}
+
+function OffersSectionHeader() {
+  return (
+    <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">Offers</p>
+    </div>
+  );
+}
+
+function OffersTabBar() {
+  return (
+    <div className="bg-[rgba(255,255,255,0.04)] h-[48px] relative rounded-[12px] shrink-0 w-[342px]" data-name="tabv2">
+      <div className="absolute content-stretch flex h-[48px] items-center justify-between left-0 p-[4px] top-0 w-[342px]" data-name="content">
+        <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.04)] border-solid content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[8px]" data-name="1">
+          <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.5] not-italic relative shrink-0 text-[#eee] text-[16px] text-center whitespace-nowrap">New</p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-center justify-center min-w-px relative" data-name="2">
+          <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.5] not-italic relative shrink-0 text-[#999] text-[16px] text-center w-full">Claimed</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Frame120() {
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] min-w-full not-italic relative shrink-0 text-[#e3e3e3] text-[24px] w-[min-content]">What happens next?</p>
-      <Frame82 />
+      <OffersSectionHeader />
+      <OffersTabBar />
+      <TeslaOfferCard />
     </div>
   );
 }
@@ -1869,7 +2094,6 @@ function Frame119() {
     <div className="content-stretch flex flex-col gap-[64px] items-start w-full">
       <Frame49 />
       <Frame70 />
-      <Frame84 />
       <Frame83 />
     </div>
   );
