@@ -16,7 +16,7 @@ function Frame6() {
 
 function Frame7() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[12px] h-[86px] items-start left-[24px] top-[83px] w-[342px]">
+    <div className="absolute content-stretch flex flex-col gap-[12px] h-[86px] items-start left-[24px] top-[100px] w-[342px]">
       <Frame6 />
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#999] text-[0px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>
         <span className="leading-[1.5] text-[16px]">Every purchase generates data. Every certificate proves you own it.</span>

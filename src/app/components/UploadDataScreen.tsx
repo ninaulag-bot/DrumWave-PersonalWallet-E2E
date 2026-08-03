@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "@/imports/RequestData/svg-te9anx1ork";
 import uploadSvg from "@/imports/Upload3/svg-6h72v7eg5k";
-import { MainBottomNav } from "@/app/components/MainBottomNav";
 
 // The first file is present as soon as files are selected…
 const INITIAL_FILE = { id: "tesla", name: "Tesladata.zip", size: "33.4 MB" };
@@ -158,10 +157,9 @@ function ShieldCheck() {
 interface UploadDataScreenProps {
   onBack: () => void;
   onUpload?: () => void;
-  onHome?: () => void;
 }
 
-export function UploadDataScreen({ onBack, onUpload, onHome }: UploadDataScreenProps) {
+export function UploadDataScreen({ onBack, onUpload }: UploadDataScreenProps) {
   const [showTerms, setShowTerms] = useState(false);
   const closeTerms = () => setShowTerms(false);
 
@@ -347,8 +345,6 @@ export function UploadDataScreen({ onBack, onUpload, onHome }: UploadDataScreenP
               <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "18px", lineHeight: 1, color: canUpload ? "#1d2023" : "#666666" }}>Upload my Data</span>
             </button>
           </div>
-
-          <MainBottomNav onHome={onHome} />
         </div>
       </div>
 

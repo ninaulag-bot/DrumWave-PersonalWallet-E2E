@@ -8,6 +8,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { DrumWaveLogo } from "@/app/components/DrumWaveLogo";
 import { CornerGlow } from "@/app/components/CornerGlow";
 import { MainBottomNav } from "@/app/components/MainBottomNav";
+import { ApplyForDspCard } from "@/app/components/ApplyForDspCard";
+import { MyDataSavingsScreen } from "@/app/components/MyDataSavingsScreen";
+import { OffersNotEnrolledScreen } from "@/app/components/OffersNotEnrolledScreen";
 import { StatusBar } from "@/app/components/ui/StatusBar";
 import { EnrollHeroVisual } from "@/app/components/EnrollHeroVisual";
 import { PhotoFanStack } from "@/app/components/PhotoFanStack";
@@ -3100,7 +3103,7 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => vo
 
       {/* Scrollable content */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 94, paddingBottom: "var(--space-12)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 118, paddingBottom: "var(--space-12)" }}>
 
           {/* Heading — design specifies Open Sans for this title, conflicting with
               CLAUDE.md's Titillium-Web-for-headers rule; following the design here
@@ -4370,7 +4373,7 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
   );
 }
 
-function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void; onHome?: () => void }) {
+function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
@@ -4622,21 +4625,21 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
           </button>
           <button
             type="button"
-            disabled
+            onClick={onViewRequests}
             style={{
               height: "44px",
               borderRadius: "500px",
               padding: "10px 24px",
               background: "transparent",
               border: "none",
-              boxShadow: "inset 0 0 0 1px rgba(227, 227, 227, 0.3)",
-              cursor: "default",
+              boxShadow: "inset 0 0 0 1px var(--color-action-secondary-border)",
+              cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <span style={{ ...tw, fontWeight: 600, fontSize: "18px", lineHeight: "18px", color: "var(--color-text-disabled, #666666)" }}>
+            <span style={{ ...tw, fontWeight: 600, fontSize: "18px", lineHeight: "18px", color: "var(--color-action-secondary-text)" }}>
               View my requests
             </span>
           </button>
@@ -4665,95 +4668,8 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
               scrollbarWidth: "none",
             }}
           >
-            {/* Card 1 — featured */}
-            <div
-              style={{
-                flexShrink: 0,
-                width: "265px",
-                height: "184px",
-                borderRadius: "var(--radius-lg)",
-                background:
-                  "linear-gradient(90deg, rgba(18,53,193,0.40) 0%, rgba(43,100,225,0) 100%), #181818",
-                position: "relative",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-                padding: "24px 63px 31px 23px",
-                boxSizing: "border-box",
-              }}
-            >
-              {/* Photo — right side, with fade overlays */}
-              <img
-                src={dataSavingsPhoto}
-                alt=""
-                style={{
-                  position: "absolute",
-                  width: "212px",
-                  height: "188px",
-                  right: 0,
-                  top: 0,
-                }}
-              />
-
-              {/* Text + button */}
-              <div
-                style={{
-                  position: "relative",
-                  zIndex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "16px",
-                }}
-              >
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: "var(--mobile-heading-small-font-family)",
-                      fontWeight: "var(--mobile-heading-small-font-weight)" as React.CSSProperties["fontWeight"],
-                      fontSize: "var(--mobile-heading-small-font-size)",
-                      lineHeight: "var(--mobile-heading-small-line-height)",
-                      color: "var(--color-text-primary)",
-                    }}
-                  >
-                    Apply for a Data Savings Plan
-                  </p>
-                  <p
-                    style={{
-                      ...tw,
-                      margin: 0,
-                      opacity: 0.8,
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      lineHeight: "16.8px",
-                      color: "var(--color-text-primary)",
-                    }}
-                  >
-                    Contribute data. Earn offers.
-                  </p>
-                </div>
-                <button
-                  onClick={onApplyForDsp}
-                  style={{
-                    background: "var(--color-action-primary-bg)",
-                    border: "none",
-                    borderRadius: "60px",
-                    padding: "6px 19px",
-                    height: "40px",
-                    width: "151px",
-                    cursor: "pointer",
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 600,
-                    fontSize: "18px",
-                    lineHeight: "18px",
-                    color: "var(--color-action-primary-text)",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  Apply now
-                </button>
-              </div>
-            </div>
+            {/* Card 1 — featured (shared with MyDataSavingsScreen) */}
+            <ApplyForDspCard onApply={onApplyForDsp} />
             {/* Card 2 */}
             <div
               style={{
@@ -5232,7 +5148,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav onHome={onHome} onMyData={onViewRequests} />
+        <MainBottomNav onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -7335,7 +7251,9 @@ const DEMO_MODE = true;
 /** Step values with no render branch — the prev/next arrows walk past these so
  *  they never land on a blank frame. Steps 32 and 60 are deliberately NOT here:
  *  they render real screens and the arrows are their only access path. */
-const EMPTY_STEPS = [13, 61, 70];
+// 70 = "My Data Savings" and 61 = "Offers", both Savings-plan/Offers tab
+// destinations for the noDsp / "Onboarding/Enrollment" state.
+const EMPTY_STEPS = [13];
 
 export default function App() {
   // Entry point: Landing screen. Reset to 0 before committing/sharing.
@@ -7499,7 +7417,7 @@ export default function App() {
                 setClaimFlow(false);
                 setStep(36);
               } else {
-                setStep(2);
+                setStep(9);
               }
             }}
           />
@@ -7603,7 +7521,7 @@ export default function App() {
             onHome: () => setStep(9),
           };
           if (DEMO_MODE) {
-            if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} />;
+            if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
             if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} />;
             return <DashboardScreenOneDsp {...homeProps} />;
           }
@@ -7800,7 +7718,7 @@ export default function App() {
           <LegalScreen onBack={() => setStep(16)} />
         )}
         {step === 27 && (
-          <UploadDataScreen onBack={() => setStep(12)} onUpload={() => setStep(29)} onHome={() => setStep(9)} />
+          <UploadDataScreen onBack={() => setStep(12)} onUpload={() => setStep(29)} />
         )}
         {step === 28 && (
           <HowToGetDataScreen onBack={() => setStep(12)} onGetData={() => setStep(27)} />
@@ -7874,14 +7792,32 @@ export default function App() {
         {step === 56 && <DspLanding1Screen onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}
         {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => setStep(9)} />}
         {step === 60 && <RequestYourDataScreen onBack={() => setStep(30)} />}
-        {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} />}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(9)} />}
+        {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage. */}
+        {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(9)} onBack={() => setStep(63)} />}
         {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(9)} />}
         {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(9)} />}
         {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} />}
         {step === 68 && <Success1Screen />}
         {step === 69 && <OneDspHomeScreen onHome={() => setStep(69)} />}
+        {/* Savings-plan tab destination for the noDsp / "Onboarding/Enrollment" state only.
+            Figma frame "Not enrolled" (node 16:82941). */}
+        {step === 70 && (
+          <MyDataSavingsScreen
+            onApplyForDsp={openDsp}
+            onLearnMore={() => setStep(57)}
+            onHome={() => setStep(9)}
+          />
+        )}
+        {/* Offers tab destination for the noDsp / "Onboarding/Enrollment" state only.
+            Figma frame "Offers" (node 16:83111). */}
+        {step === 61 && (
+          <OffersNotEnrolledScreen
+            onRequestMoreData={() => setStep(10)}
+            onHome={() => setStep(9)}
+          />
+        )}
         {step === 71 && <InitialEmailScreen onViewCertificates={() => { setCertsFlow(true); setStep(1); }} />}
         {step === 72 && <DataCertsLoadingScreen onViewCertificates={() => setStep(73)} onClose={() => setStep(71)} />}
         {/* Only reached via the Request Data / certsFlow path today (step 71→72→73) — hence "requests".
