@@ -1,140 +1,175 @@
-# Prompt templates — for fast turnaround
+# Prompt templates
 
-Copy/paste and fill the blanks. The bracketed rules are what actually cut round trips.
-
----
-
-## 1. FAST FIX — small, isolated edits (use this most)
-
-```
-FAST FIX — minimal mode.
-
-Files: <path:line, if known>
-Change:
-1. <change>
-2. <change>
-3. <change>
-
-Rules: do all of the above in ONE pass. No browser verification, no
-screenshots, no components.md/pitfalls.md updates, no re-reading files
-already read this session. Verify with esbuild only. If something blocks
-you, one line and stop — don't investigate.
-```
-
-**Why each rule earns its place**
-- *one pass* — "one at a time" forces serial round trips
-- *no browser verification* — the default is verify-after-every-edit; overkill for a constant
-- *no docs update* — CLAUDE.md tells me to update those by default; real overhead
-- *esbuild only* — catches syntax/type breakage in ~1 call instead of a reload + screenshot
-- *one line and stop* — prevents a 6-call investigation you didn't ask for
+Cursor-first. Conventions live in `CLAUDE.md` (which Cursor reads via the
+`AGENTS.md` symlink) — these are the copy-paste shapes.
 
 ---
 
-## 2. REPORT ONLY — audits, mapping, "where is X"
+## 1. INLINE FIX (Cmd+K) — use this most
+
+**Select the exact lines first**, then Cmd+K. The selection is the scope,
+so the prompt stays short:
 
 ```
-REPORT ONLY — no edits, no file writes.
-
-Question: <what you need to know>
-Scope: <files//dirs to look at>
-
-Use grep + targeted line reads. Output a markdown table. Don't read whole
-files. Don't fix anything you find — list it.
+<the change, in one sentence>
+Change only what's selected. No other edits.
 ```
 
-Add `Flag premise errors` if you want me to push back when your assumption
-about the code is wrong (e.g. "the consolidated DashboardScreen" — there were four).
+Examples:
+- `Add objectFit: "cover" so the photo crops instead of stretching. Change only what's selected.`
+- `Change this label to "Enrolled in a DSP". Change only what's selected.`
+- `Make this text var(--color-text-disabled, #666666) and remove the onClick. Change only what's selected.`
+
+To get to a known line: Cmd+P for the file, Cmd+G for the line number,
+select, Cmd+K.
 
 ---
 
-## 3. BUILD — new component or screen
+## 2. SCOPED AGENT EDIT — when a change spans a few known files
+
+Agent panel, but pin the files:
 
 ```
-BUILD: <component/screen name>
+@<file1> @<file2>
 
-Source of truth: <Figma link + node-id, or paste dev-mode code>
-Data: <hardcode OK | must be dynamic from X>
+<the change>
 
-Reuse from components.md if a match exists; if not, build it and add one row.
-Fidelity: prototype default per CLAUDE.md — inputs typeable but meaningless,
-no validation, no gating, no focus/keyboard handling. Say so explicitly here
-ONLY if this screen is an exception and needs real logic.
-Verify: ONE screenshot at the end. No intermediate screenshots.
-If the design is missing/inconsistent, one line and proceed with an assumption
-stated — don't stop to ask.
+Only edit the files I've referenced. Do not search the codebase. Do not
+read anything under src/imports/ unless I named it.
+Prototype fidelity per CLAUDE.md.
+Report only the lines changed.
 ```
 
 ---
 
-## 4. CONSOLIDATE — merge near-duplicate components
-
-Use this instead of FAST FIX whenever the task is "merge/dedupe X and Y,"
-not "change one thing." FAST FIX's "don't investigate, one line and stop"
-rule is right for isolated edits and wrong here — it rewards the cheapest
-path, and deleting the most-different variant is cheaper than actually
-merging it in. That's what happened to `DashboardScreenEnrolledNoPlan`.
+## 3. FIND IT — when the location is unknown
 
 ```
-CONSOLIDATE — merge near-duplicates into one parameterized component.
+@codebase Where is <thing> defined and rendered?
 
-Components: <name1>, <name2>, <name3>, ... (pull from components.md's
-"Known near-duplicate screens" list — if the set you want isn't listed
-there yet, add it first, don't proceed on an unlisted set)
+Report file paths and line numbers only. This project has many duplicate
+copies under src/imports/ — tell me which copy App.tsx actually renders
+and which are dead.
 
-Step 1 — REPORT ONLY, no code: diff every pair, list every line that
-actually differs, report back. Stop here until I confirm.
-Step 2 — after I confirm: build ONE component with a variant/state prop
-covering every listed difference. Merging removes duplication, it does not
-remove functionality — every previously-reachable app state must still be
-reachable afterward. If merging genuinely requires dropping a state, say so
-explicitly and wait for confirmation before doing it.
-Step 3: update every call site, then update components.md — replace the
+Don't edit anything.
+```
+
+---
+
+## 4. BUILD — new screen or component
+
+```
+BUILD: <name>
+
+Source of truth: <Figma node URL> + pasted Dev Mode code below.
+File: src/app/components/<Name>.tsx
+
+Structural template: <an existing screen with the same chrome> — copy its
+imports and structure rather than re-deriving from the Dev Mode code.
+
+[Dev Mode code — strip the logo artifact at left:-805/top:3352, any nav
+bars, and placehold.co references before pasting]
+
+Fidelity: prototype per CLAUDE.md. Inputs typeable but meaningless. No
+validation, no gating, no focus/keyboard handling.
+
+Do NOT wire into App.tsx — that's a separate pass.
+Do NOT substitute images. Report any real asset still needed.
+Add one row to components.md.
+```
+
+---
+
+## 5. WIRE — insert screens into the step chain
+
+```
+WIRE: <ScreenName(s)> into the step chain.
+Target position: after <screen>, before <screen>.
+
+STEP 1 — report only: find the step numbers of the two neighbours and the
+current highest step number in use. Report the exact line of the
+preceding screen's onNext handler. Stop.
+
+STEP 2 — after I confirm: assign the next unused step number(s). Do NOT
+renumber any existing screen. Add render branches matching the existing
+{step === N && <Screen />} pattern. Reroute ONLY the preceding screen's
+onNext. Every other setStep call stays untouched.
+
+Report every line changed.
+```
+
+---
+
+## 6. CONSOLIDATE — merge near-duplicates
+
+Never a FAST FIX. The two-step is mandatory — skipping it is how
+`DashboardScreenEnrolledNoPlan` got deleted instead of merged.
+
+```
+CONSOLIDATE: <name1>, <name2>, <name3>
+
+STEP 1 — report only, no code: diff every pair, list every line that
+actually differs. Stop until I confirm.
+
+STEP 2 — after I confirm: build ONE component with a variant/state prop
+covering every listed difference. Merging removes duplication, not
+functionality — every previously-reachable app state must still be
+reachable. If merging genuinely requires dropping a state, say so and wait.
+
+STEP 3: update every call site, then update components.md — replace the
 individual entries with the new shared component and its variant values.
-
-Rules: this two-step (diff-then-confirm) process is mandatory even in
-minimal mode — don't skip Step 1.
 ```
 
 ---
 
-## 5. Toggle phrases — drop into any prompt
+## 7. MOVE SCREEN — change a screen's position in the flow
+
+```
+MOVE: <ComponentName> from step <X>.
+
+STEP 1 — report only: find every setStep(<X>) call. For each, report the
+file, what triggers it, and whether it should still land here after the
+move. Also confirm whether more than one demoScreen branch renders step
+<X>. Stop.
+
+STEP 2 — after I confirm: move to the next unused step number (don't reuse
+an old one). Update only the transitions confirmed in Step 1.
+```
+
+---
+
+## 8. Anti-patterns in my own prompts
+
+- **Using the agent panel for a change I could select.** Cmd+K is scoped
+  by the selection; the panel searches.
+- **"do them one at a time"** → forces serial round trips. Say `one pass`.
+- **Fix + audit + screenshot in one message** → the audit dominates.
+  Split them.
+- **Omitting the file when I know it** → costs a search.
+  `PlanDetaillPage/index.tsx:834` is enough.
+- **"make it look right"** without a Figma node or pasted spec →
+  guesswork.
+- **Describing an asset instead of pointing at where it's used** → it will
+  search, fail, and ask. Trace by render location.
+
+---
+
+## 9. Phrases that work in both tools
 
 | Phrase | Effect |
 |---|---|
-| `minimal mode` | no browser verify, no docs, no extra investigation |
+| `Change only what's selected` | hard scope for Cmd+K |
+| `Only edit the files I've referenced` | hard scope for agent mode |
 | `one pass` | batch everything, don't serialize |
-| `esbuild only` | skip runtime verification |
-| `no docs` | leave components.md / pitfalls.md alone |
-| `skip the caveats` | fewer flags/warnings in the reply |
 | `report only` | never edit files |
 | `flag premise errors` | push back if my description of the code is wrong |
-| `verify properly` | opt back IN to full browser verification |
-| `use agents` | fan out to parallel subagents (only when explicitly asked) |
-| `scoped read` | grep for the target's line range first, read/edit only that range — never the whole file (default for any `App.tsx` edit, see `CLAUDE.md`) |
+| `no browser verification` | skip screenshots and dev-server fiddling |
+| `verify properly` | opt back IN to full verification |
 
 ---
 
-## 6. Anti-patterns to avoid in your prompts
+## 10. Model setting
 
-- **"do them one at a time"** → forces serial round trips. Say `one pass`.
-- **Asking for a fix + an audit + a screenshot in one message** → the audit
-  dominates. Split: fast fix first, audit separately.
-- **Omitting the file when you know it** → costs a search. `App.tsx:7787` is enough.
-- **"make it look right"** without a Figma node or pasted spec → guesswork.
-
----
-
-## 7. Standing preferences (optional)
-
-Anything you'd repeat every session belongs in `CLAUDE.md` instead, e.g.:
-
-```
-## Working style
-- Default to minimal mode: no browser verification unless asked, no doc
-  updates unless asked.
-- Batch multi-item requests into one pass.
-- Verify with esbuild; only use the browser preview when explicitly asked
-  or when the change is a new interactive component.
-- Cap log reads (`lines`/`level`) — never dump full stack traces.
-- Check cheap before expensive: parse check before reading error logs.
-```
+Sonnet for routine edits. Opus only for the component-layer refactor and
+anything architectural. Opus + High reasoning on a rename is paying
+extended thinking for a find-and-replace.

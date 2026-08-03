@@ -7,6 +7,7 @@ import NoResultsText from "@/imports/Frame2095587046/index";
 import { motion, AnimatePresence } from "motion/react";
 import { DrumWaveLogo } from "@/app/components/DrumWaveLogo";
 import { CornerGlow } from "@/app/components/CornerGlow";
+import { MainBottomNav } from "@/app/components/MainBottomNav";
 import { StatusBar } from "@/app/components/ui/StatusBar";
 import { EnrollHeroVisual } from "@/app/components/EnrollHeroVisual";
 import { PhotoFanStack } from "@/app/components/PhotoFanStack";
@@ -3024,7 +3025,7 @@ const RdStaticCatRow = ({ cat }: { cat: { id: string; icon: string; name: string
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function RequestDataScreen({ onBack, onSpiritClick }: { onBack: () => void; onSpiritClick?: () => void }) {
+function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void }) {
   const [rdTravelExpanded, setRdTravelExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -3098,7 +3099,7 @@ function RequestDataScreen({ onBack, onSpiritClick }: { onBack: () => void; onSp
       </button>
 
       {/* Scrollable content */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 94, paddingBottom: "var(--space-12)" }}>
 
           {/* Heading — design specifies Open Sans for this title, conflicting with
@@ -3208,11 +3209,16 @@ function RequestDataScreen({ onBack, onSpiritClick }: { onBack: () => void; onSp
 
         </div>
       </div>
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="requests" onHome={onHome} />
+      </div>
     </div>
   );
 }
 
-function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void }) {
+function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void }) {
   const [activeTab, setActiveTab] = useState<"pending" | "accepted" | "rejected">("pending");
 
   const tw = {
@@ -3258,7 +3264,7 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
       </div>
 
       {/* Scrollable content */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 138, paddingBottom: "var(--space-12)" }}>
 
           {/* Segmented control */}
@@ -3433,6 +3439,11 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
 
         </div>
       </div>
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="requests" onHome={onHome} />
+      </div>
     </div>
   );
 }
@@ -3503,7 +3514,7 @@ const DashCategoryRow = ({ iconPath, name, sub, expandable, expanded, onToggle, 
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void }) {
+function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onHome?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
@@ -3597,7 +3608,7 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
     paddingTop: "67px",
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: "72px",
     overflowY: "auto",
     overflowX: "hidden",
     scrollbarWidth: "none",
@@ -4350,11 +4361,16 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
 
       {/* Persistent top nav */}
       <TopNav name={name} onAccountSettings={onAccountSettings} />
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="home" onHome={onHome} />
+      </div>
     </div>
   );
 }
 
-function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void }) {
+function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void; onHome?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
@@ -4448,7 +4464,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
     paddingTop: "67px",
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: "72px",
     overflowY: "auto",
     overflowX: "hidden",
     scrollbarWidth: "none",
@@ -5213,11 +5229,16 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
 
       {/* Persistent top nav */}
       <TopNav name={name} onAccountSettings={onAccountSettings} />
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav onHome={onHome} onMyData={onViewRequests} />
+      </div>
     </div>
   );
 }
 
-function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onContinueEnrollment, onViewAllPlans }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onContinueEnrollment?: () => void; onViewAllPlans?: () => void }) {
+function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onContinueEnrollment, onViewAllPlans, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onContinueEnrollment?: () => void; onViewAllPlans?: () => void; onHome?: () => void }) {
   const [snackbarDismissed, setSnackbarDismissed] = useState(false);
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
@@ -5321,7 +5342,7 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
     paddingTop: "67px",
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: "72px",
     overflowY: "auto",
     overflowX: "hidden",
     scrollbarWidth: "none",
@@ -6115,11 +6136,16 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
           </button>
         </div>
       )}
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="home" onHome={onHome} />
+      </div>
     </div>
   );
 }
 
-function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void }) {
+function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onHome?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
@@ -6213,7 +6239,7 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
     paddingTop: "67px",
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: "72px",
     overflowY: "auto",
     overflowX: "hidden",
     scrollbarWidth: "none",
@@ -6966,11 +6992,16 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
 
       {/* Persistent top nav */}
       <TopNav name={name} onAccountSettings={onAccountSettings} />
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="home" onHome={onHome} />
+      </div>
     </div>
   );
 }
 
-function SpiritDetailScreen({ onBack, onContinue }: { onBack: () => void; onContinue?: () => void }) {
+function SpiritDetailScreen({ onBack, onContinue, onHome }: { onBack: () => void; onContinue?: () => void; onHome?: () => void }) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <HomeRequestDataBeforeDsp />
@@ -6990,6 +7021,11 @@ function SpiritDetailScreen({ onBack, onContinue }: { onBack: () => void; onCont
         }}
         aria-label="Back"
       />
+
+      {/* Persistent bottom nav */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="requests" onHome={onHome} />
+      </div>
     </div>
   );
 }
@@ -7564,9 +7600,10 @@ export default function App() {
             onViewRequests: () => setStep(12),
             onApplyForDsp: openDsp,
             onAccountSettings: () => setStep(16),
+            onHome: () => setStep(9),
           };
           if (DEMO_MODE) {
-            if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} />;
+            if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} />;
             if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} />;
             return <DashboardScreenOneDsp {...homeProps} />;
           }
@@ -7595,7 +7632,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => setStep(9)} onSpiritClick={() => setStep(11)} />
+          <RequestDataScreen onBack={() => setStep(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(9)} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -7605,10 +7642,11 @@ export default function App() {
       setEnrollSubStep(1);
       setStep(14);
     }}
+    onHome={() => setStep(9)}
   />
 )}
         {step === 12 && (
-          <MyDataRequestsScreen onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} />
+          <MyDataRequestsScreen onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(9)} />
         )}
         {step === 14 && (
           <EnrollForm
@@ -7762,7 +7800,7 @@ export default function App() {
           <LegalScreen onBack={() => setStep(16)} />
         )}
         {step === 27 && (
-          <UploadDataScreen onBack={() => setStep(12)} onUpload={() => setStep(29)} />
+          <UploadDataScreen onBack={() => setStep(12)} onUpload={() => setStep(29)} onHome={() => setStep(9)} />
         )}
         {step === 28 && (
           <HowToGetDataScreen onBack={() => setStep(12)} onGetData={() => setStep(27)} />
@@ -7783,6 +7821,7 @@ export default function App() {
           <OfferSavingsScreen
             onContinue={() => setStep(33)}
             onClaim={() => setStep(35)}
+            onHome={() => setStep(9)}
           />
         )}
         {step === 35 && (
@@ -7820,33 +7859,35 @@ export default function App() {
           </motion.div>
         )}
         {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => setStep(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
-        {step === 44 && <DspPlanNotSelectedScreen />}
-        {step === 45 && <TermsConditionsScreen onBack={() => setStep(43)} onAccept={() => setStep(46)} />}
+        {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(9)} />}
+        {step === 45 && <TermsConditionsScreen onBack={() => setStep(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
         {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
         {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
         {step === 48 && <JoinAnotherPlanScreen onViewSmartDetails={() => setStep(50)} />}
         {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(42)} />}
         {step === 50 && <Smart2PlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(48)} />}
         {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} />}
-        {step === 52 && <SmartTermsConditionsScreen onAccept={() => setStep(54)} />}
+        {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setStep(54); }} />}
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(53)} />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
-        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} />}
+        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(9)} />}
         {step === 56 && <DspLanding1Screen onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}
-        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} />}
+        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => setStep(9)} />}
         {step === 60 && <RequestYourDataScreen onBack={() => setStep(30)} />}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} />}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} />}
-        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} />}
-        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} />}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(9)} />}
+        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(9)} />}
+        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(9)} />}
         {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} />}
         {step === 68 && <Success1Screen />}
         {step === 69 && <OneDspHomeScreen onHome={() => setStep(69)} />}
         {step === 71 && <InitialEmailScreen onViewCertificates={() => { setCertsFlow(true); setStep(1); }} />}
         {step === 72 && <DataCertsLoadingScreen onViewCertificates={() => setStep(73)} onClose={() => setStep(71)} />}
-        {step === 73 && <DataCertsDetailScreen onDone={() => setStep(74)} />}
-        {step === 74 && <MyCertificatesScreen />}
+        {/* Only reached via the Request Data / certsFlow path today (step 71→72→73) — hence "requests".
+            If a future call site reaches this screen from the 23andMe / DA Home flow, pass "home" there instead. */}
+        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(9)} />}
+        {step === 74 && <MyCertificatesScreen onHome={() => setStep(9)} />}
         {step === 33 && (
           <OfferCampaignScreen
             onBack={() => setStep(9)}
@@ -7855,6 +7896,7 @@ export default function App() {
               setEnrollSubStep(1);
               setStep(14);
             }}
+            onHome={() => setStep(9)}
           />
         )}
         {step === 57 && (

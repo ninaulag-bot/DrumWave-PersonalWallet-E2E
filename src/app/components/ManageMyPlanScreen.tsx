@@ -3,6 +3,7 @@ import HomeRequestDataBeforeDsp9 from "@/imports/HomeRequestDataBeforeDsp-9/inde
 import { GoBackContext } from "@/imports/HomeRequestDataBeforeDsp-9/go-back-context";
 import { AutoRenewToggleContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-toggle-context";
 import { AutoRenewStateContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-state-context";
+import { MainBottomNav } from "./MainBottomNav";
 
 function CancelAutoRenewModal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => void }) {
   return (
@@ -113,7 +114,7 @@ function CancelAutoRenewModal({ onClose, onConfirm }: { onClose: () => void; onC
 
 /** "Manage my plan" screen — reached by tapping "Manage my plan" on the
  *  DSP Landing screen within the approved + not joined flow. */
-export function ManageMyPlanScreen({ onBack }: { onBack?: () => void }) {
+export function ManageMyPlanScreen({ onBack, onHome }: { onBack?: () => void; onHome?: () => void }) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [autoRenewOn, setAutoRenewOn] = useState(true);
 
@@ -146,6 +147,10 @@ export function ManageMyPlanScreen({ onBack }: { onBack?: () => void }) {
           onConfirm={handleConfirmCancel}
         />
       )}
+
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="savingsPlan" onHome={onHome} />
+      </div>
     </div>
   );
 }

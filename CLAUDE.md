@@ -1,113 +1,195 @@
-# Project Conventions — Figma Make → Claude Code Prototype
+# Project Conventions — DrumWave dWallet Investor Prototype
+
+This file is read by both Cursor (via the `AGENTS.md` symlink) and Claude
+Code. Edit this file only — `AGENTS.md` points at it.
+
+---
+
+# READ THIS FIRST: this is a fake prototype, not an application
+
+**Everything in this project is a demo. None of it is real. It exists to
+show investors and clients how the product would work.**
+
+There is no backend, no database, no authentication, no API, no real user.
+Every screen is a facade. Every piece of data is invented. "Carolina
+Smith" is not a user — she is a stage prop. The 7 pending data requests,
+the $430 balance, the 23,391 plan members, the phone verification code:
+all fake, all hardcoded, all permanent.
+
+**What this means for every task:**
+
+- **Never build logic.** No validation, no error handling, no state
+  machines, no conditional gating, no data fetching, no persistence.
+- **Never make a button conditional.** Every button that advances the flow
+  is always enabled and always works, no matter what has or hasn't been
+  entered.
+- **Inputs are props, not inputs.** Text fields, dropdowns, toggles, and
+  code boxes should be typeable and look real, but nothing reads their
+  values and nothing ever will. Any input, or none, advances the flow.
+- **Never check whether something "would work."** It doesn't need to work.
+  It needs to look right and advance to the next screen.
+- **Never add what wasn't asked for.** No loading states, no empty states,
+  no edge cases, no accessibility scaffolding, no "while I was in here I
+  also…". If it isn't in the design and I didn't ask, don't build it.
+- **Never carry state between screens** unless a screen visibly displays
+  something entered on a previous one — and even then, prefer a hardcoded
+  demo value over real state plumbing.
+
+When a request sounds like it implies real behavior — "make the field
+fillable," "add a dropdown," "let the user pick a country" — it means the
+control should be **usable and look right**, not that it needs working
+logic behind it. Build the simplest version that looks correct. If you
+genuinely can't tell whether something crosses into real logic, build the
+simple version and flag the question in one line. Do not build the
+complex version "just in case."
+
+**The cost of over-building here is real:** it burns limited credits, it
+adds code that has to be maintained through a deadline, and it makes the
+prototype harder to change. Simpler is not a compromise on this project.
+Simpler is correct.
+
+---
+
+# Never verify in a browser
+
+**Do not open a browser. Do not take screenshots. Do not measure the DOM.**
+
+Specifically forbidden:
+- Opening or driving a browser (Chrome DevTools Protocol, CDP,
+  `Runtime.evaluate`, Playwright, Puppeteer, any browser action)
+- Measuring layout at runtime (`getBoundingClientRect`, computed styles,
+  scroll heights, element dimensions)
+- Taking or reading screenshots to check a result
+- Temporarily editing `App.tsx` to force a preview, then reverting it
+- Reading PNG or image files to "visually confirm" an asset
+
+**I have the dev server running and the preview open on a second screen. I
+will look at it myself.** I can judge spacing, colour, and alignment in
+two seconds; a measurement pass costs minutes and credits and tells me
+nothing I can't see.
+
+This applies especially to spacing, padding, sizing, and layout tasks —
+the ones most likely to tempt a verification pass. Find the value in the
+code, change it, report the line, stop.
+
+The only acceptable verification is a parse/type check.
+
+---
 
 ## Context
-This project was originally built in Figma Make (~60% of screens complete) and exported to GitHub to continue development in Claude Code. It's a click-through prototype: visual and behavioral fidelity to the Figma source matters more than idiomatic React style. Do not "clean up," refactor, or re-theme existing screens.
+Originally built in Figma Make (~60% of screens complete) and exported to GitHub. Figma Make is no longer available for this project; all remaining work happens in code. Visual fidelity to the Figma source matters more than idiomatic React style. Do not "clean up," refactor, or re-theme existing screens unless asked.
+
+## Scope every edit — the most important workflow rule
+
+`src/app/App.tsx` is ~7,000 lines. Baked exports under `src/imports/` run
+to thousands of lines each. Reading a whole file to make a small change is
+the single biggest waste in this project.
+
+**In Cursor:** prefer Cmd+K on a selected region over the agent panel for
+any edit where the location is already known. Select the exact lines
+first. Use `@filename` to scope agent-panel context rather than letting it
+search. Never read a whole baked export to change one value.
+
+**In Claude Code:** state the file and line range in the prompt. If the
+range isn't known, grep for it first (`grep -n "^function <Name>"`), then
+read only that range.
+
+**When a request is ambiguous about location** — e.g. "the bottom of this
+screen" when the text appears in five components — ask which file in one
+line. Don't search five candidates to find out.
+
+## Known duplication — read before searching
+
+The Figma export flattened the component graph. Many components exist in
+near-identical copies. Expect multiple search hits and confirm which one
+is live before editing:
+
+- `src/imports/HomeRequestDataBeforeDsp` through `-12` — 13 copies
+- `src/imports/SmallCards` through `-7` — 8 copies
+- `src/imports/Enroll` through `-7` — 8 copies
+- `src/imports/DWCloud` through `-5` — 6 copies
+- `src/imports/Profile` through `-4` — 5 copies
+- `src/imports/PlanDetaillPage`, `-1`, `-2` — 3 copies
+- `src/imports/ChoosePlans`, `-1` — 2 copies, each split into
+  `index.tsx` / `index-part2.tsx` / `index-part3.tsx`
+
+The same PNG is duplicated across folders too — e.g.
+`2ecd5d81e460c7d3d3cebba32104639d894d3f78.png` exists in six places.
+
+Also note: "View details" appears in `ChoosePlansScreen`,
+`PlanDetailScreen`, `SmartPlanDetailScreen`, `Smart2PlanDetailScreen`, and
+`JoinAnotherPlanScreen`. Text-based location hints are unreliable here.
+
+**Rule:** before editing anything under `src/imports/`, confirm which copy
+`App.tsx` actually renders. Report the answer before editing. Never assume
+the first search hit is the live one.
 
 ## Git safety
-- Confirm the repo root with `git rev-parse --show-toplevel` before any git operation that stages or commits. If it doesn't resolve to this project's folder, stop and flag it — don't stage anything. (This has already resolved to the wrong directory once — home directory instead of the project folder.)
-- Never run `git add -A` or any blanket-add. Always review `git status` first and stage specific paths.
-- `.DS_Store` and `node_modules/` belong in `.gitignore`, not committed-then-untracked.
+- The repo root is this project folder. Confirm with `git rev-parse --show-toplevel` before any staging or commit; if it resolves anywhere else, stop and flag it.
+- Never run `git add -A` or any blanket-add. Review `git status` first and stage specific paths.
 - Commits are local only unless explicitly told to push or add a remote.
+- An older repo rooted at the home directory still exists and holds commit `d0ebcbe`. Don't delete it; don't run git commands from home.
 
-## First session in this repo: audit before building anything new
-Before writing a single new screen, do this pass:
-1. Walk every already-built screen in the codebase. For each, note: file path, what it renders, and any shared components it imports.
-2. Fill in `components.md` from what you find — every shared/reusable component (name, file path, states, where it's used). This becomes the source of truth for reuse going forward.
-3. Confirm which of the conventions below actually match this codebase, and correct this file where they don't — match what's really here, not the assumed default.
-4. Note any recurring visual or behavioral quirks in `pitfalls.md` (create it if it doesn't exist).
+## Code conventions
+_Confirmed in the 2026-07-30 audit. `components.md` (root — not `guidelines/`) holds the full inventory._
 
-Do not skip this pass just because "the code is probably standard" — the whole point is catching where this specific export deviates.
+- Absolute pixel positioning (`left`, `top`, `width`, `height` as inline styles) matching exact Figma values — not Tailwind utilities, not flex/grid — unless the source frame uses auto-layout. **Confirmed**, including for overlay tap-targets on static Figma exports.
+- Shared chrome imports from `@/app/components/...`; per-screen generated assets from `@/imports/<LayerName>/...`. **Known exception:** `DrumWaveFooter` imports directly from `@/imports/UnnamedComponent/index` and duplicates artwork `DrumWaveLogo.tsx` already provides. Don't copy this into new work.
+- One function component per screen. **Only partially true in practice** — `ScreenWithNavBar`/`OneDspBottomNav` exist but are wired into one screen only; ~45 of 58 screens import zero shared components and duplicate their own chrome. Reuse existing shared components where a screen's role matches; don't take the under-use as license to keep duplicating.
+- Navigation is plain callback props (`onNext`, `onBack`, etc.) driven by a single numeric `step` state in `App.tsx` (`{step === N && <Screen .../>}`) — no routing library. **Confirmed**, with one secondary pattern: DSP/plan screens wire callbacks via React Context from a co-located `@/imports/<Screen>/*-context.tsx`. Match whichever the screen's siblings use.
+- Every visual effect preserved literally: gradient stops, shadows, `backdropFilter`, `maskImage`, `mixBlendMode`, opacity. **Mostly confirmed**, but several screens hand-reconstruct effects because the Figma export failed — when that happens, flag it rather than silently approximating.
+- Typefaces: **two only** — **Titillium Web** for UI chrome/headers/buttons/nav/section titles, **Open Sans** for input text, labels, and body copy (verified via `src/styles/fonts.css`). Never normalize to one.
 
-## Code conventions (confirmed against the actual repo 2026-07-30 audit — see `components.md` for the full inventory)
-- Absolute pixel positioning (`left`, `top`, `width`, `height` as inline styles) matching exact Figma values — not Tailwind utilities, not flex/grid — unless the source Figma frame itself uses auto-layout. **Confirmed** — used near-universally, including for overlay tap-targets on otherwise-static Figma exports.
-- Shared chrome (status bar, footer, nav, background) imports from `@/app/components/...`; per-layer/per-screen generated assets from `@/imports/<LayerName>/...`. **Mostly confirmed, with a known exception:** `DrumWaveFooter` (the shared dashboard footer) is imported directly from `@/imports/UnnamedComponent/index` rather than a flattened `@/app/components` wrapper, and duplicates artwork that `DrumWaveLogo.tsx` already provides. Don't copy this exception into new work — new shared chrome should still live under `@/app/components/`.
-- One function component per screen; shared chrome factors into a wrapper reused across screens. **Only partially true in practice.** `ScreenWithNavBar`/`OneDspBottomNav` exist as a shared home-shell pair but are wired into just one screen (`OneDspHomeScreen`) — most screens (~45 of 58) import zero shared components at all and instead duplicate their own status bar / back-button / tap-target markup per screen. Reuse the existing shared components where a screen's role matches (e.g. any future bottom-nav screen should use `ScreenWithNavBar`+`OneDspBottomNav`, any header+scroll screen should reuse `StatusBar` rather than rebuilding it) — don't take the under-use as license to keep duplicating.
-- Navigation is plain callback props (`onNext`, `onBack`, `onSignIn`, etc.) driven by a single numeric `step` state in the top-level `App.tsx` (`{step === N && <Screen .../>}` chain) — no routing library. **Confirmed**, with one recurring secondary pattern: DSP/plan-related screens (e.g. `ChoosePlansScreen`, `PlanDetailScreen`, `SuccessfullyJoinedScreen`) wire callbacks via React Context providers exported from a co-located `@/imports/<Screen>/*-context.tsx` module instead of plain props. Both patterns are established — match whichever the screen's existing siblings use.
-- Every visual effect preserved literally: full gradient stops, shadows, `backdropFilter` blur, `maskImage`, `mixBlendMode`, opacity — don't simplify these. **Mostly confirmed**, but several screens hand-reconstruct effects/icons because the Figma export failed (e.g. `UploadDataScreen`'s `ShieldCheck` icon, `DataCertsLoadingScreen`'s entire screen) — when that happens, flag it rather than silently approximating, per the pitfalls doc.
-- Typefaces: **confirmed two fixed typefaces** — **Titillium Web** for UI chrome/headers/buttons/nav/section titles, **Open Sans** for form input text, labels, and body/description copy (verified via `src/styles/fonts.css` and direct usage in e.g. `HomeRequestDataBeforeDspScreen.tsx`). Never normalize to one.
+## Assets & images
+- Assets must live inside the repo. Files in `~/Downloads` or on the Desktop are invisible — copy into `src/imports/` first.
+- Figma exports use hashed filenames, so searching by description will never find an asset. To reuse an existing image, trace it by where it's already rendered.
+- Never fabricate, download, or substitute an image. Never use `placehold.co`. If an asset is genuinely missing, say so and stop.
+- Distortion: an `<img>` with hardcoded `width`/`height` and no `objectFit` squeezes the photo. Use `objectFit: "cover"` plus a container matching the source aspect ratio.
+- Before pasting Figma Dev Mode code, strip: the DrumWave logo block at `left: -805, top: 3352` (off-canvas artifact, ~150 lines of tiny coloured divs), any bottom nav bars unless the nav is the task, and `placehold.co` references.
 
 ## Refactoring & consolidation safety
-- "Consolidate" or "merge duplicates" means: build one shared component with a `variant`/`state` prop that branches on the real differences. It does NOT mean removing one of the variants. Every app state reachable before the change (every value in a routing/`demoScreen`-style type union, every screen wired to a `step`) must still be reachable after it, unless removal was explicitly requested.
-- Before deleting any component, function, or state value: confirm zero references with a repo-wide grep (not just within the file being edited), and report what's being removed and why *before* removing it.
-- If a request could mean either "merge into one" or "cut down to one," stop and ask which is meant rather than guessing — a wrong guess here silently removes a demoable app state.
+- "Consolidate" or "merge duplicates" means one shared component with a `variant` prop branching on the real differences. It does NOT mean removing a variant. Every app state reachable before the change must still be reachable after, unless removal was explicitly requested.
+- Before deleting any component, function, or state value: confirm zero references repo-wide, and report what's being removed *before* removing it.
+- If a request could mean either "merge into one" or "cut down to one," ask.
+- Before changing any screen's `step` number, find every `setStep(N)` reference to it first and report them. Transitions are scattered; missing one creates a silent dead end.
 
-## Scoped reads for App.tsx
-`App.tsx` is 7,000+ lines. Never read the whole file for a targeted change.
-1. Locate the target function's line range first, via grep (start:
-   `grep -n "^function <Name>"`; end: next `^function ` match after it) — or
-   from `components.md`/`PROMPTS.md` if the range is already documented there.
-2. Read and edit only that range (`offset`/`limit`). State the range
-   explicitly in the prompt if it's already known; otherwise require the
-   grep step before any `Read` call on the file.
-3. Never read the full file unless explicitly doing a whole-file audit —
-   and say so explicitly when that's actually what's needed.
+## Figma MCP
+- Keep the Figma MCP server connected only when actively pulling from Figma; its tool surface loads into context before any work begins.
+- Pull only the specific frame needed — not the whole flow.
+- Check `components.md` before building or regenerating anything.
 
-## Figma MCP + Code Connect
-- Figma MCP server should be connected (remote, via the `figma@claude-plugins-official` plugin).
-- Before building or regenerating any component, check for an existing Code Connect mapping (or `components.md`) first. If a mapping exists, use that real code component — don't regenerate a near-duplicate.
-- Pull only the specific frame/screen needed for the current task via the MCP — not the whole remaining flow at once.
+## Working style
 
-## Continuing the remaining screens
-- Build in the same flow order as the original (fill in remaining sections/screens here as a checklist).
-- Checkpoint after each screen or small batch: run the verification checklist below, update `components.md` / `pitfalls.md` if anything new came up, then clear session context before the next screen. At scale, this is what keeps output quality consistent — not optional tidiness.
-- If a next screen's design isn't available yet, say so and ask rather than inventing one.
-
-## Working style (default to fast; opt into thorough)
-Reusable prompt templates live in `PROMPTS.md`.
-
-**Prototype fidelity — universal default, applies to every screen unless
-the request explicitly says otherwise.** This is a click-through prototype
-shown to investors and clients to demonstrate *how the product works*. It
-is not a functioning application.
-
-- **Visual accuracy matters. Interaction logic does not.**
-- Inputs (text fields, code boxes, dropdowns, toggles) should be typeable/
-  selectable so a demo feels real — but the values are meaningless. Any
-  input, or none, advances the flow.
-- No validation. No format/length/required checks. No error states unless
-  a specific error screen was requested as a design.
-- No gating: buttons that advance the flow are always enabled and always
-  work, regardless of what has or hasn't been entered.
-- Don't build focus management, auto-advance between fields, keyboard
-  event handling, or input masking unless explicitly asked.
-- Don't add state that isn't visible on screen during the walkthrough.
-- If a screen genuinely needs real logic, the request will say so
-  explicitly. Absent that, assume none.
-
-When a request seems to imply real behavior ("make the field fillable,"
-"add a dropdown"), it means the control should be *usable and look right* —
-not that it needs working logic behind it. If unsure whether something
-crosses into real logic, build the simple version and flag the question in
-one line rather than building the complex version.
-
-**Default for small, isolated changes** — a constant, a style value, a one-line
-rewire, a targeted edit at a known line:
+### Default for small, isolated changes
 - Batch every item in a multi-item request into ONE pass. Don't serialize.
-- Verify with `npx esbuild <file> --outdir=/tmp/check` only. No browser preview,
-  no screenshots.
 - Don't update `components.md` / `pitfalls.md`.
-- Don't re-read files already read this session; don't re-verify what's confirmed.
+- Don't re-read files already read this session.
 - If blocked, say so in one line and stop — don't open an investigation.
 
-**Cheap check before expensive check.** Run a parse check before reading error
-logs. Cap all log reads with `lines`/`level` — never dump a full stack trace.
-Vite errors seen right after an edit are usually stale mid-edit saves; confirm
-with a parse check first.
+### Cheap check before expensive check
+Parse check before reading error logs. Cap all log reads — never dump a
+full stack trace. Vite errors right after an edit are usually stale
+mid-save; confirm with a parse check first.
 
-**Match verification depth to risk.** The full checklist below applies to new
-screens and new interactive components. It does NOT apply to constants, colour
-values, or isolated edits.
-
-**Still flag, always.** Brevity never overrides "flag, don't fake" — state
-missing/contradictory design, off-by-one errors, and premise errors in one line,
+### Still flag, always
+Brevity never overrides "flag, don't fake" — state missing or
+contradictory design, off-by-one errors, and premise errors in one line,
 then proceed under a stated assumption.
 
-**Escape hatches the user can type:** `verify properly` (full browser
-verification), `report only` (no edits), `use agents` (parallel subagents),
-`skip the caveats` (fewer flags).
+### Escape hatches I can type
+`verify properly` (opt back in to full verification), `report only` (no
+edits), `skip the caveats` (fewer flags).
 
-## Verification checklist (per screen, before calling it done)
-_Applies to new screens and new interactive components — not to isolated edits._
+## Companion docs
+- `components.md` (root) — component inventory and known near-duplicates. Canonical; `guidelines/components.md` was deleted as a stale stub.
+- `pitfalls.md` (root) — recurring quirks. Canonical.
+- `PROMPTS.md` — reusable prompt templates.
+- `dWallet-Prototype-Flow-Architecture.md` — Account State model and nav tab matrix.
+- `guidelines/tokens.md` — design tokens. **Currently empty; fill before relying on it.**
+- `guidelines/asset-handling.md`, `guidelines/session-hygiene.md`, `guidelines/Guidelines.md` — supporting reference.
+
+## Verification checklist (new screens and new components only)
+_Does not apply to constants, colour values, spacing tweaks, or isolated edits._
 - [ ] Colors match exact hex values (not eyeballed)
 - [ ] Correct typeface per element, matching the two-typeface rule
 - [ ] Spacing/positions match Figma exactly, including intentionally off-center elements
@@ -116,5 +198,4 @@ _Applies to new screens and new interactive components — not to isolated edits
 - [ ] No Dev Mode annotation artifacts (dotted outlines, redline numbers)
 - [ ] Icons/logos are real vector SVG, not flattened bounding boxes
 - [ ] Screen navigates correctly to the next screen in the flow
-- [ ] Every interaction/edge case in scope was walked through live in the preview
-- [ ] Any new reusable component or recurring issue is already logged in `components.md` / `pitfalls.md`
+- [ ] Any new reusable component or recurring issue logged in `components.md` / `pitfalls.md`

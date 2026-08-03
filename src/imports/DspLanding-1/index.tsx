@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { ScreenWithNavBar } from "../../app/components/ScreenWithNavBar";
+import { MainBottomNav } from "../../app/components/MainBottomNav";
 import svgPaths from "./svg-m5uou8o78c";
 import offerSvgPaths from "../PlanDetaillPage/svg-hfxtqmo847";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
@@ -2271,6 +2272,7 @@ function Component4() {
 }
 
 export default function DspLanding() {
+  const onGoToHome = useContext(GoToHomeContext);
   return (
     <div className="bg-[#070707] relative size-full overflow-hidden" data-name="DSP LANDING">
       {/* Decorative backgrounds — absolute, don't affect layout */}
@@ -2278,7 +2280,7 @@ export default function DspLanding() {
       <Group12 />
 
       {/* ScreenWithNavBar handles scroll area + pinned tab bar */}
-      <ScreenWithNavBar navBar={<Component4 />}>
+      <ScreenWithNavBar navBar={<MainBottomNav activeTab="savingsPlan" onHome={onGoToHome} />}>
         {/* 71px spacer — matches original top-[71px] of Profile header */}
         <div style={{ height: "71px" }} />
 

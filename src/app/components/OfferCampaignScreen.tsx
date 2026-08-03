@@ -1,18 +1,20 @@
 import OfferCampaignLandingPageUnauthenticated from "@/imports/OfferCampaignLandingPageUnauthenticated/index";
+import { MainBottomNav } from "./MainBottomNav";
 
 interface OfferCampaignScreenProps {
   /** Back arrow in the profile header. */
   onBack?: () => void;
   /** "Continue enrollment" CTA — starts the DSP enroll flow. */
   onContinue?: () => void;
+  onHome?: () => void;
 }
 
 /** Offer campaign landing page reached from the Tesla "Continue enrollment" CTA.
  *  Renders the read-only import as-is and overlays a transparent tap-target on the
  *  header back arrow so the user can return to the home screen. */
-export function OfferCampaignScreen({ onBack, onContinue }: OfferCampaignScreenProps) {
+export function OfferCampaignScreen({ onBack, onContinue, onHome }: OfferCampaignScreenProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       {/* Force the "Continue enrollment" CTA label (inside the read-only import's
           "Offer CTAs" node) to 600 weight, without editing the protected import. */}
       <style>{`
@@ -22,6 +24,7 @@ export function OfferCampaignScreen({ onBack, onContinue }: OfferCampaignScreenP
       `}</style>
       {/* The imported page is taller than the phone frame (CTA sits at ~top 1319px).
           Give it its full height so the wrapper can scroll instead of clipping. */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden" }}>
       <div style={{ position: "relative", width: "100%", height: "1400px" }}>
         <OfferCampaignLandingPageUnauthenticated />
 
@@ -64,6 +67,11 @@ export function OfferCampaignScreen({ onBack, onContinue }: OfferCampaignScreenP
           zIndex: 5,
         }}
       />
+      </div>
+
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="offers" onHome={onHome} />
+      </div>
     </div>
   );
 }

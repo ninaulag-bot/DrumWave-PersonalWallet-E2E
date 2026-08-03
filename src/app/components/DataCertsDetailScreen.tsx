@@ -3,6 +3,7 @@ import DataCerts1 from "@/imports/DataCerts-1/index";
 import { CertificateCompaniesContext } from "@/imports/DataCerts-1/companies-context";
 import { CertificateCompaniesSection } from "@/app/components/CertificateCompaniesSection";
 import { VEHICLE_REGISTRATION, type Certificate } from "@/app/data/certificates";
+import { MainBottomNav } from "@/app/components/MainBottomNav";
 
 const FRAME_W = 390;
 // Figma frame is 390×1925. Content (My data value card) ends at y=1831 with 94px breathing
@@ -15,12 +16,19 @@ const COLLAPSED_SECTION_H = 24;
 
 interface DataCertsDetailScreenProps {
   onDone?: () => void;
+  onHome?: () => void;
   certificate?: Certificate;
+  /** No default on purpose — the caller must say which flow led here
+   *  ("requests" from the Request Data / certsFlow path, "home" from the
+   *  23andMe / DA Home path) so the nav bar highlights the right tab. */
+  activeTab: "requests" | "home";
 }
 
 export function DataCertsDetailScreen({
   onDone,
+  onHome,
   certificate = VEHICLE_REGISTRATION,
+  activeTab,
 }: DataCertsDetailScreenProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [extraHeight, setExtraHeight] = useState(0);
@@ -45,7 +53,8 @@ export function DataCertsDetailScreen({
   );
 
   return (
-    <div style={{ position: "absolute", inset: 0, overflowY: "auto", background: "#070707" }}>
+    <div style={{ position: "absolute", inset: 0, background: "#070707" }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto" }}>
       <div style={{ position: "relative", width: `${FRAME_W}px`, margin: "0 auto" }}>
         {/* Inner frame clipped to actual content height, hiding blank tail of Frame47.
             Grows with the expanded company list so nothing gets cut off. */}
@@ -81,6 +90,11 @@ export function DataCertsDetailScreen({
             zIndex: 10,
           }}
         />
+      </div>
+      </div>
+
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab={activeTab} onHome={onHome} />
       </div>
     </div>
   );

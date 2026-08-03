@@ -9,6 +9,7 @@ import SmallCards6 from "@/imports/SmallCards-6/index";
 import SmallCards7 from "@/imports/SmallCards-7/index";
 import Enroll7 from "@/imports/Enroll-7/index";
 import FiltersImport from "@/imports/Filters/index";
+import { MainBottomNav } from "./MainBottomNav";
 
 const CARD_W = 342;
 const CARD_H = 200;
@@ -20,7 +21,7 @@ const FILTERS_SHEET_H = 960;
 
 const SPRING = { type: "spring" as const, damping: 30, stiffness: 260 };
 
-export function MyCertificatesScreen() {
+export function MyCertificatesScreen({ onHome }: { onHome?: () => void } = {}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -28,8 +29,15 @@ export function MyCertificatesScreen() {
     // Full-bleed wrapper — fills the 393×852 device frame exactly, no slivers
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
 
-      {/* Base design: status bar, header, filter row, bottom nav */}
-      <DataCertificates1 />
+      {/* Base design: status bar, header, filter row. Its own baked bottom nav
+          is hidden below in favor of the shared MainBottomNav. */}
+      <style>{`.mycertificates-import .h-\\[72px\\] { display: none !important; }`}</style>
+      <div className="mycertificates-import" style={{ position: "absolute", inset: 0 }}>
+        <DataCertificates1 />
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="savingsPlan" onHome={onHome} />
+      </div>
 
       {/* Scrollable certificate cards */}
       <div

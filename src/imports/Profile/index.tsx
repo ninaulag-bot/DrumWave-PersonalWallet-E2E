@@ -174,7 +174,7 @@ function Frame2() {
   return (
     <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[normal] relative shrink-0 text-[var(--color-text-primary)] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        Request my DrumWave data
+        My DrumWave data
       </p>
       <div className="overflow-clip relative shrink-0 size-[24px]" data-name="keyboard_arrow_right_24dp">
         <div className="absolute bottom-1/4 left-[33.33%] right-[35.83%] top-1/4" data-name="Vector">

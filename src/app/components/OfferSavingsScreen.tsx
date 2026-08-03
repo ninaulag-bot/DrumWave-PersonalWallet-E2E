@@ -1,20 +1,23 @@
 import Savings from "@/imports/Savings/index";
+import { MainBottomNav } from "./MainBottomNav";
 
 interface OfferSavingsScreenProps {
   /** "Go to my Data Savings Plan" CTA — advances the Offer 1.0 flow. */
   onContinue?: () => void;
   /** "Claim my Tesla data" bar — opens the unauthenticated claim landing page. */
   onClaim?: () => void;
+  onHome?: () => void;
 }
 
 /** First screen of the "Offer 1.0" demo flow. Renders the read-only Savings
  *  import as-is inside a scrollable container (the design is taller than the
  *  device frame) and overlays a transparent tap-target on the primary CTA. */
-export function OfferSavingsScreen({ onContinue, onClaim }: OfferSavingsScreenProps) {
+export function OfferSavingsScreen({ onContinue, onClaim, onHome }: OfferSavingsScreenProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       {/* The Savings design is absolutely positioned. The black IMG_9143 screenshot
           begins at ~1118px; we clip it and place the email footer on top instead. */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden" }}>
       <div style={{ position: "relative", width: "100%", height: "1600px", overflow: "hidden" }}>
         <Savings />
 
@@ -109,6 +112,11 @@ export function OfferSavingsScreen({ onContinue, onClaim }: OfferSavingsScreenPr
             zIndex: 5,
           }}
         />
+      </div>
+      </div>
+
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+        <MainBottomNav activeTab="offers" onHome={onHome} />
       </div>
     </div>
   );
