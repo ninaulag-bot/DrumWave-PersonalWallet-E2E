@@ -50,7 +50,7 @@ function DataDollar({ size = 16 }: { size?: number }) {
   );
 }
 
-export function TeslaDataJourneyScreen({ onBack, onHome, onViewCertificates, onSavingsPlan }: { onBack?: () => void; onHome?: () => void; onViewCertificates?: () => void; onSavingsPlan?: () => void }) {
+export function TeslaDataJourneyScreen({ onBack, onHome, onMyData, onViewCertificates, onSavingsPlan, onOffers }: { onBack?: () => void; onHome?: () => void; onMyData?: () => void; onViewCertificates?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const tw = { fontFamily: "var(--font-display)" };
   const os = { fontFamily: "var(--font-body)", fontVariationSettings: '"wdth" 100' } as React.CSSProperties;
 
@@ -161,7 +161,7 @@ export function TeslaDataJourneyScreen({ onBack, onHome, onViewCertificates, onS
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} onSavingsPlan={onSavingsPlan} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );

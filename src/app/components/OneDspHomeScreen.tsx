@@ -10,9 +10,9 @@ import { MainBottomNav } from "./MainBottomNav";
 // the FAQ column pushed past that line.
 const FRAME_W = 390;
 
-export function OneDspHomeScreen({ onHome, onViewMyRequests, onTeslaRelationship, onSavingsPlan, variant = "enrolled" }: { onHome?: () => void; onViewMyRequests?: () => void; onTeslaRelationship?: () => void; onSavingsPlan?: () => void; variant?: OfferVariant }) {
+export function OneDspHomeScreen({ onHome, onViewMyRequests, onTeslaRelationship, onSavingsPlan, onOffers, variant = "enrolled" }: { onHome?: () => void; onViewMyRequests?: () => void; onTeslaRelationship?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; variant?: OfferVariant }) {
   return (
-    <ScreenWithNavBar navBar={<MainBottomNav activeTab="home" onHome={onHome} onSavingsPlan={onSavingsPlan} />} navBarHeight={72}>
+    <ScreenWithNavBar navBar={<MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewMyRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />} navBarHeight={72}>
       {/* Hide the nav bar baked into the import. Component4 is the only element
           with both border-t and bottom-0; targeting both prevents accidental matches. */}
       <style>{`.onedsp-import .border-t.bottom-0 { display: none !important; }`}</style>

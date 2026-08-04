@@ -184,7 +184,6 @@ edits), `skip the caveats` (fewer flags).
 - `components.md` (root) — component inventory and known near-duplicates. Canonical; `guidelines/components.md` was deleted as a stale stub.
 - `pitfalls.md` (root) — recurring quirks. Canonical.
 - `PROMPTS.md` — reusable prompt templates.
-- `dWallet-Prototype-Flow-Architecture.md` — Account State model and nav tab matrix.
 - `guidelines/tokens.md` — design tokens. **Currently empty; fill before relying on it.**
 - `guidelines/asset-handling.md`, `guidelines/session-hygiene.md`, `guidelines/Guidelines.md` — supporting reference.
 

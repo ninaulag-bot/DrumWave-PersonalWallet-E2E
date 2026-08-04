@@ -7,10 +7,13 @@ const FRAME_H = 844;
 interface DataCertificatesScreenProps {
   onCustomerProfile?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
+  onSavingsPlan?: () => void;
+  onOffers?: () => void;
   onBack?: () => void;
 }
 
-export function DataCertificatesScreen({ onCustomerProfile, onHome, onBack }: DataCertificatesScreenProps = {}) {
+export function DataCertificatesScreen({ onCustomerProfile, onHome, onMyData, onSavingsPlan, onOffers, onBack }: DataCertificatesScreenProps = {}) {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
       {/* Hide the nav bar baked into the import; the shared MainBottomNav renders in its place. */}
@@ -49,7 +52,7 @@ export function DataCertificatesScreen({ onCustomerProfile, onHome, onBack }: Da
         </svg>
       </button>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );

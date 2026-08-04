@@ -4,7 +4,7 @@ import { MainBottomNav } from "./MainBottomNav";
 const FRAME_W = 390;
 const FRAME_H = 844;
 
-export function DataCertsScreen({ onDone, onHome }: { onDone?: () => void; onHome?: () => void }) {
+export function DataCertsScreen({ onDone, onHome, onMyData, onSavingsPlan, onOffers }: { onDone?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
       {/* Hide the nav bar baked into the import; the shared MainBottomNav renders in its place. */}
@@ -35,7 +35,7 @@ export function DataCertsScreen({ onDone, onHome }: { onDone?: () => void; onHom
         />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );

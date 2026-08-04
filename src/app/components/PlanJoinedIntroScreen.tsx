@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "./ui/StatusBar";
 import imgSmartCard from "@/imports/dsavings-smart-card.png";
+import imgKaiserLogo from "@/imports/DspLanding-1/kaiser-logo.png";
+import { DrumWaveLogo } from "./DrumWaveLogo";
 
 /**
  * No raw Figma import exists for this screen — it's a single animated
@@ -15,6 +17,11 @@ interface PlanJoinedIntroScreenProps {
   name: string;
   /** Called ~1s after the mount animation settles, or immediately on tap. */
   onComplete?: () => void;
+  /** Plan card artwork. Defaults to the dSavings Smart card. */
+  planImage?: string;
+  /** Draws the DrumWave + Kaiser row over the card. Only the Fitness artwork
+   *  needs it; the Smart card already has its marks baked in. */
+  showPartnerMarks?: boolean;
 }
 
 const FONT_TITILLIUM = "var(--font-family-primary, 'Titillium Web')";
@@ -28,6 +35,24 @@ const ADVANCE_DELAY_MS = 1000;
  *  being derived from the heading's rendered height. */
 const CARD_SLIDE_PX = 99;
 
+/* DrumWave + divider + Kaiser row. The Fitness artwork bakes in the title and
+   gradient but not the partner marks, so they're drawn over it. Position keeps
+   the reference row's 25.57px right / 27.03px bottom inset from the card edge. */
+function PartnerMarks() {
+  return (
+    <div style={{ position: "absolute", left: 240.4, top: 160.9, width: 76.03, display: "flex", alignItems: "center", gap: 11.98 }}>
+      <DrumWaveLogo size={26} />
+      {/* Zero-width in layout so the row measures 76.03px; the rule bleeds ±0.5px. */}
+      <div style={{ position: "relative", width: 0, height: 20.43, flexShrink: 0 }}>
+        <div style={{ position: "absolute", left: -0.5, right: -0.5, top: 0, bottom: 0, background: "#fff" }} />
+      </div>
+      <div style={{ width: 26.07, height: 26.07, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <img alt="" src={imgKaiserLogo} style={{ width: 25.96, height: 25.96, borderRadius: 100, objectFit: "cover", display: "block" }} />
+      </div>
+    </div>
+  );
+}
+
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
 }
@@ -35,7 +60,7 @@ function prefersReducedMotion() {
 /** Animated intro shown after accepting a plan's terms, before the
  *  successfully-joined screen. One screen, one mount animation: the heading
  *  fades in while the plan card slides down into the space it occupies. */
-export function PlanJoinedIntroScreen({ name, onComplete }: PlanJoinedIntroScreenProps) {
+export function PlanJoinedIntroScreen({ name, onComplete, planImage = imgSmartCard, showPartnerMarks = false }: PlanJoinedIntroScreenProps) {
   const [reducedMotion] = useState(prefersReducedMotion);
   const [animateIn, setAnimateIn] = useState(reducedMotion);
   // Guards against the auto-advance timer firing onComplete a second time
@@ -125,20 +150,29 @@ export function PlanJoinedIntroScreen({ name, onComplete }: PlanJoinedIntroScree
           Welcome to your new plan, {name}!
         </div>
 
-        <img
-          src={imgSmartCard}
-          alt=""
+        <div
           style={{
+            position: "relative",
             width: 342,
             height: 214,
-            borderRadius: 16.27,
-            border: "1.02px solid white",
-            objectFit: "cover",
-            display: "block",
             transform: animateIn ? "translateY(0)" : `translateY(-${CARD_SLIDE_PX}px)`,
             transition: `transform ${ANIMATION_MS}ms ease-out`,
           }}
-        />
+        >
+          <img
+            src={planImage}
+            alt=""
+            style={{
+              width: 342,
+              height: 214,
+              borderRadius: 16.27,
+              border: "1.02px solid white",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+          {showPartnerMarks && <PartnerMarks />}
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { SmartJoinPlanContext, SmartPlanDetailBackContext } from "./smart-plan-c
 import svgPaths from "./svg-ea6u6w4vqd";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
 import imgImage3 from "../dsavings-fitness-card.png";
+import imgKaiserLogo from "../DspLanding-1/kaiser-logo.png";
 import imgFrame2095588103 from "./f9e8d7ad2db3694d4ad80113b62de33982c16b26.png";
 import imgScreenshot20251202At22639Pm1 from "./4d5a6cbe125eda5f4043f5bcc1d8821a46227412.png";
 import imgFrame2095588104 from "./f472d1b36845b43b2500d400f1df89646f59a9a3.png";
@@ -555,8 +556,8 @@ function Frame6() {
 
 function Group14() {
   return (
-    <div className="absolute contents left-[-1.02px] top-[-1.02px]">
-      <div className="absolute h-[214px] left-0 top-0 w-[342px]" data-name="image 3">
+    <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-clip rounded-[16.359px]" data-name="image 3">
         <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage3} />
       </div>
     </div>
@@ -566,78 +567,7 @@ function Group14() {
 function DspCard() {
   return (
     <div className="absolute border-[1.022px] border-[rgba(255,255,255,0.4)] border-solid h-[221.403px] left-0 overflow-clip rounded-[16.359px] top-[-0.45px] w-[347.582px]" data-name="DSP card">
-      <div className="absolute flex h-[195.262px] items-center justify-center left-[219.39px] top-[160.63px] w-[207.744px]">
-        <div className="flex-none rotate-[-30.69deg] skew-x-[-1.18deg]">
-          <div className="bg-[#ffd900] blur-[39.529px] h-[124.543px] opacity-60 relative w-[170.233px]" />
-        </div>
-      </div>
       <Group14 />
-      <div className="absolute h-[217.265px] left-[196.01px] top-[-56.89px] w-[212.187px]">
-        <div className="absolute inset-[-23.53%_-24.09%]">
-          <svg className="block size-full" fill="none" height="319.508" preserveAspectRatio="none" viewBox="0 0 314.43 319.508" width="314.43">
-            <foreignObject height="319.508" width="314.43" x="0" y="0">
-              <div style={{ backdropFilter: "blur(2.04px)", clipPath: "url(#bgblur_0_217_28913_clip_path)", height: "100%", width: "100%" }} xmlns="http://www.w3.org/1999/xhtml" />
-            </foreignObject>
-            <g filter="url(#filter0_f_217_28913)" id="Ellipse 1" data-figma-bg-blur-radius="4.08973">
-              <ellipse cx="157.215" cy="159.754" fill="var(--fill-0, #112595)" fillOpacity="0.2" rx="106.093" ry="108.632" />
-            </g>
-            <defs>
-              <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="319.508" id="filter0_f_217_28913" width="314.43" x="0" y="0">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
-                <feGaussianBlur result="effect1_foregroundBlur_217_28913" stdDeviation="25.5608" />
-              </filter>
-              <clipPath id="bgblur_0_217_28913_clip_path" transform="translate(0 0)">
-                <ellipse cx="157.215" cy="159.754" rx="106.093" ry="108.632" />
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="absolute h-[217.265px] left-[182.87px] top-[153.13px] w-[212.187px]">
-        <div className="absolute inset-[-23.53%_-24.09%]">
-          <svg className="block size-full" fill="none" height="319.508" preserveAspectRatio="none" viewBox="0 0 314.43 319.508" width="314.43">
-            <foreignObject height="319.508" width="314.43" x="0" y="0">
-              <div style={{ backdropFilter: "blur(2.04px)", clipPath: "url(#bgblur_0_217_28681_clip_path)", height: "100%", width: "100%" }} xmlns="http://www.w3.org/1999/xhtml" />
-            </foreignObject>
-            <g filter="url(#filter0_f_217_28681)" id="Ellipse 3" opacity="0.6" data-figma-bg-blur-radius="4.08973">
-              <ellipse cx="157.215" cy="159.754" fill="var(--fill-0, #112595)" fillOpacity="0.2" rx="106.093" ry="108.632" />
-            </g>
-            <defs>
-              <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="319.508" id="filter0_f_217_28681" width="314.43" x="0" y="0">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
-                <feGaussianBlur result="effect1_foregroundBlur_217_28681" stdDeviation="25.5608" />
-              </filter>
-              <clipPath id="bgblur_0_217_28681_clip_path" transform="translate(0 0)">
-                <ellipse cx="157.215" cy="159.754" rx="106.093" ry="108.632" />
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="absolute h-[139.67px] left-[258.65px] top-[168.65px] w-[136.406px]">
-        <div className="absolute inset-[-29.28%_-29.98%]">
-          <svg className="block size-full" fill="none" height="221.465" preserveAspectRatio="none" viewBox="0 0 218.2 221.465" width="218.2">
-            <foreignObject height="221.465" width="218.2" x="0" y="0">
-              <div style={{ backdropFilter: "blur(2.04px)", clipPath: "url(#bgblur_0_217_28702_clip_path)", height: "100%", width: "100%" }} xmlns="http://www.w3.org/1999/xhtml" />
-            </foreignObject>
-            <g filter="url(#filter0_f_217_28702)" id="Ellipse 2" opacity="0.6" data-figma-bg-blur-radius="4.08973">
-              <ellipse cx="109.1" cy="110.732" fill="var(--fill-0, #FFD900)" fillOpacity="0.3" rx="68.2029" ry="69.8351" />
-            </g>
-            <defs>
-              <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="221.465" id="filter0_f_217_28702" width="218.2" x="0" y="0">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
-                <feGaussianBlur result="effect1_foregroundBlur_217_28702" stdDeviation="20.4487" />
-              </filter>
-              <clipPath id="bgblur_0_217_28702_clip_path" transform="translate(0 0)">
-                <ellipse cx="109.1" cy="110.732" rx="68.2029" ry="69.8351" />
-              </clipPath>
-            </defs>
-          </svg>
-        </div>
-      </div>
     </div>
   );
 }
@@ -880,9 +810,19 @@ function Logo() {
 
 function Frame70() {
   return (
-    <div className="absolute content-stretch flex items-center left-[276px] top-[148px] w-[26px]">
+    <div className="absolute content-stretch flex gap-[11.98px] items-center left-[225.97px] top-[148px] w-[76.03px]">
       <div className="relative shrink-0 size-[26px]" data-name="Logo / DrumWave">
         <Logo />
+      </div>
+      <div className="h-[20.43px] relative shrink-0 w-0" data-name="Vector 1442">
+        <div className="absolute bg-white inset-[0_-0.5px]" />
+      </div>
+      <div className="flex items-center justify-center relative shrink-0 size-[26.07px]" data-name="Kaiser Permanente logo">
+        <div className="flex-none">
+          <div className="relative rounded-[100px] size-[25.96px]" data-name="logo 1">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[100px] size-full" src={imgKaiserLogo} />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -891,7 +831,6 @@ function Frame70() {
 function Frame71() {
   return (
     <div className="h-[174px] relative shrink-0 w-full">
-      <Frame69 />
       <Frame70 />
       <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Open_Sans:Regular',sans-serif] font-normal h-[24px] justify-center leading-[0] left-0 text-[#e3e3e3] text-[14px] top-[162px] w-[129px]" style={{ fontVariationSettings: '"wdth" 100' }}>
         <p className="leading-[1.5]">23,391 members</p>

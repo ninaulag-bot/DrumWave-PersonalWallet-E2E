@@ -1474,13 +1474,6 @@ export default function DspLanding() {
           </svg>
         </div>
       </div>
-      <div className="absolute bottom-[-1248px] h-[21px] left-0 w-[390px]" data-name="Home Indicator">
-        <div className="-translate-x-1/2 absolute bottom-[8px] flex h-[5px] items-center justify-center left-1/2 w-[144px]">
-          <div className="-scale-y-100 flex-none rotate-180">
-            <div className="bg-white h-[5px] relative rounded-[100px] w-[144px]" data-name="Home Indicator" />
-          </div>
-        </div>
-      </div>
       <Frame45 />
       <div className="absolute content-stretch flex flex-col items-start left-0 top-0 w-[390px]" data-name="Navigation Bar - iPhone (Compact Size Class)">
         <div className="content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-full" data-name="Status Bar - iPhone">

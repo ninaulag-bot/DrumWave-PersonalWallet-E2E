@@ -4057,7 +4057,7 @@ export default function ChoosePlans() {
           </div>
           <div aria-hidden className="absolute border-[rgba(255,255,255,0.15)] border-b-[0.333px] border-solid inset-0 pointer-events-none" />
         </div>
-        <div className="content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-full" data-name="Status Bar - iPhone">
+        <div className="bg-black content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-full" data-name="Status Bar - iPhone">
           <Frame1 />
         </div>
       </div>

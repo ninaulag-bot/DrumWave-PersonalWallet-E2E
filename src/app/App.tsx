@@ -48,6 +48,8 @@ import { AutoApprovedScreen } from "@/app/components/AutoApprovedScreen";
 import { ProfileHalo } from "@/app/components/ProfileHalo";
 import { MyPlanScreen } from "@/app/components/MyPlanScreen";
 import { DspLanding1Screen } from "@/app/components/DspLanding1Screen";
+import { DspLandingFitnessScreen } from "@/app/components/DspLandingFitnessScreen";
+import { DspActivePlansScreen } from "@/app/components/DspActivePlansScreen";
 import { ManageMyPlanScreen } from "@/app/components/ManageMyPlanScreen";
 import { ChoosePlansScreen } from "@/app/components/ChoosePlansScreen";
 import { PlanDetailScreen } from "@/app/components/PlanDetailScreen";
@@ -134,6 +136,7 @@ import enrollDecorativeFrame from "@/imports/decorative-frame.svg";
 import DspIntroSplash from "@/imports/DspIntroSplashDesktop4X/index";
 import goalGlowBg from "@/imports/goal-glow.png";
 import updatedProfilePhoto from "@/imports/Profile-2/741a120aa50a1efc4ca25391e35f954fa9bea854.png";
+import dsavingsFitnessCard from "@/imports/dsavings-fitness-card.png";
 const US_STATES = [
   "Alabama",
   "Alaska",
@@ -3035,7 +3038,7 @@ const RdStaticCatRow = ({ cat }: { cat: { id: string; icon: string; name: string
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void }) {
+function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsPlan, onOffers }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const [rdTravelExpanded, setRdTravelExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -3222,7 +3225,7 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => vo
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="requests" onHome={onHome} />
+        <MainBottomNav activeTab="requests" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -3234,7 +3237,7 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => vo
    that frame's caption, shows the accepted company as a tappable row with a
    chevron instead of a card with a "View certificate" button, drops the
    DrumWave footer, and keeps Home lit in the bottom nav. */
-function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome, onViewCertificate, onSavingsPlan, variant = "default", hasAccepted = true }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void; onViewCertificate?: () => void; onSavingsPlan?: () => void; variant?: "default" | "certificates"; hasAccepted?: boolean }) {
+function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome, onMyData, onViewCertificate, onSavingsPlan, onOffers, variant = "default", hasAccepted = true }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void; onMyData?: () => void; onViewCertificate?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; variant?: "default" | "certificates"; hasAccepted?: boolean }) {
   const isCerts = variant === "certificates";
   const [activeTab, setActiveTab] = useState<"pending" | "accepted" | "rejected">(isCerts ? "accepted" : "pending");
 
@@ -3513,7 +3516,7 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab={isCerts ? "home" : "requests"} onHome={onHome} onSavingsPlan={onSavingsPlan} />
+        <MainBottomNav activeTab={isCerts ? "home" : "requests"} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -4435,7 +4438,7 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} />
       </div>
     </div>
   );
@@ -5222,7 +5225,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
   );
 }
 
-function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onContinueEnrollment, onViewAllPlans, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onContinueEnrollment?: () => void; onViewAllPlans?: () => void; onHome?: () => void }) {
+function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onContinueEnrollment, onViewAllPlans, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onContinueEnrollment?: () => void; onViewAllPlans?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const [snackbarDismissed, setSnackbarDismissed] = useState(false);
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
@@ -6171,13 +6174,13 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
 }
 
-function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onHome }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onHome?: () => void }) {
+function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
@@ -7027,13 +7030,13 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
 }
 
-function SpiritDetailScreen({ onBack, onContinue, onHome }: { onBack: () => void; onContinue?: () => void; onHome?: () => void }) {
+function SpiritDetailScreen({ onBack, onContinue, onHome, onMyData, onSavingsPlan, onOffers }: { onBack: () => void; onContinue?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <HomeRequestDataBeforeDsp />
@@ -7056,7 +7059,7 @@ function SpiritDetailScreen({ onBack, onContinue, onHome }: { onBack: () => void
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="requests" onHome={onHome} />
+        <MainBottomNav activeTab="requests" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -7378,6 +7381,15 @@ export default function App() {
   const [twoStepEnabled, setTwoStepEnabled] = useState(true);
   // Demo switcher: which standalone home screen is showing.
   const [demoScreen, setDemoScreen] = useState<"noDsp" | "oneDsp" | "enrolledNoPlan" | "offer1" | "dataRequestAccepted">("noDsp");
+  // Bottom-nav destinations that differ per account state, resolved once here and
+  // passed to every screen's nav callbacks. Same read-demoScreen-at-the-call-site
+  // pattern OneDspHomeScreen's savings-plan tab already used.
+  // Home: 9 dispatches to the noDsp / enrolledNoPlan dashboards; 69 is the
+  // enrolled states' own home (OneDspHomeScreen, variant follows demoScreen).
+  const preEnrollment = demoScreen === "noDsp" || demoScreen === "enrolledNoPlan";
+  const homeStep = preEnrollment ? 9 : 69;
+  const savingsPlanStep = demoScreen === "dataRequestAccepted" ? 80 : preEnrollment ? 70 : 56;
+  const OFFERS_STEP = 61;
   // Tracks which step to return to when closing the ChoosePlans screen.
   const [choosePlansCloseDest, setChoosePlansCloseDest] = useState(44);
   // Tracks which step to return to when going back from ManageMyPlan.
@@ -7462,8 +7474,8 @@ export default function App() {
   // can't be renumbered into sequence without shifting every existing screen, so
   // the arrows reach them only after stepping through 74, not right after step 5
   // where they actually sit in the real onNext/onSkip chain). goNext clamps to
-  // TOTAL_STEPS - 1, so this must be 78 for step 77 to be reachable via the arrows.
-  const TOTAL_STEPS = 78;
+  // TOTAL_STEPS - 1, so this must be 85 for step 84 to be reachable via the arrows.
+  const TOTAL_STEPS = 85;
   const goPrev = () =>
     setStep((s) => {
       let n = s - 1;
@@ -7641,12 +7653,12 @@ export default function App() {
           };
           if (DEMO_MODE) {
             if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
-            if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} />;
+            if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
-            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen variant="dataCertificates" onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(80)} />;
-            return <DashboardScreenOneDsp {...homeProps} />;
+            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen variant="dataCertificates" onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
+            return <DashboardScreenOneDsp {...homeProps} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
           }
           return <DashboardScreen {...homeProps} />;
         })()}
@@ -7673,7 +7685,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => setStep(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(9)} />
+          <RequestDataScreen onBack={() => setStep(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -7683,13 +7695,16 @@ export default function App() {
       setEnrollSubStep(1);
       setStep(14);
     }}
-    onHome={() => setStep(9)}
+    onHome={() => setStep(homeStep)}
+    onMyData={() => setStep(12)}
+    onSavingsPlan={() => setStep(savingsPlanStep)}
+    onOffers={() => setStep(OFFERS_STEP)}
   />
 )}
         {step === 12 && (
           /* Nothing is accepted until a DSP is joined — Onboarding/Enrollment and
              Approved-No-Plan both show the empty Accepted state. */
-          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(9)} onViewCertificate={() => setStep(73)} />
+          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onViewCertificate={() => setStep(73)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 14 && (
           <EnrollForm
@@ -7906,59 +7921,64 @@ export default function App() {
           </motion.div>
         )}
         {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => setStep(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
-        {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(9)} />}
+        {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 45 && <TermsConditionsScreen onBack={() => setStep(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
         {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
         {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
-        {step === 48 && <JoinAnotherPlanScreen onViewSmartDetails={() => setStep(50)} />}
+        {step === 48 && <JoinAnotherPlanScreen onViewFitnessDetails={() => setStep(50)} />}
         {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(42)} />}
         {step === 50 && <Smart2PlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(48)} />}
         {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} />}
         {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setStep(54); }} />}
-        {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(53)} />}
+        {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
-        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(9)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}
-        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => { setDemoScreen("oneDsp"); setStep(69); }} />}
+        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} />}
+        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 60 && <RequestYourDataScreen onBack={() => setStep(30)} />}
         {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage. */}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
         {/* Slide 64 in the prototype counter. Back → slide 63 (step 62). */}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} onBack={() => setStep(62)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(9)} onBack={() => setStep(63)} />}
-        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(9)} />}
-        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(cashBalanceBackDest === 80 ? 69 : 9)} onBack={() => setStep(cashBalanceBackDest)} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(62)} />}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(63)} />}
+        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(cashBalanceBackDest)} />}
         {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => setStep(66)} />}
         {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
-        {step === 69 && <OneDspHomeScreen variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={demoScreen === "dataRequestAccepted" ? () => setStep(80) : undefined} />}
-        {/* Savings-plan tab destination for the noDsp / "Onboarding/Enrollment" state only.
+        {step === 69 && <OneDspHomeScreen variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {/* Savings-plan tab destination for the noDsp / "Approved, No Plan" states.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
           <MyDataSavingsScreen
             onApplyForDsp={openDsp}
             onLearnMore={() => setStep(57)}
-            onHome={() => setStep(9)}
+            onHome={() => setStep(homeStep)}
+            onMyData={() => setStep(12)}
+            onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
-        {/* Offers tab destination for the noDsp / "Onboarding/Enrollment" state only.
-            Figma frame "Offers" (node 16:83111). */}
+        {/* Offers tab destination for every account state — the only Offers frame
+            that exists. Figma frame "Offers" (node 16:83111) is authored for the
+            not-enrolled state, so enrolled users see not-enrolled copy here. */}
         {step === 61 && (
           <OffersNotEnrolledScreen
             onRequestMoreData={() => setStep(10)}
-            onHome={() => setStep(9)}
+            onHome={() => setStep(homeStep)}
+            onMyData={() => setStep(12)}
+            onSavingsPlan={() => setStep(savingsPlanStep)}
           />
         )}
         {step === 71 && <InitialEmailScreen onViewCertificates={() => { setCertsFlow(true); setStep(1); }} />}
         {step === 72 && <DataCertsLoadingScreen onViewCertificates={() => setStep(73)} onClose={() => setStep(71)} />}
         {/* Only reached via the Request Data / certsFlow path today (step 71→72→73) — hence "requests".
             If a future call site reaches this screen from the 23andMe / DA Home flow, pass "home" there instead. */}
-        {/* Home goes to step 69, not 9: 9 falls through to DashboardScreenOneDsp for
-            demoScreen "dataRequestAccepted", whereas 69 is OneDspHomeScreen — the
-            build of Figma frame 13:73059, this state's home. */}
-        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(69)} onSavingsPlan={() => setStep(80)} />}
-        {step === 74 && <MyCertificatesScreen onHome={() => setStep(69)} onSavingsPlan={() => setStep(80)} />}
+        {/* Home resolves through homeStep, which is 69 for the enrolled states —
+            9 falls through to DashboardScreenOneDsp, whereas 69 is OneDspHomeScreen,
+            the build of Figma frame 13:73059 and these states' home. */}
+        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 74 && <MyCertificatesScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
         {/* Figma 9:89701 — opened by the Tesla tile under "My relationships" on the
             certificates home. Back returns to the screen that opened it (69); the
             Tesla row opens the Tesla company page (79). */}
@@ -7966,12 +7986,14 @@ export default function App() {
           <MyDataRequestsScreen
             variant="certificates"
             onBack={() => setStep(69)}
-            onHome={() => setStep(69)}
+            onHome={() => setStep(homeStep)}
             onUploadManually={() => setStep(27)}
             onSeeHow={() => setStep(28)}
             onGoToDWCloud={() => setStep(31)}
+            onMyData={() => setStep(12)}
             onViewCertificate={() => setStep(79)}
-            onSavingsPlan={() => setStep(80)}
+            onSavingsPlan={() => setStep(savingsPlanStep)}
+            onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
         {/* Figma 9:6610 — Tesla company page. Back returns to the Accepted list
@@ -7979,9 +8001,11 @@ export default function App() {
         {step === 79 && (
           <TeslaDataJourneyScreen
             onBack={() => setStep(78)}
-            onHome={() => setStep(69)}
+            onHome={() => setStep(homeStep)}
+            onMyData={() => setStep(12)}
             onViewCertificates={() => setStep(74)}
-            onSavingsPlan={() => setStep(80)}
+            onSavingsPlan={() => setStep(savingsPlanStep)}
+            onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
         {/* Figma 9:93931 — the savings-plan tab in the certificates flow. Same
@@ -7991,7 +8015,9 @@ export default function App() {
           <DspLanding1Screen
             variant="dataCertificates"
             onLearnMore={() => setStep(58)}
-            onGoHome={() => setStep(69)}
+            onGoHome={() => setStep(homeStep)}
+            onMyData={() => setStep(12)}
+            onOffers={() => setStep(OFFERS_STEP)}
             onManageMyPlan={() => { setManagePlanBackDest(80); setStep(59); }}
             onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
             onDataBalance={() => setStep(81)}
@@ -8001,6 +8027,9 @@ export default function App() {
         {step === 81 && <DataBalanceScreen onBack={() => setStep(80)} onTransaction={() => setStep(82)} />}
         {/* Figma 9:94266 — the Tesla Model 3 (+Ð 0.08) transaction on step 81. */}
         {step === 82 && <DataTransactionScreen onBack={() => setStep(81)} />}
+        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {/* Figma 15:34974 — "My Data Savings" all-plans overview, reached from "Back to all plans" on step 83. */}
+        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(83)} onManageMyPlan={() => { setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {step === 33 && (
           <OfferCampaignScreen
             onBack={() => setStep(9)}
@@ -8009,7 +8038,9 @@ export default function App() {
               setEnrollSubStep(1);
               setStep(14);
             }}
-            onHome={() => setStep(9)}
+            onHome={() => setStep(homeStep)}
+            onMyData={() => setStep(12)}
+            onSavingsPlan={() => setStep(savingsPlanStep)}
           />
         )}
         {step === 57 && (

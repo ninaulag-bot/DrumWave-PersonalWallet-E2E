@@ -127,9 +127,11 @@ function SideOfferCard({
 interface OffersNotEnrolledScreenProps {
   onRequestMoreData?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
+  onSavingsPlan?: () => void;
 }
 
-export function OffersNotEnrolledScreen({ onRequestMoreData, onHome }: OffersNotEnrolledScreenProps) {
+export function OffersNotEnrolledScreen({ onRequestMoreData, onHome, onMyData, onSavingsPlan }: OffersNotEnrolledScreenProps) {
   return (
     <div
       style={{
@@ -313,7 +315,7 @@ export function OffersNotEnrolledScreen({ onRequestMoreData, onHome }: OffersNot
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="offers" onHome={onHome} />
+        <MainBottomNav activeTab="offers" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} />
       </div>
     </div>
   );

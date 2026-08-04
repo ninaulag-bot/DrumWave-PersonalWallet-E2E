@@ -119,7 +119,7 @@ function CancelAutoRenewModal({ onClose, onConfirm }: { onClose: () => void; onC
 
 /** "Manage my plan" screen — reached by tapping "Manage my plan" on the
  *  DSP Landing screen within the approved + not joined flow. */
-export function ManageMyPlanScreen({ onBack, onHome }: { onBack?: () => void; onHome?: () => void }) {
+export function ManageMyPlanScreen({ onBack, onHome, onMyData, onOffers }: { onBack?: () => void; onHome?: () => void; onMyData?: () => void; onOffers?: () => void }) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [autoRenewOn, setAutoRenewOn] = useState(true);
 
@@ -174,7 +174,7 @@ export function ManageMyPlanScreen({ onBack, onHome }: { onBack?: () => void; on
       )}
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="savingsPlan" onHome={onHome} />
+        <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
       </div>
     </div>
   );

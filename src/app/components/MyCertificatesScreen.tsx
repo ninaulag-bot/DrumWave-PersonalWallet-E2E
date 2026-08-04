@@ -21,7 +21,7 @@ const FILTERS_SHEET_H = 960;
 
 const SPRING = { type: "spring" as const, damping: 30, stiffness: 260 };
 
-export function MyCertificatesScreen({ onHome, onSavingsPlan }: { onHome?: () => void; onSavingsPlan?: () => void } = {}) {
+export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers }: { onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void } = {}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -36,7 +36,7 @@ export function MyCertificatesScreen({ onHome, onSavingsPlan }: { onHome?: () =>
         <DataCertificates1 />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="savingsPlan" onHome={onHome} onSavingsPlan={onSavingsPlan} />
+        <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
 
       {/* Scrollable certificate cards */}

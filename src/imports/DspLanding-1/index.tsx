@@ -26,11 +26,14 @@ import { CompanyRequestCard } from "../../app/components/MyDataSavingsScreen";
 import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
 import { LearnMoreContext } from "./learn-more-context";
 import { GoToHomeContext } from "./go-to-home-context";
+import { MyDataContext } from "./my-data-context";
+import { OffersContext } from "./offers-context";
 import { ManageMyPlanContext } from "./manage-my-plan-context";
 import { CashBalanceContext } from "./cash-balance-context";
 import { DataBalanceContext } from "./data-balance-context";
+import { ViewAllPlansContext } from "./view-all-plans-context";
 
-function Group10() {
+export function Group10() {
   return (
     <div className="-translate-x-1/2 absolute h-[1165.689px] left-[calc(50%-0.21px)] top-[-292px] w-[1086.229px]">
       <div className="absolute inset-[0_0_-5.8%_0]">
@@ -155,7 +158,7 @@ function Group2() {
   );
 }
 
-function Group12() {
+export function Group12() {
   return (
     <div className="absolute contents left-[-101px] top-[7px]">
       <Frame55 />
@@ -594,7 +597,7 @@ function Group9() {
   );
 }
 
-function Frame87() {
+export function Frame87() {
   return (
     <div className="border border-[rgba(255,255,255,0.4)] border-solid h-[214px] overflow-clip relative rounded-[16px] w-[344px]">
       <div className="absolute flex h-[188.733px] items-center justify-center left-[217.14px] top-[155.25px] w-[205.603px]">
@@ -1289,7 +1292,7 @@ function CertsCategoryCards() {
   );
 }
 
-function Frame70() {
+export function Frame70() {
   const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[342px]">
@@ -1889,6 +1892,7 @@ function Content2() {
 }
 
 function Frame92() {
+  const onViewAllPlans = useContext(ViewAllPlansContext);
   return (
     <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full">
       <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full" data-name="Button">
@@ -1903,7 +1907,7 @@ function Frame92() {
           </div>
         </div>
       </div>
-      <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full" data-name="Button">
+      <button type="button" onClick={onViewAllPlans} className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full cursor-pointer" data-name="Button">
         <div className="content-stretch flex flex-[1_0_0] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
           <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
             <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
@@ -1913,7 +1917,7 @@ function Frame92() {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   );
 }
@@ -2120,6 +2124,7 @@ function Content4() {
 }
 
 function Frame93() {
+  const onViewAllPlans = useContext(ViewAllPlansContext);
   return (
     <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full">
       <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full" data-name="Button">
@@ -2134,7 +2139,7 @@ function Frame93() {
           </div>
         </div>
       </div>
-      <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full" data-name="Button">
+      <button type="button" onClick={onViewAllPlans} className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full cursor-pointer" data-name="Button">
         <div className="content-stretch flex flex-[1_0_0] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
           <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
             <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
@@ -2144,7 +2149,7 @@ function Frame93() {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   );
 }
@@ -2214,7 +2219,7 @@ function Frame121() {
   );
 }
 
-function Frame83() {
+export function Frame83() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
       <Frame121 />
@@ -2462,6 +2467,8 @@ function Component4() {
 
 export default function DspLanding() {
   const onGoToHome = useContext(GoToHomeContext);
+  const onMyData = useContext(MyDataContext);
+  const onOffers = useContext(OffersContext);
   return (
     <div className="bg-[#070707] relative size-full overflow-hidden" data-name="DSP LANDING">
       {/* Decorative backgrounds — absolute, don't affect layout */}
@@ -2469,7 +2476,7 @@ export default function DspLanding() {
       <Group12 />
 
       {/* ScreenWithNavBar handles scroll area + pinned tab bar */}
-      <ScreenWithNavBar navBar={<MainBottomNav activeTab="savingsPlan" onHome={onGoToHome} />}>
+      <ScreenWithNavBar navBar={<MainBottomNav activeTab="savingsPlan" onHome={onGoToHome} onMyData={onMyData} onOffers={onOffers} />}>
         {/* 71px spacer — matches original top-[71px] of Profile header */}
         <div style={{ height: "71px" }} />
 

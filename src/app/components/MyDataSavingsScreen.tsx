@@ -269,9 +269,11 @@ interface MyDataSavingsScreenProps {
   onApplyForDsp?: () => void;
   onLearnMore?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
+  onOffers?: () => void;
 }
 
-export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome }: MyDataSavingsScreenProps) {
+export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyData, onOffers }: MyDataSavingsScreenProps) {
   return (
     <div
       style={{
@@ -403,7 +405,7 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome }: MyDa
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="savingsPlan" onHome={onHome} />
+        <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
       </div>
     </div>
   );

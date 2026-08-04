@@ -7,10 +7,13 @@ const FRAME_H = 844;
 interface DaHomeFullWidthOverview1ScreenProps {
   onViewDataCertificates?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
+  onSavingsPlan?: () => void;
+  onOffers?: () => void;
   onBack?: () => void;
 }
 
-export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome, onBack }: DaHomeFullWidthOverview1ScreenProps = {}) {
+export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome, onMyData, onSavingsPlan, onOffers, onBack }: DaHomeFullWidthOverview1ScreenProps = {}) {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
       {/* Hide the nav bar baked into the import; the shared MainBottomNav renders in its place. */}
@@ -61,7 +64,7 @@ export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome,
         </div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );

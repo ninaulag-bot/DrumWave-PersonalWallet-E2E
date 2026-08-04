@@ -7,12 +7,14 @@ interface OfferCampaignScreenProps {
   /** "Continue enrollment" CTA — starts the DSP enroll flow. */
   onContinue?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
+  onSavingsPlan?: () => void;
 }
 
 /** Offer campaign landing page reached from the Tesla "Continue enrollment" CTA.
  *  Renders the read-only import as-is and overlays a transparent tap-target on the
  *  header back arrow so the user can return to the home screen. */
-export function OfferCampaignScreen({ onBack, onContinue, onHome }: OfferCampaignScreenProps) {
+export function OfferCampaignScreen({ onBack, onContinue, onHome, onMyData, onSavingsPlan }: OfferCampaignScreenProps) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       {/* Force the "Continue enrollment" CTA label (inside the read-only import's
@@ -70,7 +72,7 @@ export function OfferCampaignScreen({ onBack, onContinue, onHome }: OfferCampaig
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="offers" onHome={onHome} />
+        <MainBottomNav activeTab="offers" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} />
       </div>
     </div>
   );

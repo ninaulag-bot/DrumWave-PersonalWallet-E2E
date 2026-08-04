@@ -17,7 +17,9 @@ const COLLAPSED_SECTION_H = 24;
 interface DataCertsDetailScreenProps {
   onDone?: () => void;
   onHome?: () => void;
+  onMyData?: () => void;
   onSavingsPlan?: () => void;
+  onOffers?: () => void;
   certificate?: Certificate;
   /** No default on purpose — the caller must say which flow led here
    *  ("requests" from the Request Data / certsFlow path, "home" from the
@@ -28,7 +30,9 @@ interface DataCertsDetailScreenProps {
 export function DataCertsDetailScreen({
   onDone,
   onHome,
+  onMyData,
   onSavingsPlan,
+  onOffers,
   certificate = VEHICLE_REGISTRATION,
   activeTab,
 }: DataCertsDetailScreenProps) {
@@ -96,7 +100,7 @@ export function DataCertsDetailScreen({
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab={activeTab} onHome={onHome} onSavingsPlan={onSavingsPlan} />
+        <MainBottomNav activeTab={activeTab} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );

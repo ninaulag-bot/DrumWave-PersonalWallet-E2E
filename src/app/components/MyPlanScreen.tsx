@@ -5,7 +5,7 @@ import { MainBottomNav } from "./MainBottomNav";
 
 /** "Welcome to your Data Savings Plan" landing page, reached from the
  *  "Go to my plan" button on the Approved + not joined home screen. */
-export function MyPlanScreen({ onClose, onGoToPlan, onHome }: { onClose?: () => void; onGoToPlan?: () => void; onHome?: () => void }) {
+export function MyPlanScreen({ onClose, onGoToPlan, onHome, onMyData, onOffers }: { onClose?: () => void; onGoToPlan?: () => void; onHome?: () => void; onMyData?: () => void; onOffers?: () => void }) {
   return (
     <CloseContext.Provider value={onClose}>
       <GoToPlanContext.Provider value={onGoToPlan}>
@@ -17,7 +17,7 @@ export function MyPlanScreen({ onClose, onGoToPlan, onHome }: { onClose?: () => 
             <Component />
           </div>
           <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-            <MainBottomNav activeTab="savingsPlan" onHome={onHome} />
+            <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
           </div>
         </div>
       </GoToPlanContext.Provider>
