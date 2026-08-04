@@ -7418,7 +7418,16 @@ export default function App() {
       >
       <div
         className="relative w-[393px] h-[852px] overflow-hidden"
-        style={{ borderRadius: "48px", background: "#070707" }}
+        style={{
+          borderRadius: "48px",
+          background: "#070707",
+          // Safari: filter:blur children escape overflow+border-radius and
+          // paint a light square band over the rounded corners. clip-path
+          // forces the round mask for every screen in this frame.
+          clipPath: "inset(0 round 48px)",
+          WebkitClipPath: "inset(0 round 48px)",
+          isolation: "isolate",
+        }}
       >
         {step === 0 && (
           <LandingScreen

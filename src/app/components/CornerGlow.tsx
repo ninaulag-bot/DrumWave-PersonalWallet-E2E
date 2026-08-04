@@ -1,3 +1,15 @@
+import type { CSSProperties } from "react";
+
+/** Safari: filter:blur children escape overflow+border-radius; clip-path holds them. */
+const HOST: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  pointerEvents: "none",
+  overflow: "hidden",
+  clipPath: "inset(0)",
+  WebkitClipPath: "inset(0)",
+};
+
 export function CornerGlow({
   color = "#FFB700",
   glowOpacity = 0.10,
@@ -9,7 +21,7 @@ export function CornerGlow({
 }) {
   if (side === "center") {
     return (
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }} aria-hidden>
+      <div style={HOST} aria-hidden>
         {/* Primary glow at top, centered horizontally */}
         <div style={{ position: "absolute", left: "50%", top: -140, transform: "translateX(-50%)", width: 420, height: 420, opacity: glowOpacity, background: color, borderRadius: "9999px", filter: "blur(110px)" }} />
         {/* Softer secondary bloom */}
@@ -20,7 +32,7 @@ export function CornerGlow({
 
   if (side === "left") {
     return (
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }} aria-hidden>
+      <div style={HOST} aria-hidden>
         <div style={{ position: "absolute", left: -160, top: "20%", width: 360, height: 360, opacity: glowOpacity, background: color, borderRadius: "9999px", filter: "blur(90px)" }} />
         <div style={{ position: "absolute", left: -120, top: "55%", width: 280, height: 280, opacity: glowOpacity * 0.6, background: color, borderRadius: "9999px", filter: "blur(100px)" }} />
         <div style={{ position: "absolute", left: 120, top: "15%", width: 340, height: 500, opacity: 0.70, background: "var(--color-bg-base)", borderRadius: "9999px", filter: "blur(40px)" }} />
@@ -30,7 +42,7 @@ export function CornerGlow({
 
   if (side === "top-right") {
     return (
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }} aria-hidden>
+      <div style={HOST} aria-hidden>
         {/* Primary glow anchored to top-right corner */}
         <div style={{ position: "absolute", right: -120, top: -120, width: 380, height: 380, opacity: glowOpacity, background: color, borderRadius: "9999px", filter: "blur(90px)" }} />
         {/* Softer secondary bloom along the top-right */}
@@ -43,7 +55,7 @@ export function CornerGlow({
 
   // default: top-left
   return (
-    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }} aria-hidden>
+    <div style={HOST} aria-hidden>
       {/* Primary glow anchored to top-left corner */}
       <div style={{ position: "absolute", left: -120, top: -120, width: 380, height: 380, opacity: glowOpacity, background: color, borderRadius: "9999px", filter: "blur(90px)" }} />
       {/* Softer secondary bloom */}
