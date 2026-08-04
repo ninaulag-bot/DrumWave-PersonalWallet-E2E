@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import svgPaths from "./svg-gq1sgllx8v";
 import { DataContributionStep } from "../../app/components/DataContributionStep";
 import { GoalStep } from "../../app/components/GoalStep";
+import { CornerGlow } from "../../app/components/CornerGlow";
 import imgRectangle5595 from "./741a120aa50a1efc4ca25391e35f954fa9bea854.png";
 
 function Group1() {
@@ -50,42 +51,6 @@ function Group1() {
           </defs>
         </svg>
       </div>
-    </div>
-  );
-}
-
-// Goal-confirmation ambient glow — top-right corner. Follows the same
-// conventions as Group1 (blurred, radius-full ellipses with baked-in opacity),
-// with all colors/blur pulled from design-system tokens.
-function GoalGlow() {
-  return (
-    <div style={{ position: "absolute", top: 0, right: 0, width: 400, height: 400, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
-      <div
-        style={{
-          width: 525.58,
-          height: 555.31,
-          top: -260,
-          right: -180,
-          position: "absolute",
-          opacity: 0,
-          background: "var(--color-glow-green)",
-          borderRadius: "var(--radius-full)",
-          filter: "blur(var(--glow-blur))",
-        }}
-      />
-      <div
-        style={{
-          width: 312.11,
-          height: 328.32,
-          top: -110,
-          right: -90,
-          position: "absolute",
-          opacity: 0.6,
-          background: "var(--color-glow-blue)",
-          borderRadius: "var(--radius-full)",
-          filter: "blur(var(--glow-blur))",
-        }}
-      />
     </div>
   );
 }
@@ -1092,8 +1057,13 @@ export default function Enroll({
 
   return (
     <div className="bg-[#070707] relative size-full overflow-hidden" data-name="Enroll">
-      {/* Background glow — top-right for step 5 only */}
-      {step === 5 && <GoalGlow />}
+      {/* Background glow — top-right for step 5 only.
+          Use CornerGlow (self-clipped) instead of a bare filter:blur — Safari
+          blanks the whole phone frame when CSS blur sits under the frame's
+          clip-path. */}
+      {step === 5 && (
+        <CornerGlow side="top-right" color="var(--color-glow-blue)" glowOpacity={0.6} />
+      )}
       {step !== 4 && step !== 5 && <Group1 />}
 
       {/* Scrollable content area — starts below nav/progress, sits above home indicator */}
