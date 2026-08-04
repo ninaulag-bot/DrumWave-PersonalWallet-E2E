@@ -1,4 +1,20 @@
+import { useContext } from "react";
 import svgPaths from "./svg-envbxqmko5";
+import imgSmartCardPhoto from "../DspLanding-1/smart-card-photo.png";
+import { DrumWaveLogo } from "../../app/components/DrumWaveLogo";
+import { ClaroLogo, MastercardLogo, NubankLogo, VivoLogo } from "../../app/components/CompanyLogos";
+import imgOfferHeroPhoto from "../PlanDetaillPage/f472d1b36845b43b2500d400f1df89646f59a9a3.png";
+import imgRivianOffers from "../DspLanding-1/rivian-offers.png";
+// Shared with the DSP Landing screen rather than duplicated — same account-state
+// distinction, one source of truth. This file already imports assets from that
+// folder (smart-card-photo.png).
+import { OfferVariantContext } from "../DspLanding-1/offer-variant-context";
+import { ViewMyRequestsContext, TeslaRelationshipContext } from "./view-my-requests-context";
+import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
+// The white Tesla mark already used on the red disc in DataCertsLoadingScreen —
+// same treatment here, so the two certificate screens share one asset.
+import imgTeslaMotorsLoading from "../tesla-motors-loading.png";
+import Bubbles from "../Bubbles/index";
 import imgImage686 from "./ed0613d61b8120f65e142a6c92489eebf7d29667.png";
 import imgImage14 from "./eabded7bb48e6ebaedb4863e963568e03b9ce73f.png";
 import imgRectangle6021 from "./c6e0e98eeb1bd3f1abf08b3354bcc0a18aa70551.png";
@@ -460,7 +476,7 @@ function Group15() {
       <div className="absolute flex items-center justify-center left-[calc(20%+52.12px)] size-[129.081px] top-[223px]">
         <div className="flex-none rotate-[1.42deg]">
           <div className="relative rounded-[230.172px] size-[126px]">
-            <img alt="" className="absolute inset-0 max-w-none object-bottom pointer-events-none rounded-[230.172px] size-full" src={imgRectangle6021} />
+            <img alt="" className="absolute inset-0 max-w-none object-bottom object-cover pointer-events-none rounded-[230.172px] size-full" src={imgRectangle6021} />
           </div>
         </div>
       </div>
@@ -712,12 +728,12 @@ function Nubank1() {
   );
 }
 
+/* Company badges — real brand marks at 17px, matching the other home states
+   (App.tsx DashboardScreenNoDsp / EnrolledNoPlan / OneDsp). The Figma export
+   baked flat coloured letter chips here instead; positions are the shared
+   halo-relative ones shifted by +117px for this frame's halo centre. */
 function Frame22() {
-  return (
-    <div className="absolute content-stretch flex flex-col items-center left-[calc(80%-6px)] top-[246px] w-[16.167px]">
-      <Nubank1 />
-    </div>
-  );
+  return <NubankLogo size={17} style={{ position: "absolute", left: "307.1px", top: "242.6px", zIndex: 4, pointerEvents: "none" }} />;
 }
 
 function Mc1() {
@@ -729,11 +745,7 @@ function Mc1() {
 }
 
 function Frame28() {
-  return (
-    <div className="absolute content-stretch flex flex-col items-center left-[calc(60%-3.07px)] top-[168px] w-[16.167px]">
-      <Mc1 />
-    </div>
-  );
+  return <MastercardLogo size={17} style={{ position: "absolute", left: "224.3px", top: "156.8px", zIndex: 4, pointerEvents: "none" }} />;
 }
 
 function Claro1() {
@@ -745,11 +757,7 @@ function Claro1() {
 }
 
 function Frame26() {
-  return (
-    <div className="absolute content-stretch flex flex-col items-center left-[calc(20%+24px)] top-[207.2px] w-[16.167px]">
-      <Claro1 />
-    </div>
-  );
+  return <ClaroLogo size={17} style={{ position: "absolute", left: "82.2px", top: "199.8px", zIndex: 4, pointerEvents: "none" }} />;
 }
 
 function Vivo1() {
@@ -761,11 +769,7 @@ function Vivo1() {
 }
 
 function Frame24() {
-  return (
-    <div className="absolute content-stretch flex flex-col items-center left-[calc(20%+61px)] top-[186px] w-[16.167px]">
-      <Vivo1 />
-    </div>
-  );
+  return <VivoLogo size={17} style={{ position: "absolute", left: "126.2px", top: "171.2px", zIndex: 4, pointerEvents: "none" }} />;
 }
 
 function Group1() {
@@ -976,10 +980,8 @@ function Frame103() {
   return (
     <div className="content-stretch flex flex-col gap-[8px] items-center relative shrink-0 w-full">
       <Frame75 />
-      <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#999] text-[14px] text-center w-[295px] whitespace-pre-wrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        {`Request data from the companies you `}
-        <br aria-hidden />
-        {` have relationships with`}
+      <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.4] relative shrink-0 text-[#999] text-[14px] text-center w-[295px]" style={{ fontVariationSettings: '"wdth" 100' }}>
+        Request data from the companies you have relationships with
       </p>
     </div>
   );
@@ -1005,7 +1007,7 @@ function Frame51() {
 function Frame108() {
   return (
     <div className="content-stretch flex items-start justify-center relative shrink-0">
-      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:ExtraLight',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">2</p>
+      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">2</p>
     </div>
   );
 }
@@ -1042,18 +1044,18 @@ function Frame50() {
       <div className="flex flex-row items-center justify-center size-full">
         <div className="content-stretch flex gap-[18px] items-center justify-center p-[16px] relative size-full">
           <Frame51 />
-          <div className="h-[52.5px] relative shrink-0 w-0">
+          <div className="h-[52px] relative shrink-0 w-0">
             <div className="absolute inset-[0_-0.5px]">
-              <svg className="block size-full" fill="none" height="52.5" preserveAspectRatio="none" viewBox="0 0 1 52.5" width="1">
-                <path d="M0.5 0V52.5" id="Vector 924" stroke="var(--stroke-0, #999999)" />
+              <svg className="block size-full" fill="none" height="52" preserveAspectRatio="none" viewBox="0 0 1 52" width="1">
+                <path d="M0.5 0V52" id="Vector 924" stroke="var(--stroke-0, #3D3D3D)" />
               </svg>
             </div>
           </div>
           <Frame53 />
-          <div className="h-[52.5px] relative shrink-0 w-0">
+          <div className="h-[52px] relative shrink-0 w-0">
             <div className="absolute inset-[0_-0.5px]">
-              <svg className="block size-full" fill="none" height="52.5" preserveAspectRatio="none" viewBox="0 0 1 52.5" width="1">
-                <path d="M0.5 0V52.5" id="Vector 924" stroke="var(--stroke-0, #999999)" />
+              <svg className="block size-full" fill="none" height="52" preserveAspectRatio="none" viewBox="0 0 1 52" width="1">
+                <path d="M0.5 0V52" id="Vector 924" stroke="var(--stroke-0, #3D3D3D)" />
               </svg>
             </div>
           </div>
@@ -1067,7 +1069,7 @@ function Frame50() {
 function Content() {
   return (
     <div className="content-stretch flex gap-[8px] h-[24px] items-center relative shrink-0" data-name="Content">
-      <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#090908] text-[18px] text-center whitespace-nowrap">
+      <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#070707] text-[18px] text-center whitespace-nowrap">
         <p className="leading-none">Request more data</p>
       </div>
     </div>
@@ -1076,14 +1078,14 @@ function Content() {
 
 function ButtonState() {
   return (
-    <div className="bg-white content-stretch flex flex-[1_0_0] h-[48px] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
+    <div className="bg-[#e3e3e3] content-stretch flex flex-[1_0_0] h-[44px] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
       <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
         <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
-          <div className="content-stretch flex items-center justify-center px-[24px] py-[12px] relative size-full">
+          <div className="content-stretch flex items-center justify-center px-[24px] py-[10px] relative size-full">
             <Content />
           </div>
         </div>
-        <div aria-hidden className="absolute border-[0.911px] border-solid border-white inset-0 pointer-events-none rounded-[500px]" />
+        <div aria-hidden className="absolute border-[0.911px] border-solid border-[#e3e3e3] inset-0 pointer-events-none rounded-[500px]" />
       </div>
     </div>
   );
@@ -1100,7 +1102,7 @@ function Button() {
 function Content1() {
   return (
     <div className="content-stretch flex gap-[8px] h-[24px] items-center relative shrink-0" data-name="Content">
-      <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#e3e3e3] text-[18px] text-center whitespace-nowrap">
+      <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#d9d9d9] text-[18px] text-center whitespace-nowrap">
         <p className="leading-none">View my requests</p>
       </div>
     </div>
@@ -1108,11 +1110,18 @@ function Content1() {
 }
 
 function Frame62() {
+  // The only tappable element in this export — routes to My data requests.
+  const onViewMyRequests = useContext(ViewMyRequestsContext);
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-[342px]">
-      <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[343px]" data-name="Button">
+      <div
+        className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px]"
+        data-name="Button"
+        onClick={onViewMyRequests}
+        style={onViewMyRequests ? { cursor: "pointer" } : undefined}
+      >
         <div className="content-stretch flex flex-[1_0_0] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
-          <div aria-hidden className="absolute border border-solid border-white inset-0 pointer-events-none rounded-[500px]" />
+          <div aria-hidden className="absolute border border-solid border-[#e3e3e3] inset-0 pointer-events-none rounded-[500px]" />
           <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
             <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
               <div className="content-stretch flex items-center justify-center px-[24px] py-[10px] relative size-full">
@@ -1357,7 +1366,7 @@ function Group7() {
 
 function Group4() {
   return (
-    <div className="h-[24.34px] relative shrink-0 w-[90.299px]">
+    <div className="h-[11.676px] relative shrink-0 w-[42.872px]">
       <div className="absolute inset-[-1.23%_-0.33%]">
         <svg className="block size-full" fill="none" height="24.9393" preserveAspectRatio="none" viewBox="0 0 90.8987 24.9393" width="90.8987">
           <g id="Group 1000005954">
@@ -1401,14 +1410,14 @@ function Group4() {
 function Frame29() {
   return (
     <div className="content-stretch flex items-center relative shrink-0">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#b0ff11] text-[16.114px] whitespace-nowrap">smart</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[28px] text-white whitespace-nowrap">Smart</p>
     </div>
   );
 }
 
 function Frame35() {
   return (
-    <div className="content-stretch flex gap-[6px] h-[24.34px] items-center relative shrink-0 w-full">
+    <div className="content-stretch flex flex-col gap-[1.946px] items-start justify-center relative shrink-0">
       <Group4 />
       <Frame29 />
     </div>
@@ -1431,7 +1440,7 @@ function Frame30() {
   return (
     <div className="content-stretch flex items-center relative shrink-0">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.2] relative shrink-0 text-[#aeaeae] text-[14px] tracking-[-0.28px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        5 members
+        23,391 members
       </p>
     </div>
   );
@@ -1456,9 +1465,13 @@ function Frame34() {
 
 function Frame123() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[4px] items-start left-[24px] top-[22px] w-[137.299px]">
-      <Frame35 />
-      <Frame34 />
+    <div className="absolute h-[174px] left-[19px] top-[19px] w-[302px]">
+      <div className="absolute left-0 top-0 w-[154px]">
+        <Frame35 />
+      </div>
+      <div className="absolute left-[276px] size-[26px] top-[148px]" data-name="Logo / DrumWave">
+        <DrumWaveLogo size={26} />
+      </div>
     </div>
   );
 }
@@ -1514,6 +1527,9 @@ function Component1() {
   return (
     <div className="bg-[#152973] h-[214px] relative rounded-[16.112px] shrink-0 w-full" data-name="-">
       <div className="overflow-clip relative rounded-[inherit] size-full">
+        <div className="absolute inset-0" data-name="image 3">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSmartCardPhoto} />
+        </div>
         <Group6 />
         <div className="absolute flex h-[189.958px] items-center justify-center left-[-31.7px] top-[-86.56px] w-[213.792px]">
           <div className="flex-none rotate-[-30.1deg]">
@@ -1715,11 +1731,147 @@ function Frame119() {
   );
 }
 
+/* "Offers" section (Figma node 13:77462) — replaces the old "What happens next?"
+   block on the enrolled-in-a-DSP home. Hero photo, Tesla mark and the bubbles
+   glyph are all existing repo assets; nothing new was downloaded. */
+function OfferCard() {
+  // Receiving Offers gets the Rivian hero; Enrolled in a DSP keeps the Tesla one.
+  const variant = useContext(OfferVariantContext);
+  return (
+    <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-name="Offer cards">
+      <div className="border border-[#2a2a2a] border-solid h-[456px] mb-[-1px] overflow-clip relative rounded-tl-[24px] rounded-tr-[24px] shrink-0 w-full">
+        <div aria-hidden className="absolute inset-0 pointer-events-none rounded-tl-[24px] rounded-tr-[24px]">
+          <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+            {variant === "receivingOffers" ? (
+              /* 342×456 source, exactly the hero box — object-cover, no crop. */
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgRivianOffers} />
+            ) : (
+              <img alt="" className="absolute h-[109.31%] left-[-78.66%] max-w-none top-0 w-[257.31%]" src={imgOfferHeroPhoto} />
+            )}
+          </div>
+        </div>
+        <div className="absolute bg-gradient-to-b bottom-[-1px] from-[4.398%] from-[rgba(22,22,22,0)] h-[240px] left-[-1px] to-[#111] to-[66.907%] w-[342px]" />
+        <div className="-translate-x-1/2 absolute content-stretch flex flex-col items-start left-1/2 top-[301px] w-[310px]">
+          <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
+            <div className="h-[76px] relative shrink-0 w-full">
+              <p className="[word-break:break-word] absolute font-['Titillium_Web:Regular',sans-serif] inset-0 leading-[1.2] not-italic text-[32px] text-white">Lorem ipsum dolor sit amet consectetur</p>
+              {/* Figma 123:52254 places this at inset-[67.11%_16.27%_5.26%_76.61%]
+                  of the 310×76 title box = x 237.5–259.6, y 51–72. It was
+                  previously pinned at left 259.56 / top 72 — the box's right and
+                  bottom edges read as left/top — which pushed it outside the
+                  title block and onto the body copy. */}
+              <div className="absolute h-[21px] left-[237.5px] overflow-clip top-[51px] w-[22.1px]" data-name="Material / chevron_right">
+                <div className="absolute bottom-1/4 left-[33.33%] right-[35.83%] top-1/4" data-name="Vector">
+                  <svg className="absolute block inset-0 size-full" fill="none" height="12.3776" preserveAspectRatio="none" viewBox="0 0 7.63287 12.3776" width="7.63287">
+                    <path d={svgPaths.p20e4e180} fill="var(--fill-0, #999999)" id="Vector" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div className="h-[34px] relative shrink-0 w-full">
+              <p className="[word-break:break-word] absolute font-['Open_Sans:Regular',sans-serif] font-normal inset-0 leading-[1.2] text-[14px] text-white" style={{ fontVariationSettings: '"wdth" 100' }}>{`Lorem ipsum dolor sit amet consectetur. Ante accumsan ac turpis semper elit ligula `}</p>
+            </div>
+          </div>
+        </div>
+        <div className="absolute backdrop-blur-[2.5px] border border-[rgba(101,117,156,0.3)] border-solid content-stretch flex flex-col items-start left-[15px] pl-[9px] pr-[17px] py-[9px] rounded-[40px] top-[15px] w-[310px]" style={{ backgroundImage: "linear-gradient(90.344deg, rgba(0, 0, 0, 0.4) 1.6349%, rgb(66, 81, 112) 99.977%)" }} data-name="Dropdown for enriched with data">
+          <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-[67px]">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
+                <div className="bg-white border-[0.585px] border-[rgba(203,203,203,0.2)] border-solid col-1 ml-0 mt-0 relative rounded-[58.537px] row-1 size-[24px]" />
+                <div className="col-1 h-[13.654px] ml-[4.8px] mt-[6.6px] relative row-1 w-[14.133px]" data-name="Tesla_Motors.svg 1">
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <img alt="" className="absolute h-[135.09%] left-[-0.58%] max-w-none top-0 w-[101.17%]" src={imgTeslaMotorsSvg1} />
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">Tesla</p>
+            </div>
+            <div className="content-stretch flex items-center justify-end relative shrink-0 w-[183.5px]">
+              <div className="content-stretch flex gap-[8px] items-center relative shrink-0">
+                <div className="h-[12.065px] relative shrink-0 w-[27px]" data-name="bubbles">
+                  <Bubbles />
+                </div>
+                <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-end leading-[0] not-italic relative shrink-0 text-[10px] text-white tracking-[0.8px] uppercase whitespace-nowrap">
+                  <p className="leading-[1.2]">enriched with data</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#111] border border-[#2a2a2a] border-solid content-stretch flex flex-col gap-[16px] items-start px-[16px] py-[20px] relative rounded-bl-[24px] rounded-br-[24px] shrink-0 w-full">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="Company and benefit">
+          <div className="content-stretch flex items-center justify-center relative shrink-0 w-full">
+            <div className="[word-break:break-word] content-stretch flex font-['Open_Sans:Regular',sans-serif] font-normal gap-[8px] items-center leading-[0] relative shrink-0 text-[16px] text-right tracking-[-0.64px] whitespace-nowrap">
+              <div className="flex flex-col justify-center relative shrink-0 text-[#e3e3e3]" style={{ fontVariationSettings: '"wdth" 100' }}>
+                <p className="leading-[1.2]">Data and cash benefit</p>
+              </div>
+              <div className="content-stretch flex gap-[2px] items-center relative shrink-0 text-[#00ff91]">
+                <p className="leading-[1.2]">+</p>
+                <p className="leading-[1.2]">$</p>
+                <p className="leading-[1.2]">20</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="h-[36px] relative shrink-0 w-full" data-name="Offer CTAs">
+          <div className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]">
+            <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[18px] text-center text-white tracking-[0.36px] whitespace-nowrap">
+              <p className="leading-[1.2]">Redeem offer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Frame120() {
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] min-w-full not-italic relative shrink-0 text-[#e3e3e3] text-[24px] w-[min-content]">What happens next?</p>
-      <Frame119 />
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] min-w-full not-italic relative shrink-0 text-[#e3e3e3] text-[24px] w-[min-content]">Offers</p>
+      <div className="bg-[rgba(255,255,255,0.04)] h-[48px] relative rounded-[12px] shrink-0 w-full" data-name="tabv2">
+        <div className="absolute content-stretch flex h-[48px] items-center justify-between left-0 p-[4px] top-0 w-full">
+          <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.04)] border-solid content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[8px]">
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.5] not-italic relative shrink-0 text-[#eee] text-[16px] text-center whitespace-nowrap">Active</p>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-center justify-center min-w-px relative">
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.5] not-italic relative shrink-0 text-[#999] text-[16px] text-center w-full">Completed</p>
+          </div>
+        </div>
+      </div>
+      <OfferCard />
+    </div>
+  );
+}
+
+/* "My relationships" — Figma 9:53425, the View Data Certificates home. The
+   enrolled-in-a-DSP home (13:73059) has no such section, and both states render
+   this same export, so it's gated on the variant rather than added inline. */
+function MyRelationships() {
+  const variant = useContext(OfferVariantContext);
+  const onTesla = useContext(TeslaRelationshipContext);
+  if (variant !== "dataCertificates") return null;
+  return (
+    <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 w-full" data-name="My relationships">
+      <div className="content-stretch flex h-[24px] items-center relative shrink-0 w-full">
+        <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">My relationships</p>
+      </div>
+      <div
+        className="content-stretch flex flex-col gap-[20px] items-center relative shrink-0"
+        onClick={onTesla}
+        style={onTesla ? { cursor: "pointer" } : undefined}
+      >
+        {/* #e82127 is the Tesla brand colour, matching the disc in DataCertsLoadingScreen.
+            Logo box is that screen's 55×53-in-120 mark scaled to this 70px disc. */}
+        <div className="overflow-clip relative rounded-[500px] shrink-0 size-[70px]" style={{ background: "#e82127" }} data-name="Tesla">
+          <img alt="" className="absolute h-[31px] left-1/2 top-1/2 w-[32px]" src={imgTeslaMotorsLoading} style={{ objectFit: "contain", transform: "translate(-50%, -50%)" }} />
+        </div>
+        <div className="content-stretch flex flex-col gap-[6px] items-center relative shrink-0 text-center">
+          <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">Tesla</p>
+          <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.2] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>3 products</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1728,6 +1880,7 @@ function Frame73() {
   return (
     <div className="relative shrink-0 w-full">
       <div className="content-stretch flex flex-col gap-[64px] items-start px-[24px] relative size-full">
+        <MyRelationships />
         <Frame57 />
         <Frame120 />
       </div>
@@ -3040,9 +3193,17 @@ function Frame112() {
 
 function Frame122() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[65px] items-start left-0 top-[774px] w-[839px]">
+    /* In flow (was absolute top-[774px]) so the frame's height follows this
+       column, and pt- rather than mt- so the offset can't collapse out through
+       the root and shift the absolutely-positioned status bar / halo.
+       Component3 (DrumWave footer) is the last child instead of being pinned at
+       top-[3451px] independently of where the FAQ list actually ends. */
+    <div className="content-stretch flex flex-col gap-[65px] items-start pb-[40px] pt-[774px] relative w-[839px]">
       <Frame121 />
       <Frame112 />
+      <div className="flex justify-center shrink-0 w-[390px]">
+        <Component3 />
+      </div>
     </div>
   );
 }
@@ -3236,7 +3397,7 @@ function Frame72() {
 
 function Component3() {
   return (
-    <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[10px] items-center justify-center left-[calc(50%+0.27px)] top-[3451px] w-[228.538px]" data-name="-">
+    <div className="content-stretch flex flex-col gap-[10px] items-center justify-center relative shrink-0 w-[228.538px]" data-name="-">
       <Frame70 />
       <Frame72 />
     </div>
@@ -3472,7 +3633,6 @@ export default function HomeRequestDataBeforeDsp() {
       <Component />
       <Frame104 />
       <Frame122 />
-      <Component3 />
       <Component4 />
       <div className="absolute content-stretch flex flex-col items-start left-0 top-0 w-[390px]" data-name="Navigation Bar - iPhone (Compact Size Class)">
         <div className="content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-full" data-name="Status Bar - iPhone">

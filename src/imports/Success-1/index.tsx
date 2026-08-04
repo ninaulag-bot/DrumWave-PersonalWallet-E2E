@@ -140,10 +140,10 @@ function Content() {
   );
 }
 
-function Frame8() {
+function Frame8({ onDone }: { onDone?: () => void } = {}) {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-      <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[343px]" data-name="Button">
+      <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[343px]" data-name="Button" onClick={onDone} style={{ cursor: onDone ? "pointer" : undefined }}>
         <div className="content-stretch flex flex-[1_0_0] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
           <div aria-hidden className="absolute border border-solid border-white inset-0 pointer-events-none rounded-[500px]" />
           <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
@@ -159,20 +159,20 @@ function Frame8() {
   );
 }
 
-function Frame7() {
+function Frame7({ onDone }: { onDone?: () => void } = {}) {
   return (
     <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full">
       <Frame6 />
-      <Frame8 />
+      <Frame8 onDone={onDone} />
     </div>
   );
 }
 
-function Frame9() {
+function Frame9({ onDone }: { onDone?: () => void } = {}) {
   return (
     <div className="absolute content-stretch flex flex-col gap-[49px] items-center left-[23px] top-[222px] w-[342px]">
       <Group1 />
-      <Frame7 />
+      <Frame7 onDone={onDone} />
     </div>
   );
 }
@@ -241,7 +241,7 @@ function Frame() {
   );
 }
 
-export default function Success() {
+export default function Success({ onDone }: { onDone?: () => void } = {}) {
   return (
     <div className="bg-[#070707] relative size-full" data-name="Success">
       <Frame1 />
@@ -256,7 +256,7 @@ export default function Success() {
           </svg>
         </div>
       </div>
-      <Frame9 />
+      <Frame9 onDone={onDone} />
       <div className="absolute bg-[#070707] h-[54px] left-0 top-0 w-[390px]" />
       <div className="absolute content-stretch flex flex-col items-start left-0 top-0 w-[390px]" data-name="Navigation Bar - iPhone (Compact Size Class)">
         <div className="content-stretch flex flex-col h-[54px] items-start pt-[21px] relative shrink-0 w-[402px]" data-name="Status Bar - iPhone">

@@ -152,8 +152,10 @@ function GetOffersCard({ onLearnMore }: { onLearnMore?: () => void }) {
   );
 }
 
-/** "Request more data" company card — letter avatar + category + Request pill. */
-function CompanyRequestCard({
+/** "Request more data" company card — letter avatar + category + Request pill.
+ *  Exported so the certificates variant of the DSP Landing screen (Figma
+ *  9:93931) renders the same carousel card instead of duplicating it. */
+export function CompanyRequestCard({
   initial,
   avatarColor,
   category,

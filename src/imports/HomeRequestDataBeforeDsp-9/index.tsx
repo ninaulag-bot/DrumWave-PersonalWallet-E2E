@@ -404,7 +404,7 @@ function Frame28() {
 
 function Component1() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[10px] items-center justify-center left-[77px] top-[3109px] w-[228.538px]" data-name="-">
+    <div className="content-stretch flex flex-col gap-[10px] items-center justify-center relative shrink-0 w-[228.538px]" data-name="-">
       <Frame26 />
       <Frame28 />
     </div>
@@ -855,10 +855,14 @@ function Group3() {
 
 function Frame34() {
   return (
-    <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center left-[calc(50%-0.5px)] top-[147px] w-[347px]">
+    /* In flow (was absolute top-[147px]) so the frame's height ends with the
+       content — the DrumWave footer now sits under "Questions?" instead of at
+       the baked top-[3109px], which left ~1.8k px of empty canvas below. */
+    <div className="content-stretch flex flex-col gap-[40px] items-center mx-auto pb-[40px] pt-[147px] relative w-[347px]">
       <Frame33 />
       <Frame29 />
       <Group3 />
+      <Component1 />
     </div>
   );
 }
@@ -933,8 +937,10 @@ export default function HomeRequestDataBeforeDsp() {
       <Container />
       <Container1 />
       <Container2 />
-      <Component />
-      <Component1 />
+      {/* <Component /> removed: off-canvas export artifact (left -690.73, top
+          3405.07). Invisible via overflow-x, but its vertical extent still
+          counted toward the scroll height, leaving ~2000px of empty canvas
+          below the footer. The real footer is Component1, in flow in Frame34. */}
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-px items-center left-1/2 top-[76px] w-[390px]" data-name="Profile header">
         <Frame23 />
         <div className="h-0 relative shrink-0 w-[390px]">

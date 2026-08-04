@@ -71,6 +71,9 @@ import { InitialEmailScreen } from "@/app/components/InitialEmailScreen";
 import { DataCertsLoadingScreen } from "@/app/components/DataCertsLoadingScreen";
 import { DataCertsDetailScreen } from "@/app/components/DataCertsDetailScreen";
 import { MyCertificatesScreen } from "@/app/components/MyCertificatesScreen";
+import { TeslaDataJourneyScreen } from "@/app/components/TeslaDataJourneyScreen";
+import { DataBalanceScreen } from "@/app/components/DataBalanceScreen";
+import { DataTransactionScreen } from "@/app/components/DataTransactionScreen";
 import { CashBalanceUSScreen } from "@/app/components/CashBalanceUSScreen";
 import { Enroll6Screen } from "@/app/components/Enroll6Screen";
 import { Success1Screen } from "@/app/components/Success1Screen";
@@ -104,6 +107,7 @@ import { UsaFlag } from "@/app/components/ui/UsaFlag";
 import ringsBg from "@/imports/rings-bg.png";
 import sparkles from "@/imports/sparkles.png";
 import lockPng from "@/imports/lock.png";
+import teslaMotorsLogo from "@/imports/tesla-motors-loading.png";
 import accountCirclePng from "@/imports/account_circle.png";
 import teslaOfferImg from "@/imports/tesla-car.png";
 import teslaDrivingImg from "@/imports/tesla-driving-source.png";
@@ -116,6 +120,9 @@ import categorySvgEntertainment from "@/imports/Frame2095587625/svg-laxthr64i4";
 import categorySvgInsurance from "@/imports/Frame2095587626/svg-tdh88oever";
 import categorySvgCivic from "@/imports/Frame2095587627/svg-xl8kkpvr94";
 import dataSavingsPhoto from "@/imports/datasavingsplan.png";
+import kaiserHeroPhoto from "@/imports/DspLanding-1/kaiser-hero-photo.png";
+import kaiserLogo from "@/imports/DspLanding-1/kaiser-logo.png";
+import dSavingsWordmark from "@/imports/DspLanding-1/dsavings-wordmark.svg";
 import { ClaroLogo, MastercardLogo, NubankLogo, VivoLogo } from "@/app/components/CompanyLogos";
 import enrollDsavingsGaming from "@/imports/dsavings-gaming.png";
 import enrollDsavingsSmartGreen from "@/imports/dsavings-smart-green.png";
@@ -3221,8 +3228,15 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome }: { onBack: () => vo
   );
 }
 
-function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void }) {
-  const [activeTab, setActiveTab] = useState<"pending" | "accepted" | "rejected">("pending");
+/* `variant="certificates"` is Figma 9:89701 — the screen the Tesla tile under
+   "My relationships" opens in the View Data Certificates flow. It differs from
+   the default (step 12) entry in four ways: it opens on the Accepted tab, uses
+   that frame's caption, shows the accepted company as a tappable row with a
+   chevron instead of a card with a "View certificate" button, drops the
+   DrumWave footer, and keeps Home lit in the bottom nav. */
+function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome, onViewCertificate, onSavingsPlan, variant = "default", hasAccepted = true }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void; onViewCertificate?: () => void; onSavingsPlan?: () => void; variant?: "default" | "certificates"; hasAccepted?: boolean }) {
+  const isCerts = variant === "certificates";
+  const [activeTab, setActiveTab] = useState<"pending" | "accepted" | "rejected">(isCerts ? "accepted" : "pending");
 
   const tw = {
     fontFamily: "var(--font-display)",
@@ -3314,13 +3328,19 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
           {/* Heading + caption */}
           <div style={{ width: 342, display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
             <p style={{ ...tw, margin: 0, fontWeight: "var(--text-display-xl-weight)" as React.CSSProperties["fontWeight"], fontSize: "var(--text-display-xl-size)", color: "var(--color-text-primary)", lineHeight: "var(--text-display-xl-line-height)" }}>
-              {activeTab === "pending" ? `${requests.length} pending` : activeTab === "accepted" ? "0 accepted" : "3 rejected"}
+              {activeTab === "pending" ? `${requests.length} pending` : activeTab === "accepted" ? (hasAccepted ? "1 accepted" : "0 accepted") : "3 rejected"}
             </p>
             <p style={{ ...os, margin: 0, fontSize: "var(--text-body-lg-size)", lineHeight: "var(--text-body-lg-line-height)", color: "var(--color-text-secondary)" }}>
               {activeTab === "pending"
                 ? "Your requests have been sent and are awaiting a response. You can upload data manually at any time."
                 : activeTab === "accepted"
-                ? "Your matched companies will appear here once a company accepts your request."
+                ? !hasAccepted
+                  /* Empty-state copy from the Figma-confirmed accepted state in
+                     HomeRequestDataBeforeDspScreen (node 361:52864). */
+                  ? "Your matched companies will appear here once a company Accepts your request."
+                  : isCerts
+                  ? "Companies that accepted your data requests appear here"
+                  : "These companies accepted your request. Open a certificate to see the data and its value."
                 : "You legally own your data, even if your request has been Rejected."}
             </p>
           </div>
@@ -3355,6 +3375,52 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
                     <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "var(--text-body-lg-size)", lineHeight: "var(--text-body-lg-line-height)", color: "var(--color-action-secondary-text)" }}>How to upload</span>
                   </button>
                 </div>
+              </div>
+            ))}
+
+            {/* ── Accepted card ─────────────────────────────────────────────
+                Composed from the rejected Tesla card below — this tab had no
+                cards and no Figma frame. Tesla / "Jan 25, 2026" match the
+                VEHICLE_REGISTRATION entry in @/app/data/certificates so the
+                card and the certificate it opens agree. Copy is invented. */}
+            {activeTab === "accepted" && hasAccepted && (isCerts ? (
+              /* Figma 9:89701 — whole row is the tap target, chevron replaces the
+                 button. Chevron is the nav BACK glyph mirrored, so the two arrows
+                 on this screen stay the same weight. */
+              <button
+                type="button"
+                onClick={onViewCertificate}
+                style={{ background: "var(--color-bg-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-6)", border: "none", cursor: "pointer", width: "100%", textAlign: "left", display: "flex", alignItems: "center", gap: "var(--space-4)" }}
+              >
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#e82127", flexShrink: 0, overflow: "hidden", position: "relative" }}>
+                  <img
+                    src={teslaMotorsLogo}
+                    alt=""
+                    style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 18, height: 18, objectFit: "contain" }}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)", flex: 1, minWidth: 0 }}>
+                  <span style={{ ...tw, fontWeight: 600, fontSize: "var(--text-heading-md-size)", color: "var(--color-text-primary)", lineHeight: "var(--text-heading-md-line-height)" }}>Tesla</span>
+                  <span style={{ ...os, fontSize: "var(--text-body-md-size)", color: "var(--color-text-secondary)", lineHeight: "var(--text-body-md-line-height)" }}>Accepted on Jan 25, 2026</span>
+                </div>
+                <svg width="7" height="12" viewBox="0 0 12 20" fill="none" style={{ flexShrink: 0, transform: "scaleX(-1)" }}>
+                  <path d={BACK} fill="var(--color-text-white)" />
+                </svg>
+              </button>
+            ) : (
+              <div style={{ background: "var(--color-bg-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-6)", display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-4)" }}>
+                  <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#DD2222", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ ...tw, fontWeight: 600, fontSize: 20.57, color: "var(--color-text-white)", lineHeight: 1 }}>T</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
+                    <span style={{ ...tw, fontWeight: 600, fontSize: "var(--text-heading-md-size)", color: "var(--color-text-primary)", lineHeight: "var(--text-heading-md-line-height)" }}>Tesla</span>
+                    <span style={{ ...os, fontSize: "var(--text-body-md-size)", color: "var(--color-text-secondary)", lineHeight: "var(--text-body-md-line-height)" }}>Accepted on Jan 25, 2026</span>
+                  </div>
+                </div>
+                <button type="button" onClick={onViewCertificate} style={{ height: 44, borderRadius: "var(--radius-xl)", background: "transparent", border: "none", cursor: "pointer", width: "100%", boxShadow: "inset 0 0 0 1px var(--color-action-secondary-border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "var(--text-body-lg-size)", lineHeight: "var(--text-body-lg-line-height)", color: "var(--color-action-secondary-text)" }}>View certificate</span>
+                </button>
               </div>
             ))}
 
@@ -3431,21 +3497,23 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
             </>
           )}
 
-          {/* DrumWave footer */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginTop: "var(--space-8)" }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)" }}>
-              <DrumWaveLogo size={28} />
-              <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 19.478, color: "var(--color-text-white)", letterSpacing: "-0.2922px", lineHeight: "1.2", textAlign: "center" }}>DrumWave</p>
+          {/* DrumWave footer — not in Figma 9:89701, which ends at the card */}
+          {!isCerts && (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginTop: "var(--space-8)" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)" }}>
+                <DrumWaveLogo size={28} />
+                <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 19.478, color: "var(--color-text-white)", letterSpacing: "-0.2922px", lineHeight: "1.2", textAlign: "center" }}>DrumWave</p>
+              </div>
+              <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 17.043, color: "var(--color-text-secondary)", letterSpacing: "-0.2557px", lineHeight: "1.2", textAlign: "center" }}>Your Life. Your Story. Your Data.</p>
             </div>
-            <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 17.043, color: "var(--color-text-secondary)", letterSpacing: "-0.2557px", lineHeight: "1.2", textAlign: "center" }}>Your Life. Your Story. Your Data.</p>
-          </div>
+          )}
 
         </div>
       </div>
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="requests" onHome={onHome} />
+        <MainBottomNav activeTab={isCerts ? "home" : "requests"} onHome={onHome} onSavingsPlan={onSavingsPlan} />
       </div>
     </div>
   );
@@ -5203,9 +5271,18 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
   // logo and artwork photo — not substituted; logo uses the same
   // initial-in-a-circle placeholder convention as CompanyAvatar elsewhere.
   const plans = [
-    { initial: "K", company: "Kaiser Permanente", category: "Health", planName: "dSavings Health" },
+    // Kaiser now uses the real Figma hero (photo + wash + glow + logo row), matching
+    // the same card on the DSP page. Best Buy keeps the placeholder treatment until
+    // its artwork is provided, so `heroPhoto` acts as the variant switch below.
+    {
+      initial: "K", company: "Kaiser Permanente", category: "Health", planName: "dSavings Health",
+      heroTitle: "Plan name B", heroPhoto: kaiserHeroPhoto, logo: kaiserLogo,
+    },
     { initial: "BB", company: "Best Buy", category: "Gaming", planName: "dSavings Gaming" },
-  ];
+  ] as Array<{
+    initial: string; company: string; category: string; planName: string;
+    heroTitle?: string; heroPhoto?: string; logo?: string;
+  }>;
 
   const tw: React.CSSProperties = {
     fontFamily: "var(--font-display)",
@@ -5501,28 +5578,67 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
                   <span style={{ ...os, fontWeight: 700, fontSize: "16px", lineHeight: "24px", color: "#FFFFFF" }}>{plan.company}</span>
                 </div>
 
-                {/* Artwork card */}
+                {/* Artwork card. Two variants: plans with a real Figma hero (heroPhoto)
+                    get the photo + wash + glow + wordmark + logo row; the rest keep the
+                    original flat-green placeholder so they're visually unchanged. */}
                 <div
                   style={{
                     width: "100%",
                     height: "194px",
                     borderRadius: "16px",
                     background: "#17A530",
-                    boxShadow: "inset 0 0 0 1px #FFFFFF",
+                    boxShadow: plan.heroPhoto ? "inset 0 0 0 1px rgba(255,255,255,0.4)" : "inset 0 0 0 1px #FFFFFF",
                     boxSizing: "border-box",
                     position: "relative",
                     overflow: "hidden",
                     padding: "20px",
                   }}
                 >
-                  <p style={{ ...tw, margin: 0, fontWeight: 600, fontSize: "28px", lineHeight: "42px", color: "#FFFFFF" }}>
-                    {plan.category}
-                  </p>
-                  <p style={{ ...os, margin: "0", fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-primary)" }}>
-                    23,391 members
-                  </p>
-                  <div style={{ position: "absolute", right: "20px", top: "20px" }}>
-                    <DrumWaveLogo size={26} />
+                  {plan.heroPhoto && (
+                    <>
+                      <img
+                        src={plan.heroPhoto}
+                        alt=""
+                        style={{ position: "absolute", left: "-73.3px", top: "-13.81px", width: "388.71px", height: "259.171px", objectFit: "cover", opacity: 0.9, pointerEvents: "none" }}
+                      />
+                      <div style={{ position: "absolute", left: "-99.84px", right: "-30.29px", top: "-11.98px", height: "219.649px", background: "linear-gradient(-47.03deg, rgba(123,182,203,0.5) 26.413%, rgba(5,111,23,0.5) 103.65%)", pointerEvents: "none" }} />
+                      <div style={{ position: "absolute", left: "-181.3px", top: "-177.63px", width: "351.2px", height: "367.93px", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                        <div style={{ transform: "rotate(-51.64deg)", flex: "none" }}>
+                          <div style={{ width: "307.101px", height: "204.837px", background: "#35C237", filter: "blur(84.199px)", borderRadius: "9999px" }} />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  <div style={{ position: "relative", zIndex: 1, height: "100%" }}>
+                    {plan.heroPhoto && (
+                      <img src={dSavingsWordmark} alt="dSavings" style={{ display: "block", width: "38.712px", height: "10.543px", marginBottom: "4px" }} />
+                    )}
+                    <p style={{ ...tw, margin: 0, fontWeight: 600, fontSize: "28px", lineHeight: plan.heroPhoto ? "1.5" : "42px", color: "#FFFFFF" }}>
+                      {plan.heroTitle ?? plan.category}
+                    </p>
+                    {plan.heroPhoto ? (
+                      <>
+                        <p style={{ ...os, position: "absolute", left: 0, bottom: 0, margin: 0, fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-primary)" }}>
+                          23,391 members
+                        </p>
+                        <div style={{ position: "absolute", right: 0, bottom: 0, display: "flex", alignItems: "center", gap: "12px" }}>
+                          <DrumWaveLogo size={26} />
+                          <div style={{ width: "1px", height: "20.458px", background: "rgba(255,255,255,0.4)" }} />
+                          <div style={{ width: "26px", height: "26px", borderRadius: "100px", overflow: "hidden", flexShrink: 0 }}>
+                            <img src={plan.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ ...os, margin: "0", fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-primary)" }}>
+                          23,391 members
+                        </p>
+                        <div style={{ position: "absolute", right: 0, top: 0 }}>
+                          <DrumWaveLogo size={26} />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -7261,11 +7377,14 @@ export default function App() {
   // Controlled toggle state for the new TwoStepVerificationScreen (step 75).
   const [twoStepEnabled, setTwoStepEnabled] = useState(true);
   // Demo switcher: which standalone home screen is showing.
-  const [demoScreen, setDemoScreen] = useState<"noDsp" | "oneDsp" | "enrolledNoPlan" | "offer1" | "requestDataBeforeDsp" | "requestYourData" | "dataRequestAccepted">("noDsp");
+  const [demoScreen, setDemoScreen] = useState<"noDsp" | "oneDsp" | "enrolledNoPlan" | "offer1" | "dataRequestAccepted">("noDsp");
   // Tracks which step to return to when closing the ChoosePlans screen.
   const [choosePlansCloseDest, setChoosePlansCloseDest] = useState(44);
   // Tracks which step to return to when going back from ManageMyPlan.
   const [managePlanBackDest, setManagePlanBackDest] = useState(56);
+  // Cash balance is reachable from step 56 and from the certificates flow (80);
+  // its back arrow returns to whichever opened it.
+  const [cashBalanceBackDest, setCashBalanceBackDest] = useState(56);
   // Offer 1.0: when true, the sign-up flow ends on the "Claiming your Tesla data"
   // loading screen instead of the dashboard.
   const [claimFlow, setClaimFlow] = useState(false);
@@ -7523,6 +7642,10 @@ export default function App() {
           if (DEMO_MODE) {
             if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
             if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} />;
+            // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
+            // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
+            // change to the component's default can't silently retheme this state.
+            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen variant="dataCertificates" onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(80)} />;
             return <DashboardScreenOneDsp {...homeProps} />;
           }
           return <DashboardScreen {...homeProps} />;
@@ -7564,7 +7687,9 @@ export default function App() {
   />
 )}
         {step === 12 && (
-          <MyDataRequestsScreen onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(9)} />
+          /* Nothing is accepted until a DSP is joined — Onboarding/Enrollment and
+             Approved-No-Plan both show the empty Accepted state. */
+          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(9)} onViewCertificate={() => setStep(73)} />
         )}
         {step === 14 && (
           <EnrollForm
@@ -7739,7 +7864,6 @@ export default function App() {
           <OfferSavingsScreen
             onContinue={() => setStep(33)}
             onClaim={() => setStep(35)}
-            onHome={() => setStep(9)}
           />
         )}
         {step === 35 && (
@@ -7757,7 +7881,12 @@ export default function App() {
         {step === 36 && <OfferClaimingLoadingScreen onComplete={() => setStep(37)} />}
         {step === 37 && <OfferContinueScreen onContinue={() => setStep(38)} />}
         {step === 38 && <DspManageContributionScreen onContinue={() => setStep(39)} />}
-        {step === 39 && <OfferClaimSuccessScreen />}
+        {/* Done goes to the Data Savings Plan section (step 56, the enrolled
+            "My Data Savings Plan" dashboard — not step 70, which is the
+            not-yet-enrolled variant with the Apply-for-DSP card). The account
+            state stays "Receiving Offers", so Home from there is still step 69,
+            that state's own home (Figma 123:52970). */}
+        {step === 39 && <OfferClaimSuccessScreen onDone={() => { setDemoScreen("offer1"); setStep(56); }} />}
         {step === 40 && <ReviewApplicationLoadingScreen onComplete={() => setStep(41)} />}
         {step === 41 && <AutoApprovedScreen onViewPlans={() => { setChoosePlansCloseDest(9); setDemoScreen("enrolledNoPlan"); setStep(42); }} />}
         {step === 42 && (
@@ -7789,18 +7918,21 @@ export default function App() {
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(53)} />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(9)} />}
-        {step === 56 && <DspLanding1Screen onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}
-        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => setStep(9)} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} />}
+        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => { setDemoScreen("oneDsp"); setStep(69); }} />}
         {step === 60 && <RequestYourDataScreen onBack={() => setStep(30)} />}
         {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage. */}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
+        {/* Slide 64 in the prototype counter. Back → slide 63 (step 62). */}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(9)} onBack={() => setStep(62)} />}
         {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(9)} onBack={() => setStep(63)} />}
         {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(9)} />}
-        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(9)} />}
-        {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} />}
-        {step === 68 && <Success1Screen />}
-        {step === 69 && <OneDspHomeScreen onHome={() => setStep(69)} />}
+        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(cashBalanceBackDest === 80 ? 69 : 9)} onBack={() => setStep(cashBalanceBackDest)} />}
+        {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => setStep(66)} />}
+        {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
+        {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
+            flow (which routes Home here), so the variant follows demoScreen. */}
+        {step === 69 && <OneDspHomeScreen variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={demoScreen === "dataRequestAccepted" ? () => setStep(80) : undefined} />}
         {/* Savings-plan tab destination for the noDsp / "Onboarding/Enrollment" state only.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
@@ -7822,8 +7954,53 @@ export default function App() {
         {step === 72 && <DataCertsLoadingScreen onViewCertificates={() => setStep(73)} onClose={() => setStep(71)} />}
         {/* Only reached via the Request Data / certsFlow path today (step 71→72→73) — hence "requests".
             If a future call site reaches this screen from the 23andMe / DA Home flow, pass "home" there instead. */}
-        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(9)} />}
-        {step === 74 && <MyCertificatesScreen onHome={() => setStep(9)} />}
+        {/* Home goes to step 69, not 9: 9 falls through to DashboardScreenOneDsp for
+            demoScreen "dataRequestAccepted", whereas 69 is OneDspHomeScreen — the
+            build of Figma frame 13:73059, this state's home. */}
+        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(69)} onSavingsPlan={() => setStep(80)} />}
+        {step === 74 && <MyCertificatesScreen onHome={() => setStep(69)} onSavingsPlan={() => setStep(80)} />}
+        {/* Figma 9:89701 — opened by the Tesla tile under "My relationships" on the
+            certificates home. Back returns to the screen that opened it (69); the
+            Tesla row opens the Tesla company page (79). */}
+        {step === 78 && (
+          <MyDataRequestsScreen
+            variant="certificates"
+            onBack={() => setStep(69)}
+            onHome={() => setStep(69)}
+            onUploadManually={() => setStep(27)}
+            onSeeHow={() => setStep(28)}
+            onGoToDWCloud={() => setStep(31)}
+            onViewCertificate={() => setStep(79)}
+            onSavingsPlan={() => setStep(80)}
+          />
+        )}
+        {/* Figma 9:6610 — Tesla company page. Back returns to the Accepted list
+            (78) that opened it; "View my data certificates" opens step 74. */}
+        {step === 79 && (
+          <TeslaDataJourneyScreen
+            onBack={() => setStep(78)}
+            onHome={() => setStep(69)}
+            onViewCertificates={() => setStep(74)}
+            onSavingsPlan={() => setStep(80)}
+          />
+        )}
+        {/* Figma 9:93931 — the savings-plan tab in the certificates flow. Same
+            screen as step 56 with the dataCertificates variant, which adds the
+            category cards, "Contribute more data" and "Request more data". */}
+        {step === 80 && (
+          <DspLanding1Screen
+            variant="dataCertificates"
+            onLearnMore={() => setStep(58)}
+            onGoHome={() => setStep(69)}
+            onManageMyPlan={() => { setManagePlanBackDest(80); setStep(59); }}
+            onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
+            onDataBalance={() => setStep(81)}
+          />
+        )}
+        {/* Figma 9:94403 — Data Balance, opened by the Data balance card on step 80. */}
+        {step === 81 && <DataBalanceScreen onBack={() => setStep(80)} onTransaction={() => setStep(82)} />}
+        {/* Figma 9:94266 — the Tesla Model 3 (+Ð 0.08) transaction on step 81. */}
+        {step === 82 && <DataTransactionScreen onBack={() => setStep(81)} />}
         {step === 33 && (
           <OfferCampaignScreen
             onBack={() => setStep(9)}
@@ -7910,8 +8087,6 @@ export default function App() {
             { key: "oneDsp", label: "Enrolled in a DSP", step: 69 },
             { key: "offer1", label: "Receiving Offers", step: 34 },
             { key: "dataRequestAccepted", label: "View Data Certificates", step: 71 },
-            { key: "requestDataBeforeDsp", label: "Requests (tabs)", step: 32 },
-            { key: "requestYourData", label: "Request your data", step: 60 },
           ] as const).map((opt) => {
             const active = demoScreen === opt.key;
             return (

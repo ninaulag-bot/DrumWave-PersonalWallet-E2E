@@ -6,15 +6,29 @@ import offerSvgPaths from "../PlanDetaillPage/svg-hfxtqmo847";
 import imgImage from "./11f19b4a02653ec7c865094728e08ed4e8bdd13d.png";
 import imgScreenshot20251212At104517Am1 from "./27d5db072f946ec46f639d9feb7531c20e747423.png";
 import imgNoiseAnimation from "./b1b492b467327e373268d8c777b3bb8b425c81c9.png";
+import imgDeltaLogo from "./delta-logo.png";
+import imgSmartCardPhoto from "./smart-card-photo.png";
+import imgKaiserHeroPhoto from "./kaiser-hero-photo.png";
+import imgRivianOffers from "./rivian-offers.png";
+import imgKaiserLogo from "./kaiser-logo.png";
+import { DrumWaveLogo } from "../../app/components/DrumWaveLogo";
 import imgShapeOfTheChaseLogo500X3111 from "./b4e477134626ae69deca38617213557dbba6fe4d.png";
 import imgScreenshot20251202At22639Pm1 from "./4d5a6cbe125eda5f4043f5bcc1d8821a46227412.png";
 import imgTeslaCarBg1 from "../PlanDetaillPage/f472d1b36845b43b2500d400f1df89646f59a9a3.png";
 import imgTeslaCarBg2 from "../PlanDetaillPage/d3215bd4f8237e9211ad92ca35aed46057bbaf54.png";
+import { OfferVariantContext } from "./offer-variant-context";
+// Used only by the dataCertificates sections below (Figma 9:93931): the category
+// glyphs and the DrumWave data-dollar mark already exported for other screens,
+// plus the request-a-company card the My Data Savings screen renders.
+import categoryPaths from "../HomeRequestDataBeforeDsp-12/svg-envbxqmko5";
+import dataDollarPaths from "../Frame2095588102/svg-n24lup08st";
+import { CompanyRequestCard } from "../../app/components/MyDataSavingsScreen";
 import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
 import { LearnMoreContext } from "./learn-more-context";
 import { GoToHomeContext } from "./go-to-home-context";
 import { ManageMyPlanContext } from "./manage-my-plan-context";
 import { CashBalanceContext } from "./cash-balance-context";
+import { DataBalanceContext } from "./data-balance-context";
 
 function Group10() {
   return (
@@ -356,9 +370,9 @@ function Group7() {
   );
 }
 
-function Group4() {
+function Group4({ w = 42.872, h = 11.676 }: { w?: number; h?: number } = {}) {
   return (
-    <div className="h-[24.34px] relative shrink-0 w-[90.299px]">
+    <div className="relative shrink-0" style={{ width: `${w}px`, height: `${h}px` }}>
       <div className="absolute inset-[-1.23%_-0.33%]">
         <svg className="block size-full" fill="none" height="24.9393" preserveAspectRatio="none" viewBox="0 0 90.8987 24.9393" width="90.8987">
           <g id="Group 1000005954">
@@ -401,15 +415,15 @@ function Group4() {
 
 function Frame9() {
   return (
-    <div className="content-stretch flex items-center relative shrink-0">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#b0ff11] text-[16.114px] whitespace-nowrap">smart</p>
+    <div className="content-stretch flex items-center pt-[1.946px] relative shrink-0">
+      <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[28px] text-white whitespace-nowrap">Smart</p>
     </div>
   );
 }
 
 function Frame14() {
   return (
-    <div className="content-stretch flex gap-[6px] h-[24.34px] items-center relative shrink-0 w-full">
+    <div className="content-stretch flex flex-col gap-[1.946px] items-start justify-center relative shrink-0">
       <Group4 />
       <Frame9 />
     </div>
@@ -432,7 +446,7 @@ function Frame10() {
   return (
     <div className="content-stretch flex items-center relative shrink-0">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.2] relative shrink-0 text-[#aeaeae] text-[14px] tracking-[-0.28px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        5 members
+        23,391 members
       </p>
     </div>
   );
@@ -457,8 +471,16 @@ function Frame13() {
 
 function Frame85() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[4px] items-start left-[24px] top-[22px] w-[137.299px]">
-      <Frame14 />
+    <div className="absolute h-[174px] left-[19px] top-[19px] w-[302px]">
+      <div className="absolute left-0 top-0 w-[154px]">
+        <Frame14 />
+      </div>
+      <div className="-translate-y-1/2 absolute flex flex-col font-['Open_Sans:Regular',sans-serif] font-normal h-[24px] justify-center leading-[0] left-0 text-[#e3e3e3] text-[14px] top-[162px] w-[129px]" style={{ fontVariationSettings: '"wdth" 100' }}>
+        <p className="leading-[1.5]">23,391 members</p>
+      </div>
+      <div className="absolute left-[276px] size-[26px] top-[148px]" data-name="Logo / DrumWave">
+        <DrumWaveLogo size={26} />
+      </div>
     </div>
   );
 }
@@ -514,6 +536,9 @@ function Component() {
   return (
     <div className="bg-[#152973] h-[214px] relative rounded-[16.112px] shrink-0 w-full" data-name="-">
       <div className="overflow-clip relative rounded-[inherit] size-full">
+        <div className="absolute inset-0" data-name="image 3">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSmartCardPhoto} />
+        </div>
         <Group6 />
         <div className="absolute flex h-[189.958px] items-center justify-center left-[-31.7px] top-[-86.56px] w-[213.792px]">
           <div className="flex-none rotate-[-30.1deg]">
@@ -649,9 +674,11 @@ function Frame87() {
 }
 
 function Frame30() {
+  // $120 in the certificates flow (Figma 9:93931); $0 everywhere else.
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex items-center relative shrink-0">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[32px] text-white whitespace-nowrap">$120</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[32px] text-white whitespace-nowrap">{variant === "dataCertificates" ? "$120" : "$0"}</p>
     </div>
   );
 }
@@ -762,10 +789,12 @@ function Frame36() {
 }
 
 function Frame31() {
+  // Data balance only goes up once an offer has been accepted.
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
       <Frame36 />
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[32px] text-white whitespace-nowrap">1.25</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[32px] text-white whitespace-nowrap">{variant === "receivingOffers" ? "4" : variant === "dataCertificates" ? "1.25" : "0"}</p>
     </div>
   );
 }
@@ -793,7 +822,7 @@ function Frame42() {
   return (
     <div className="content-stretch flex items-center relative shrink-0 w-[87px]">
       <p className="[word-break:break-word] font-['Open_Sans:SemiBold',sans-serif] font-semibold leading-[1.32] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        Data Balance
+        Data balance
       </p>
     </div>
   );
@@ -824,8 +853,9 @@ function Frame37() {
 }
 
 function Frame80() {
+  const onDataBalance = useContext(DataBalanceContext);
   return (
-    <div className="relative rounded-[16px] shrink-0 w-full">
+    <div className="relative rounded-[16px] shrink-0 w-full" onClick={onDataBalance} style={{ cursor: onDataBalance ? "pointer" : undefined }}>
       <div aria-hidden className="absolute border border-[#2a2a2a] border-solid inset-0 pointer-events-none rounded-[16px]" />
       <div className="flex flex-col items-end size-full">
         <div className="content-stretch flex flex-col gap-[7px] items-end p-[16px] relative size-full">
@@ -898,8 +928,11 @@ function Frame58() {
 }
 
 function Frame24() {
+  // The chevron is hidden in the base frame; Figma 9:94058 shows it next to
+  // "Data contribution" in the certificates flow. The "2" count stays hidden.
+  const variant = useContext(OfferVariantContext);
   return (
-    <div className="content-stretch flex gap-[12.378px] items-center opacity-0 relative shrink-0">
+    <div className={`content-stretch flex gap-[12.378px] items-center relative shrink-0 ${variant === "dataCertificates" ? "" : "opacity-0"}`}>
       <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic opacity-0 relative shrink-0 text-[24.755px] text-white whitespace-nowrap">2</p>
       <div className="content-stretch flex items-center relative shrink-0" data-name="Master Icon">
         <div className="overflow-clip relative shrink-0 size-[24.755px]" data-name="Material / chevron_right">
@@ -977,7 +1010,7 @@ function Frame26() {
   return (
     <div className="content-stretch flex items-center justify-center relative shrink-0">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.2] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        Contributed on Feb 11, 2026
+        Contributed on Feb 18, 2026
       </p>
     </div>
   );
@@ -1087,7 +1120,7 @@ function Frame60() {
 function Frame77() {
   return (
     <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full">
-      <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[18px] whitespace-nowrap">23andMe</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[18px] whitespace-nowrap">Delta</p>
       <Frame60 />
     </div>
   );
@@ -1097,7 +1130,7 @@ function Frame28() {
   return (
     <div className="content-stretch flex items-center justify-center relative shrink-0">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.2] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>
-        Contributed on Feb 11, 2026
+        Contributed on Feb 18, 2026
       </p>
     </div>
   );
@@ -1115,8 +1148,10 @@ function Frame46() {
 function Frame48() {
   return (
     <div className="content-stretch flex gap-[16px] items-center mr-[-70.901px] relative shrink-0">
-      <div className="relative rounded-[100px] shrink-0 size-[40px]" data-name="Screenshot 2025-12-12 at 10.45.17 AM 1">
-        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[100px] size-full" src={imgScreenshot20251212At104517Am1} />
+      <div className="bg-white content-stretch flex flex-col h-[40.642px] items-center justify-center overflow-clip p-[17.5px] relative rounded-[175px] shrink-0 w-[42px]" data-name="Delta">
+        <div className="h-[22.563px] relative shrink-0 w-[28.234px]" data-name="Delta logo">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgDeltaLogo} />
+        </div>
       </div>
       <Frame46 />
     </div>
@@ -1197,11 +1232,69 @@ function Frame86() {
   );
 }
 
+/* ── View Data Certificates variant — Figma 9:93931 ────────────────────────────
+   That frame keeps this screen's title, plan card, balances, Manage my plan,
+   Offers and Other-plans sections as-is, and differs in three places:
+   Data contribution lists value-per-category cards instead of the "Tesla /
+   Contributed" card, and two sections ("Contribute more data", "Request more
+   data") sit between Data contribution and Offers. All three are gated on the
+   variant so the enrolled and Receiving Offers entries (step 56) are untouched.
+
+   Category glyphs are the travel / cardiology vectors already exported in
+   HomeRequestDataBeforeDsp-12; the design puts them on brand discs (#08E887,
+   #A7B31E — sampled from the frame). Disc-on-glyph is the only composition
+   here that isn't lifted from an export. */
+const CATEGORIES = [
+  { name: "Travel & Transportation", value: "0.16", meta: "3 company  •  3 data certificates", disc: "#08E887", glyph: categoryPaths.p1692f180, glyphFill: "#0A0A0A" },
+  { name: "Health & Wellness", value: "0.05", meta: "3 company  •  2 data certificates", disc: "#A7B31E", glyph: categoryPaths.p7d33bf0, glyphFill: "#0A0A0A" },
+];
+
+function CertsCategoryCards() {
+  return (
+    <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full">
+      <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#999] text-[14px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>Your verified data certificates organized by category</p>
+      {CATEGORIES.map((c) => (
+        <div
+          key={c.name}
+          className="content-stretch flex flex-col gap-[8px] items-start relative rounded-[16px] shrink-0 w-full"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-border-subtle)", padding: 16 }}
+        >
+          <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
+            <div className="content-stretch flex gap-[8px] items-center relative shrink-0">
+              <div className="relative shrink-0 rounded-[500px] size-[24px] overflow-clip" style={{ background: c.disc }}>
+                {/* 16px glyph centered in the 24px disc — the exported icons are drawn
+                    edge-to-edge in a 24×24 box, so they need insetting here. */}
+                <svg className="absolute block" style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 16, height: 16 }} fill="none" viewBox="0 0 24 24" preserveAspectRatio="none">
+                  <path d={c.glyph} fill={c.glyphFill} />
+                </svg>
+              </div>
+              <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">{c.name}</p>
+            </div>
+            <div className="content-stretch flex items-center relative shrink-0">
+              <div className="overflow-clip relative shrink-0 size-[16px]" data-name="DrumWave / dim_2">
+                <div className="-translate-y-1/2 absolute aspect-[8/9.750870704650879] left-[16.67%] right-[20.83%] top-1/2">
+                  <svg className="absolute block inset-0 size-full" fill="none" viewBox="0 0 10 12.1886" preserveAspectRatio="none">
+                    <path d={dataDollarPaths.p38abf380} fill="#E3E3E3" />
+                    <path d={dataDollarPaths.p324e1220} fill="#E3E3E3" />
+                  </svg>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">{c.value}</p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>{c.meta}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Frame70() {
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[342px]">
       <Frame27 />
-      <Frame86 />
+      {variant === "dataCertificates" ? <CertsCategoryCards /> : <Frame86 />}
     </div>
   );
 }
@@ -1433,15 +1526,27 @@ function TeslaOfferBadgeRow() {
 }
 
 function TeslaOfferHero() {
+  // Receiving Offers shows the Rivian offer photo (Figma 13:55374); every other
+  // state keeps the original stacked Tesla heroes.
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="h-[456px] mb-[-1px] relative rounded-tl-[24px] rounded-tr-[24px] shrink-0 w-full">
       <div aria-hidden className="absolute inset-0 pointer-events-none rounded-tl-[24px] rounded-tr-[24px]">
-        <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
-          <img alt="" className="absolute h-[109.31%] left-[-78.66%] max-w-none top-0 w-[257.31%]" src={imgTeslaCarBg1} />
-        </div>
-        <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
-          <img alt="" className="absolute h-[118.67%] left-[-144.17%] max-w-none top-[-22.6%] w-[270.45%]" src={imgTeslaCarBg2} />
-        </div>
+        {variant === "receivingOffers" ? (
+          /* 342×456 source, exactly this hero box — object-cover, no crop. */
+          <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgRivianOffers} />
+          </div>
+        ) : (
+          <>
+            <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+              <img alt="" className="absolute h-[109.31%] left-[-78.66%] max-w-none top-0 w-[257.31%]" src={imgTeslaCarBg1} />
+            </div>
+            <div className="absolute inset-0 overflow-hidden rounded-tl-[24px] rounded-tr-[24px]">
+              <img alt="" className="absolute h-[118.67%] left-[-144.17%] max-w-none top-[-22.6%] w-[270.45%]" src={imgTeslaCarBg2} />
+            </div>
+          </>
+        )}
         <div className="absolute bg-gradient-to-b from-[28%] from-[rgba(0,0,0,0)] inset-0 rounded-tl-[24px] rounded-tr-[24px] to-[71.269%] to-[rgba(0,0,0,0.4)]" />
       </div>
       <div className="overflow-clip relative rounded-[inherit] size-full">
@@ -1496,7 +1601,7 @@ function TeslaOfferClaimButton() {
   return (
     <div className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]">
       <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[18px] text-white tracking-[0.36px] whitespace-nowrap">
-        <p className="leading-[1.2]">Claim offer</p>
+        <p className="leading-[1.2]">Redeem offer</p>
       </div>
     </div>
   );
@@ -1647,8 +1752,35 @@ function Frame111() {
 
 function Kids() {
   return (
-    <div className="h-[184px] overflow-clip relative rounded-[16px] shrink-0 w-[294px]" style={{ backgroundImage: "linear-gradient(146.609deg, rgba(255, 255, 255, 0.4) 22.655%, rgba(255, 255, 255, 0.2) 45.361%, rgba(255, 255, 255, 0) 64.822%, rgba(255, 255, 255, 0.4) 78.518%, rgba(255, 255, 255, 0.4) 91.852%)" }} data-name="Kids">
-      <div className="absolute bg-[rgba(91,19,19,0.94)] h-[263px] left-[-39px] rounded-[16px] top-[-2px] w-[420px]" data-name="getty-images-0c-1-twQ7Kc-unsplash 1 1" />
+    <div className="bg-[#17a530] h-[194px] overflow-clip relative rounded-[16px] shrink-0 w-[310px]" data-name="DSP - Personal Front">
+      <div aria-hidden className="absolute border border-[rgba(255,255,255,0.4)] border-solid inset-0 pointer-events-none rounded-[16px] z-[3]" />
+      <div className="absolute h-[259.171px] left-[-73.3px] top-[-13.81px] w-[388.71px]" data-name="getty-images-X8Id-45AWlk-unsplash (1) 1">
+        <img alt="" className="absolute inset-0 max-w-none object-cover opacity-90 pointer-events-none size-full" src={imgKaiserHeroPhoto} />
+      </div>
+      <div className="absolute h-[219.649px] left-[-99.84px] right-[-30.29px] top-[-11.98px] pointer-events-none" style={{ backgroundImage: "linear-gradient(-47.03469347372473deg, rgba(123, 182, 203, 0.5) 26.413%, rgba(5, 111, 23, 0.5) 103.65%)" }} />
+      <div className="absolute flex h-[367.93px] items-center justify-center left-[-181.3px] pointer-events-none top-[-177.63px] w-[351.2px]">
+        <div className="flex-none rotate-[-51.64deg]">
+          <div className="bg-[#35c237] blur-[84.199px] h-[204.837px] relative rounded-[9999px] w-[307.101px]" />
+        </div>
+      </div>
+      <div className="absolute h-[154px] left-[19px] top-[19px] w-[270px] z-[2]" data-name="Content">
+        <div className="absolute content-stretch flex flex-col gap-[4px] items-start justify-center left-0 top-0">
+          <Group4 w={38.712} h={10.543} />
+          <div className="content-stretch flex items-center pt-[1.757px] relative shrink-0">
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.5] not-italic relative shrink-0 text-[28px] text-white whitespace-nowrap">Plan name B</p>
+          </div>
+        </div>
+        <div className="-translate-y-1/2 absolute flex flex-col font-['Open_Sans:Regular',sans-serif] font-normal h-[24px] justify-center leading-[0] left-0 text-[#e3e3e3] text-[14px] top-[142px] w-[116px]" style={{ fontVariationSettings: '"wdth" 100' }}>
+          <p className="leading-[1.5]">23,391 members</p>
+        </div>
+        <div className="absolute content-stretch flex gap-[12px] items-center left-[194px] top-[128px] w-[76px]">
+          <DrumWaveLogo size={26} />
+          <div className="bg-[rgba(255,255,255,0.4)] h-[20.458px] relative shrink-0 w-px" />
+          <div className="overflow-clip relative rounded-[100px] shrink-0 size-[26px]" data-name="Kaiser Permanente logo">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgKaiserLogo} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1887,7 +2019,7 @@ function Kids1() {
 function Frame116() {
   return (
     <div className="[word-break:break-word] content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full">
-      <p className="font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[17.008px] w-full">dSavings Health</p>
+      <p className="font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[17.008px] w-full">dSavings Gaming</p>
       <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#666] text-[14px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>{`Lorem ipsum dolor sit amet consectetur. Vitae viverra sit enim volutpat malesuada. `}</p>
     </div>
   );
@@ -2090,11 +2222,68 @@ function Frame83() {
   );
 }
 
+/* "Contribute more data" — Figma 9:93931. Card matches the pending request card
+   on My data requests: green 23andMe disc, name + Pending tag, request date,
+   Upload manually / How to upload. */
+function CertsContributeMore() {
+  return (
+    <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[342px]">
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">Contribute more data</p>
+      <div className="content-stretch flex flex-col gap-[20px] items-start relative rounded-[16px] shrink-0 w-full" style={{ background: "#121212", padding: 24 }}>
+        <div className="content-stretch flex gap-[16px] items-start relative shrink-0">
+          <div className="content-stretch flex items-center justify-center relative rounded-[500px] shrink-0 size-[40px]" style={{ background: "#92C646" }}>
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-none not-italic relative shrink-0 text-[#f4f4f4] text-[20.57px]">23</p>
+          </div>
+          <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0">
+            <div className="content-stretch flex gap-[8px] items-center relative shrink-0">
+              <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[18px] whitespace-nowrap">23andMe</p>
+              <div className="content-stretch flex items-center overflow-clip px-[6px] py-[2px] relative rounded-[4px] shrink-0" style={{ background: "rgba(255,255,255,0.12)" }}>
+                <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[normal] relative shrink-0 text-[#e3e3e3] text-[12px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>Pending</p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#999] text-[14px] whitespace-nowrap" style={{ fontVariationSettings: '"wdth" 100' }}>Requested on Jan 25, 2026</p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0">
+          <div className="content-stretch flex h-[44px] items-center justify-center px-[19px] relative rounded-[500px] shrink-0" style={{ background: "#e3e3e3" }}>
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#090908] text-[16px] whitespace-nowrap">Upload manually</p>
+          </div>
+          <div className="content-stretch flex h-[44px] items-center justify-center px-[19px] relative rounded-[500px] shrink-0">
+            <div aria-hidden className="absolute border border-solid border-[#e3e3e3] inset-0 pointer-events-none rounded-[500px]" />
+            <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[16px] whitespace-nowrap">How to upload</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* "Request more data" — Figma 9:93931. Cards are the shared CompanyRequestCard
+   already used by the My Data Savings screen, so both screens' carousels match. */
+function CertsRequestMore() {
+  return (
+    <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full">
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">Request more data</p>
+      <div className="[&::-webkit-scrollbar]:hidden" style={{ display: "flex", gap: 16, overflowX: "auto", scrollbarWidth: "none", width: 366, paddingBottom: 4 }}>
+        <CompanyRequestCard initial="X" avatarColor="#0A0A0A" category="Social Media" name="X Corp" />
+        <CompanyRequestCard initial="B" avatarColor="#EA200D" category="Financial" name="Bradesco" />
+      </div>
+    </div>
+  );
+}
+
 function Frame119() {
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex flex-col gap-[64px] items-start w-full">
       <Frame49 />
       <Frame70 />
+      {variant === "dataCertificates" && (
+        <>
+          <CertsContributeMore />
+          <CertsRequestMore />
+        </>
+      )}
       <Frame83 />
     </div>
   );

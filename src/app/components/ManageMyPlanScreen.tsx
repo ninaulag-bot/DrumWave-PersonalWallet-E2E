@@ -5,6 +5,11 @@ import { AutoRenewToggleContext } from "@/imports/HomeRequestDataBeforeDsp-9/aut
 import { AutoRenewStateContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-state-context";
 import { MainBottomNav } from "./MainBottomNav";
 
+const NAV_H = 72;
+// The import's main column (Frame34) now runs in flow and carries the DrumWave
+// footer as its last child, so the frame sizes to its own content — no fixed
+// height, and no empty canvas below the footer.
+
 function CancelAutoRenewModal({ onClose, onConfirm }: { onClose: () => void; onConfirm: () => void }) {
   return (
     <div
@@ -133,13 +138,33 @@ export function ManageMyPlanScreen({ onBack, onHome }: { onBack?: () => void; on
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-      <GoBackContext.Provider value={onBack}>
-        <AutoRenewStateContext.Provider value={autoRenewOn}>
-          <AutoRenewToggleContext.Provider value={handleToggle}>
-            <HomeRequestDataBeforeDsp9 />
-          </AutoRenewToggleContext.Provider>
-        </AutoRenewStateContext.Provider>
-      </GoBackContext.Provider>
+      <div
+        className="[&::-webkit-scrollbar]:hidden"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: `${NAV_H}px`,
+          overflowY: "auto",
+          overflowX: "hidden",
+          scrollbarWidth: "none",
+        }}
+      >
+        {/* overflow:hidden so the import's remaining absolute leftovers (the
+            #2067d1 glows at top 1458/2088, the home indicator at bottom -21)
+            can't extend the scroll height past the content. Height stays auto —
+            nothing vertical to clip, so this can't reintroduce the cut-off. */}
+        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+          <GoBackContext.Provider value={onBack}>
+            <AutoRenewStateContext.Provider value={autoRenewOn}>
+              <AutoRenewToggleContext.Provider value={handleToggle}>
+                <HomeRequestDataBeforeDsp9 />
+              </AutoRenewToggleContext.Provider>
+            </AutoRenewStateContext.Provider>
+          </GoBackContext.Provider>
+        </div>
+      </div>
 
       {showCancelModal && (
         <CancelAutoRenewModal
