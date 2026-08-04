@@ -27,6 +27,47 @@ const y = (frameTop: number) => frameTop - STATUS_H;
 /** Tallest content is the button bottom (714.19 + 44); pad a little past it. */
 const CONTENT_H = 730;
 
+/**
+ * Title + subtitle + New/Claimed toggle — Figma 16:83092. Authored identically
+ * in the not-enrolled Offers frame (16:83111) and the enrolled one (16:83035),
+ * so `OffersEnrolledScreen` imports this rather than re-deriving it. Callers
+ * supply the absolute positioning; this is the 343px-wide content column only.
+ */
+export function OffersHeader() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-body)",
+            fontWeight: 400,
+            fontSize: "31.788px",
+            lineHeight: 1.02,
+            letterSpacing: "-0.9536px",
+            color: "var(--color-text-white)",
+          }}
+        >
+          Offers
+        </p>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-body)",
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: 1.5,
+            color: "var(--color-text-secondary)",
+          }}
+        >
+          Explore available offers.
+        </p>
+      </div>
+      <OffersTabs />
+    </div>
+  );
+}
+
 function OffersTabs() {
   const [tab, setTab] = useState<"new" | "claimed">("new");
   const tabBase: React.CSSProperties = {
@@ -186,39 +227,9 @@ export function OffersNotEnrolledScreen({ onRequestMoreData, onHome, onMyData, o
               left: "24px",
               top: `${y(94)}px`,
               width: "343px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 400,
-                  fontSize: "31.788px",
-                  lineHeight: 1.02,
-                  letterSpacing: "-0.9536px",
-                  color: "var(--color-text-white)",
-                }}
-              >
-                Offers
-              </p>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 400,
-                  fontSize: "14px",
-                  lineHeight: 1.5,
-                  color: "var(--color-text-secondary)",
-                }}
-              >
-                Explore available offers.
-              </p>
-            </div>
-            <OffersTabs />
+            <OffersHeader />
           </div>
 
           {/* Fanned offer cards — retail left, auto centre, travel right */}

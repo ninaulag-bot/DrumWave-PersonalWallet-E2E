@@ -1,5 +1,5 @@
 // Prototype entrypoint. (rebuild)
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DrumWaveFooter from "@/imports/UnnamedComponent/index";
 import HomeRequestDataBeforeDsp from "@/imports/HomeRequestDataBeforeDsp-1/index";
 import NoResultsIcon from "@/imports/Frame/index";
@@ -11,6 +11,7 @@ import { MainBottomNav } from "@/app/components/MainBottomNav";
 import { ApplyForDspCard } from "@/app/components/ApplyForDspCard";
 import { MyDataSavingsScreen } from "@/app/components/MyDataSavingsScreen";
 import { OffersNotEnrolledScreen } from "@/app/components/OffersNotEnrolledScreen";
+import { OffersEnrolledScreen } from "@/app/components/OffersEnrolledScreen";
 import { StatusBar } from "@/app/components/ui/StatusBar";
 import { EnrollHeroVisual } from "@/app/components/EnrollHeroVisual";
 import { PhotoFanStack } from "@/app/components/PhotoFanStack";
@@ -7374,9 +7375,65 @@ const DEMO_MODE = true;
 // destinations for the noDsp / "Onboarding/Enrollment" state.
 const EMPTY_STEPS = [13];
 
+/** Steps that must never be pushed onto the back history.
+ *  Every one of these advances on its own — a timer, an animation completing, or
+ *  a progress bar finishing — so landing back on one would immediately throw the
+ *  user forward again and the back arrow would look broken. goBack skips them and
+ *  pops to the last screen the user actually chose to be on.
+ *    19 PhotoSavedScreen           — toast, auto-completes to 20
+ *    29 RequestDataProgressScreen  — 0→100% upload, auto-completes to 30
+ *    36 OfferClaimingLoadingScreen — 3-stage loader, auto-completes to 37
+ *    40 ReviewApplicationLoading   — 3-stage loader, auto-completes to 41
+ *    47 PlanJoinedIntroScreen      — ~2.2s timer to 56
+ *    54 PlanJoinedIntroScreen      — same component, ~2.2s timer to 83
+ *    72 DataCertsLoadingScreen     — timed loader; waits for a tap, but replaying
+ *                                    it on the way back is never what "back" means
+ */
+const NO_HISTORY_STEPS = [19, 29, 36, 40, 47, 54, 72];
+
 export default function App() {
   // Entry point: Landing screen. Reset to 0 before committing/sharing.
   const [step, setStep] = useState(0);
+
+  // ── Back history ────────────────────────────────────────────────────────────
+  // Back arrows mean "the screen I actually came from", not a fixed step number.
+  // Several screens (10, 12, 27, 58, 66 …) are reachable from four or more places,
+  // so a hardcoded destination was wrong for every entry point but one.
+  //
+  // The outgoing step is recorded by an effect rather than by wrapping setStep,
+  // so all ~127 existing setStep call sites — including the prototype prev/next
+  // arrows and the bottom-nav tabs — feed the history without being touched.
+  // Bottom-nav tabs still jump directly; only back arrows pop.
+  const [stepHistory, setStepHistory] = useState<number[]>([]);
+  const prevStepRef = useRef(step);
+  // Set for the one render caused by goBack, so popping doesn't re-push.
+  const poppingRef = useRef(false);
+
+  useEffect(() => {
+    const from = prevStepRef.current;
+    prevStepRef.current = step;
+    if (from === step) return;
+    if (poppingRef.current) {
+      poppingRef.current = false;
+      return;
+    }
+    if (NO_HISTORY_STEPS.includes(from)) return;
+    setStepHistory((h) => [...h, from]);
+  }, [step]);
+
+  /** Pop to the screen that led here. `fallback` is the screen's original
+   *  hardcoded destination, used when the history is empty — e.g. when the flow
+   *  was entered mid-way with the prototype step arrows. */
+  const goBack = (fallback: number) => {
+    poppingRef.current = true;
+    if (stepHistory.length > 0) {
+      setStep(stepHistory[stepHistory.length - 1]);
+      setStepHistory(stepHistory.slice(0, -1));
+    } else {
+      setStep(fallback);
+    }
+  };
+
   // Controlled toggle state for the new TwoStepVerificationScreen (step 75).
   const [twoStepEnabled, setTwoStepEnabled] = useState(true);
   // Demo switcher: which standalone home screen is showing.
@@ -7389,11 +7446,15 @@ export default function App() {
   const preEnrollment = demoScreen === "noDsp" || demoScreen === "enrolledNoPlan";
   const homeStep = preEnrollment ? 9 : 69;
   const savingsPlanStep = demoScreen === "dataRequestAccepted" ? 80 : preEnrollment ? 70 : 56;
-  const OFFERS_STEP = 61;
+  // Varies by account state: the two pre-enrolment states keep the not-enrolled
+  // Offers frame (61); the three enrolled states get the offer carousel (85).
+  const OFFERS_STEP = preEnrollment ? 61 : 85;
   // Tracks which step to return to when closing the ChoosePlans screen.
   const [choosePlansCloseDest, setChoosePlansCloseDest] = useState(44);
   // Tracks which step to return to when going back from ManageMyPlan.
   const [managePlanBackDest, setManagePlanBackDest] = useState(56);
+  // Which plan ManageMyPlan is showing — set by whichever entry opened it.
+  const [managePlan, setManagePlan] = useState<"smart" | "fitness">("smart");
   // Cash balance is reachable from step 56 and from the certificates flow (80);
   // its back arrow returns to whichever opened it.
   const [cashBalanceBackDest, setCashBalanceBackDest] = useState(56);
@@ -7474,8 +7535,8 @@ export default function App() {
   // can't be renumbered into sequence without shifting every existing screen, so
   // the arrows reach them only after stepping through 74, not right after step 5
   // where they actually sit in the real onNext/onSkip chain). goNext clamps to
-  // TOTAL_STEPS - 1, so this must be 85 for step 84 to be reachable via the arrows.
-  const TOTAL_STEPS = 85;
+  // TOTAL_STEPS - 1, so this must be 86 for step 85 to be reachable via the arrows.
+  const TOTAL_STEPS = 86;
   const goPrev = () =>
     setStep((s) => {
       let n = s - 1;
@@ -7532,6 +7593,8 @@ export default function App() {
         )}
         {step === 1 && (
           <SignInScreen
+            /* Left hardcoded: back here is branched on certsFlow and clears the
+               flag on the way out, which a history pop wouldn't do. */
             onBack={() => {
               if (certsFlow) {
                 setCertsFlow(false);
@@ -7559,25 +7622,25 @@ export default function App() {
             setFirstName={setFirstName}
             lastName={lastName}
             setLastName={setLastName}
-            onBack={() => setStep(0)}
+            onBack={() => goBack(0)}
             onNext={() => setStep(3)}
           />
         )}
         {step === 3 && (
           <EmailStateScreen
-            onBack={() => setStep(2)}
+            onBack={() => goBack(2)}
             onNext={() => setStep(4)}
           />
         )}
         {step === 4 && (
           <PasswordScreen
-            onBack={() => setStep(3)}
+            onBack={() => goBack(3)}
             onNext={() => setStep(5)}
           />
         )}
         {step === 5 && (
           <VerificationScreen
-            onBack={() => setStep(4)}
+            onBack={() => goBack(4)}
             onVerify={() => setStep(75)}
           />
         )}
@@ -7585,7 +7648,7 @@ export default function App() {
           <TwoStepVerificationScreen
             onNext={() => setStep(76)}
             onSkip={() => setStep(76)}
-            onBack={() => setStep(5)}
+            onBack={() => goBack(5)}
             enabled={twoStepEnabled}
             onEnabledChange={setTwoStepEnabled}
           />
@@ -7594,13 +7657,13 @@ export default function App() {
           <AddPhoneNumberScreen
             onNext={() => setStep(77)}
             onSkip={() => setStep(6)}
-            onBack={() => setStep(75)}
+            onBack={() => goBack(75)}
           />
         )}
         {step === 77 && (
           <VerifyPhoneNumberScreen
             onVerify={() => setStep(6)}
-            onBack={() => setStep(76)}
+            onBack={() => goBack(76)}
             phoneNumber="+1 (555) 012-3456"
           />
         )}
@@ -7611,7 +7674,7 @@ export default function App() {
                 ? `${firstName} ${lastName}`
                 : "Carolina Smith"
             }
-            onBack={() => setStep(5)}
+            onBack={() => goBack(5)}
             onSkip={() => setStep(7)}
             onUpload={() => setStep(7)}
           />
@@ -7623,7 +7686,7 @@ export default function App() {
                 ? `${firstName} ${lastName}`
                 : "Carolina Smith"
             }
-            onBack={() => setStep(6)}
+            onBack={() => goBack(6)}
             onNext={() => setStep(8)}
           />
         )}
@@ -7685,11 +7748,11 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => setStep(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
-    onBack={() => setStep(10)}
+    onBack={() => goBack(10)}
     onContinue={() => {
       setEnrollEditLabel(null);
       setEnrollSubStep(1);
@@ -7704,7 +7767,7 @@ export default function App() {
         {step === 12 && (
           /* Nothing is accepted until a DSP is joined — Onboarding/Enrollment and
              Approved-No-Plan both show the empty Accepted state. */
-          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => setStep(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onViewCertificate={() => setStep(73)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => goBack(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onViewCertificate={() => setStep(73)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 14 && (
           <EnrollForm
@@ -7742,7 +7805,7 @@ export default function App() {
               } else if (enrollSubStep > 1) {
                 setEnrollSubStep(enrollSubStep - 1);
               } else {
-                setStep(9);
+                goBack(9);
               }
             }}
             onContinue={() => {
@@ -7789,7 +7852,7 @@ export default function App() {
         )}
         {step === 16 && (
           <AccountSettingsScreen
-            onBack={() => setStep(9)}
+            onBack={() => goBack(9)}
             onCarolinaClick={() => setStep(17)}
             onChangePassword={() => setStep(21)}
             onRequestDrumwaveData={() => setStep(22)}
@@ -7805,18 +7868,22 @@ export default function App() {
         )}
         {step === 17 && (
           <UserProfileScreen
-            onBack={() => setStep(16)}
+            onBack={() => goBack(16)}
             onUploadClick={() => setStep(18)}
             profilePhotoSrc={profilePhotoSrc}
           />
         )}
         {step === 18 && (
           <PhotoSelectModalScreen
-            onBack={() => setStep(17)}
+            onBack={() => goBack(17)}
             onSave={() => { setProfilePhotoSrc(updatedProfilePhoto); setStep(19); }}
           />
         )}
         {step === 19 && (
+          /* Deliberately not referrer-based: the referrer is the photo-select
+             modal (18), which the user just finished saving from. Both this back
+             and step 20's return to the profile screen rather than re-opening a
+             completed flow. */
           <PhotoSavedScreen
             onComplete={() => setStep(20)}
             onBack={() => setStep(17)}
@@ -7830,13 +7897,13 @@ export default function App() {
         )}
         {step === 21 && (
           <ChangePasswordScreen
-            onBack={() => setStep(16)}
+            onBack={() => goBack(16)}
             onSuccess={() => { setPasswordToast(true); setStep(16); }}
           />
         )}
         {step === 22 && (
           <RequestDrumwaveDataScreen
-            onBack={() => setStep(16)}
+            onBack={() => goBack(16)}
             onSubmit={() => setStep(23)}
           />
         )}
@@ -7846,22 +7913,22 @@ export default function App() {
           />
         )}
         {step === 24 && (
-          <FaqScreen onBack={() => setStep(16)} />
+          <FaqScreen onBack={() => goBack(16)} />
         )}
         {step === 25 && (
           <ContactSupportScreen
-            onBack={() => setStep(16)}
+            onBack={() => goBack(16)}
             onSubmit={() => { setReportToast(true); setStep(16); }}
           />
         )}
         {step === 26 && (
-          <LegalScreen onBack={() => setStep(16)} />
+          <LegalScreen onBack={() => goBack(16)} />
         )}
         {step === 27 && (
-          <UploadDataScreen onBack={() => setStep(12)} onUpload={() => setStep(29)} />
+          <UploadDataScreen onBack={() => goBack(12)} onUpload={() => setStep(29)} />
         )}
         {step === 28 && (
-          <HowToGetDataScreen onBack={() => setStep(12)} onGetData={() => setStep(27)} />
+          <HowToGetDataScreen onBack={() => goBack(12)} onGetData={() => setStep(27)} />
         )}
         {step === 29 && (
           <RequestDataProgressScreen onComplete={() => setStep(30)} />
@@ -7870,10 +7937,10 @@ export default function App() {
           <UploadSuccessScreen onContinue={() => setStep(62)} />
         )}
         {step === 31 && (
-          <DWCloudScreen onBack={() => setStep(12)} onUploadMore={() => setStep(27)} />
+          <DWCloudScreen onBack={() => goBack(12)} onUploadMore={() => setStep(27)} />
         )}
         {step === 32 && (
-          <HomeRequestDataBeforeDspScreen onBack={() => setStep(9)} />
+          <HomeRequestDataBeforeDspScreen onBack={() => goBack(9)} />
         )}
         {step === 34 && (
           <OfferSavingsScreen
@@ -7920,30 +7987,39 @@ export default function App() {
             <ChoosePlansScreen onViewFitnessDetails={() => setStep(49)} onViewSmartDetails={() => setStep(43)} onClose={closeChoosePlans} />
           </motion.div>
         )}
-        {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => setStep(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
+        {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => goBack(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
         {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 45 && <TermsConditionsScreen onBack={() => setStep(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
+        {step === 45 && <TermsConditionsScreen onBack={() => goBack(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
         {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
         {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
         {step === 48 && <JoinAnotherPlanScreen onViewFitnessDetails={() => setStep(50)} />}
-        {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(42)} />}
-        {step === 50 && <Smart2PlanDetailScreen onJoin={() => setStep(51)} onBack={() => setStep(48)} />}
-        {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} />}
-        {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setStep(54); }} />}
+        {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => goBack(42)} />}
+        {step === 50 && <Smart2PlanDetailScreen onJoin={() => setStep(51)} onBack={() => goBack(48)} />}
+        {/* Reached from both plan-detail screens (49 and 50), so the header arrow
+            has to follow the referrer; 49 is only the fallback. */}
+        {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} onBack={() => goBack(49)} />}
+        {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setStep(54); }} onBack={() => goBack(51)} />}
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} />}
-        {step === 59 && <ManageMyPlanScreen onBack={() => setStep(managePlanBackDest)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 60 && <RequestYourDataScreen onBack={() => setStep(30)} />}
-        {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage. */}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} />}
+        {/* Smart's back arrow is a deliberate non-referrer exception: it always
+            lands on the all-plans overview (84), not wherever it was opened from. */}
+        {step === 59 && <ManageMyPlanScreen plan={managePlan} onBack={() => (managePlan === "smart" ? setStep(84) : goBack(managePlanBackDest))} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 60 && <RequestYourDataScreen onBack={() => goBack(30)} />}
+        {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage.
+            Deliberately not referrer-based: this is entered at the end of the
+            upload flow (30 → 62), and it resets the account state, so back has to
+            leave the flow rather than re-enter its success screen. */}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
         {/* Slide 64 in the prototype counter. Back → slide 63 (step 62). */}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(62)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(63)} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(62)} />}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(63)} />}
         {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(cashBalanceBackDest)} />}
-        {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => setStep(66)} />}
+        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(cashBalanceBackDest)} />}
+        {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => goBack(66)} />}
+        {/* Back stays hardcoded: the referrer is the payout form (67) the user just
+            submitted, and returning into a completed flow isn't what back means. */}
         {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
@@ -7959,9 +8035,9 @@ export default function App() {
             onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
-        {/* Offers tab destination for every account state — the only Offers frame
-            that exists. Figma frame "Offers" (node 16:83111) is authored for the
-            not-enrolled state, so enrolled users see not-enrolled copy here. */}
+        {/* Offers tab destination for the two pre-enrolment states. Figma frame
+            "Offers" (node 16:83111) is authored for the not-enrolled state; the
+            enrolled states route to step 85 instead, via OFFERS_STEP. */}
         {step === 61 && (
           <OffersNotEnrolledScreen
             onRequestMoreData={() => setStep(10)}
@@ -7985,7 +8061,7 @@ export default function App() {
         {step === 78 && (
           <MyDataRequestsScreen
             variant="certificates"
-            onBack={() => setStep(69)}
+            onBack={() => goBack(69)}
             onHome={() => setStep(homeStep)}
             onUploadManually={() => setStep(27)}
             onSeeHow={() => setStep(28)}
@@ -8000,7 +8076,7 @@ export default function App() {
             (78) that opened it; "View my data certificates" opens step 74. */}
         {step === 79 && (
           <TeslaDataJourneyScreen
-            onBack={() => setStep(78)}
+            onBack={() => goBack(78)}
             onHome={() => setStep(homeStep)}
             onMyData={() => setStep(12)}
             onViewCertificates={() => setStep(74)}
@@ -8018,21 +8094,27 @@ export default function App() {
             onGoHome={() => setStep(homeStep)}
             onMyData={() => setStep(12)}
             onOffers={() => setStep(OFFERS_STEP)}
-            onManageMyPlan={() => { setManagePlanBackDest(80); setStep(59); }}
+            onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(80); setStep(59); }}
             onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
             onDataBalance={() => setStep(81)}
+            onDataContribution={() => setStep(74)}
           />
         )}
         {/* Figma 9:94403 — Data Balance, opened by the Data balance card on step 80. */}
-        {step === 81 && <DataBalanceScreen onBack={() => setStep(80)} onTransaction={() => setStep(82)} />}
+        {step === 81 && <DataBalanceScreen onBack={() => goBack(80)} onTransaction={() => setStep(82)} />}
         {/* Figma 9:94266 — the Tesla Model 3 (+Ð 0.08) transaction on step 81. */}
-        {step === 82 && <DataTransactionScreen onBack={() => setStep(81)} />}
-        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {step === 82 && <DataTransactionScreen onBack={() => goBack(81)} />}
+        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {/* Figma 15:34974 — "My Data Savings" all-plans overview, reached from "Back to all plans" on step 83. */}
-        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(83)} onManageMyPlan={() => { setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {/* No "Manage my plan" control renders on 84 (see DspActivePlansScreen —
+            Frame49 isn't in its subtree), so onManageMyPlan here is unreachable;
+            "fitness" matches where this screen's card taps already lead (83). */}
+        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(56)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {/* Figma 16:83035 — the Offers frame authored for the enrolled states; OFFERS_STEP routes oneDsp/offer1/dataRequestAccepted here instead of 61. */}
+        {step === 85 && <OffersEnrolledScreen onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onClaimOffer={() => setStep(36)} />}
         {step === 33 && (
           <OfferCampaignScreen
-            onBack={() => setStep(9)}
+            onBack={() => goBack(9)}
             onContinue={() => {
               setEnrollEditLabel(null);
               setEnrollSubStep(1);
@@ -8045,13 +8127,13 @@ export default function App() {
         )}
         {step === 57 && (
           <EnrollInfoScreen
-            onBack={() => setStep(9)}
+            onBack={() => goBack(9)}
             onRequestData={() => setStep(10)}
           />
         )}
         {step === 58 && (
           <EnrollOffersScreen
-            onBack={() => setStep(56)}
+            onBack={() => goBack(56)}
             onRequestData={() => setStep(10)}
           />
         )}

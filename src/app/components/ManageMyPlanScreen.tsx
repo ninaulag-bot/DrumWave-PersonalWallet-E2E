@@ -3,6 +3,7 @@ import HomeRequestDataBeforeDsp9 from "@/imports/HomeRequestDataBeforeDsp-9/inde
 import { GoBackContext } from "@/imports/HomeRequestDataBeforeDsp-9/go-back-context";
 import { AutoRenewToggleContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-toggle-context";
 import { AutoRenewStateContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-state-context";
+import { PlanContext, type ManagedPlan } from "@/imports/HomeRequestDataBeforeDsp-9/plan-context";
 import { MainBottomNav } from "./MainBottomNav";
 
 const NAV_H = 72;
@@ -118,8 +119,9 @@ function CancelAutoRenewModal({ onClose, onConfirm }: { onClose: () => void; onC
 }
 
 /** "Manage my plan" screen — reached by tapping "Manage my plan" on the
- *  DSP Landing screen within the approved + not joined flow. */
-export function ManageMyPlanScreen({ onBack, onHome, onMyData, onOffers }: { onBack?: () => void; onHome?: () => void; onMyData?: () => void; onOffers?: () => void }) {
+ *  DSP Landing screen within the approved + not joined flow. `plan` switches the
+ *  lockup and the card thumbnail between dSavings Smart and dSavings Fitness. */
+export function ManageMyPlanScreen({ plan = "fitness", onBack, onHome, onMyData, onOffers }: { plan?: ManagedPlan; onBack?: () => void; onHome?: () => void; onMyData?: () => void; onOffers?: () => void }) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [autoRenewOn, setAutoRenewOn] = useState(true);
 
@@ -157,11 +159,13 @@ export function ManageMyPlanScreen({ onBack, onHome, onMyData, onOffers }: { onB
             nothing vertical to clip, so this can't reintroduce the cut-off. */}
         <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
           <GoBackContext.Provider value={onBack}>
-            <AutoRenewStateContext.Provider value={autoRenewOn}>
-              <AutoRenewToggleContext.Provider value={handleToggle}>
-                <HomeRequestDataBeforeDsp9 />
-              </AutoRenewToggleContext.Provider>
-            </AutoRenewStateContext.Provider>
+            <PlanContext.Provider value={plan}>
+              <AutoRenewStateContext.Provider value={autoRenewOn}>
+                <AutoRenewToggleContext.Provider value={handleToggle}>
+                  <HomeRequestDataBeforeDsp9 />
+                </AutoRenewToggleContext.Provider>
+              </AutoRenewStateContext.Provider>
+            </PlanContext.Provider>
           </GoBackContext.Provider>
         </div>
       </div>

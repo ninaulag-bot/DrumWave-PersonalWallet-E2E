@@ -7,6 +7,7 @@ import { ManageMyPlanContext } from "@/imports/DspLanding-1/manage-my-plan-conte
 import { CashBalanceContext } from "@/imports/DspLanding-1/cash-balance-context";
 import { DataBalanceContext } from "@/imports/DspLanding-1/data-balance-context";
 import { ViewAllPlansContext } from "@/imports/DspLanding-1/view-all-plans-context";
+import { DataContributionContext } from "@/imports/DspLanding-1/data-contribution-context";
 import { OfferVariantContext, type OfferVariant } from "@/imports/DspLanding-1/offer-variant-context";
 
 interface DspLanding1ScreenProps {
@@ -19,6 +20,9 @@ interface DspLanding1ScreenProps {
   onDataBalance?: () => void;
   /** Called when a "View all plans" button in "Other plans you qualify for" is pressed. */
   onViewAllPlans?: () => void;
+  /** Called when the "Data contribution" row is tapped. Only passed in the data
+   *  certificates flow; left undefined elsewhere so the row stays inert. */
+  onDataContribution?: () => void;
   /** "receivingOffers" (after an offer is accepted) shows data balance 4 and the
    *  Rivian offer photo; "enrolled" keeps 0 and the original Tesla photos. */
   variant?: OfferVariant;
@@ -26,7 +30,7 @@ interface DspLanding1ScreenProps {
 
 /** "My Data Savings Plan" dashboard screen, reached after "Go to my plan"
  *  on the Welcome to your Data Savings Plan page. */
-export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, variant = "enrolled" }: DspLanding1ScreenProps) {
+export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, variant = "enrolled" }: DspLanding1ScreenProps) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <OfferVariantContext.Provider value={variant}>
@@ -38,7 +42,9 @@ export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, o
                 <CashBalanceContext.Provider value={onCashBalance}>
                   <DataBalanceContext.Provider value={onDataBalance}>
                     <ViewAllPlansContext.Provider value={onViewAllPlans}>
-                      <DspLanding1 />
+                      <DataContributionContext.Provider value={onDataContribution}>
+                        <DspLanding1 />
+                      </DataContributionContext.Provider>
                     </ViewAllPlansContext.Provider>
                   </DataBalanceContext.Provider>
                 </CashBalanceContext.Provider>

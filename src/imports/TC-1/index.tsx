@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { SmartTermsAcceptContext } from "./accept-context";
+import { SmartTermsBackContext } from "./back-context";
 import svgPaths from "./svg-3yxa3eb55w";
 import imgUntitledDesign81 from "./2f1f4e853f2411e35f12bf6b3ea6d0a5bd096b3a.png";
 
@@ -2115,8 +2116,9 @@ function Content1() {
 }
 
 function Frame9() {
+  const onBack = useContext(SmartTermsBackContext);
   return (
-    <div className="content-stretch flex items-center relative shrink-0 w-[33px]">
+    <button type="button" onClick={onBack} className="content-stretch flex items-center relative shrink-0 w-[33px] cursor-pointer">
       <div className="overflow-clip relative shrink-0 size-[24px]" data-name="Material / arrow_back_ios">
         <div className="absolute inset-[8.33%_50.94%_8.33%_0]" data-name="Vector">
           <svg className="absolute block inset-0 size-full" fill="none" height="20" preserveAspectRatio="none" viewBox="0 0 11.775 20" width="11.775">
@@ -2124,7 +2126,7 @@ function Frame9() {
           </svg>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

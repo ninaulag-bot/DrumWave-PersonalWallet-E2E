@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { UpdateContributionsContext } from "./update-context";
+import { GoBackContext } from "./go-back-context";
 import svgPaths from "./svg-1c4w8jmbfu";
 import imgLogo1 from "./fc64752b39e40f9f67396ff9f994e3ee74625853.png";
 import { imgGroup } from "./svg-8t4wt";
@@ -1425,15 +1426,16 @@ function Frame() {
 }
 
 function Frame42() {
+  const onBack = useContext(GoBackContext);
   return (
     <div className="absolute content-stretch flex h-[48px] items-center justify-between left-[23.65px] top-[71px] w-[342px]">
-      <div className="overflow-clip relative shrink-0 size-[24px]" data-name="Material / arrow_back_ios">
+      <button type="button" onClick={onBack} className="overflow-clip relative shrink-0 size-[24px] cursor-pointer" data-name="Material / arrow_back_ios">
         <div className="absolute inset-[8.33%_50.94%_8.33%_0]" data-name="Vector">
           <svg className="absolute block inset-0 size-full" fill="none" height="20" preserveAspectRatio="none" viewBox="0 0 11.775 20" width="11.775">
             <path d={svgPaths.p30d4a680} fill="var(--fill-0, white)" id="Vector" />
           </svg>
         </div>
-      </div>
+      </button>
       <p className="[word-break:break-word] flex-[1_0_0] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] min-w-px not-italic relative text-[18px] text-center text-white">Contribution settings</p>
       <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic opacity-0 relative shrink-0 text-[#e3e3e3] text-[18px] text-center whitespace-nowrap">
         <p className="leading-none">Skip</p>

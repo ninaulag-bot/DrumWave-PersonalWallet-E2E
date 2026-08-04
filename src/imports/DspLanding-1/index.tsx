@@ -32,6 +32,7 @@ import { ManageMyPlanContext } from "./manage-my-plan-context";
 import { CashBalanceContext } from "./cash-balance-context";
 import { DataBalanceContext } from "./data-balance-context";
 import { ViewAllPlansContext } from "./view-all-plans-context";
+import { DataContributionContext } from "./data-contribution-context";
 
 export function Group10() {
   return (
@@ -186,7 +187,6 @@ function Frame29() {
 function Frame15() {
   return (
     <div className="content-stretch flex h-[48px] items-center justify-between relative shrink-0 w-[342px]">
-      <Frame29 />
       <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic opacity-0 relative shrink-0 text-[#e3e3e3] text-[18px] text-center whitespace-nowrap">
         <p className="leading-none">Skip</p>
       </div>
@@ -198,7 +198,7 @@ function Frame52() {
   return (
     <div className="content-stretch flex flex-col items-center relative shrink-0 w-full">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.02] relative shrink-0 text-[31.788px] text-white tracking-[-0.9536px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>
-        My Data Savings Plan
+        My Data Savings
       </p>
     </div>
   );
@@ -951,11 +951,16 @@ function Frame24() {
 }
 
 function Frame27() {
+  const onDataContribution = useContext(DataContributionContext);
   return (
-    <div className="content-stretch flex gap-[25px] items-start relative shrink-0 w-[342px]">
+    <button
+      className="content-stretch flex gap-[25px] items-start relative shrink-0 w-[342px] bg-transparent border-0 p-0 text-left"
+      onClick={onDataContribution}
+      style={{ cursor: onDataContribution ? "pointer" : undefined }}
+    >
       <Frame58 />
       <Frame24 />
-    </div>
+    </button>
   );
 }
 

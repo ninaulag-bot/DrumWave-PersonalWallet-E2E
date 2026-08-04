@@ -2,7 +2,11 @@ import { useContext } from "react";
 import svgPaths from "./svg-e3em52x0gl";
 import imgRectangle830106 from "./0610ef1e32d77c6a46a49de57977c326d5120969.png";
 import imgFitness from "../DspPage/99718c8ae26cc5d3c0512ec59d45859d4d9bff7a.png";
+// Bare card artwork, not the baked dsavings-smart-card.png: the lockup below is
+// drawn in code, and the baked card's own title would crop into this thumbnail.
+import imgSmart from "../DspLanding-1/smart-card-photo.png";
 import { imgGroup } from "./svg-2m0f3";
+import { PlanContext } from "./plan-context";
 import { GoBackContext } from "./go-back-context";
 import { AutoRenewToggleContext } from "./auto-renew-toggle-context";
 import { AutoRenewStateContext } from "./auto-renew-state-context";
@@ -479,10 +483,11 @@ function AutoRenew() {
 }
 
 function Frame32() {
+  const plan = useContext(PlanContext);
   return (
     <div className="content-stretch flex items-end justify-between relative shrink-0 w-full">
       <div className="relative rounded-[16px] shrink-0 size-[80px]">
-        <img alt="dSavings fitness" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={imgFitness} />
+        <img alt={plan === "smart" ? "dSavings smart" : "dSavings fitness"} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={plan === "smart" ? imgSmart : imgFitness} />
       </div>
       <AutoRenew />
     </div>
@@ -533,9 +538,10 @@ function Group2() {
 }
 
 function Frame20() {
+  const plan = useContext(PlanContext);
   return (
     <div className="content-stretch flex items-center relative shrink-0">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#b0ff11] text-[14.564px] whitespace-nowrap">fitness</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#b0ff11] text-[14.564px] whitespace-nowrap">{plan === "smart" ? "smart" : "fitness"}</p>
     </div>
   );
 }
