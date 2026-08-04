@@ -33,6 +33,7 @@ import { CashBalanceContext } from "./cash-balance-context";
 import { DataBalanceContext } from "./data-balance-context";
 import { ViewAllPlansContext } from "./view-all-plans-context";
 import { DataContributionContext } from "./data-contribution-context";
+import { RequestMoreDataContext } from "./request-more-data-context";
 import { BackToAllPlansContext } from "./back-to-all-plans-context";
 
 export function Group10() {
@@ -2304,12 +2305,13 @@ function CertsContributeMore() {
 /* "Request more data" — Figma 9:93931. Cards are the shared CompanyRequestCard
    already used by the My Data Savings screen, so both screens' carousels match. */
 function CertsRequestMore() {
+  const onRequestMoreData = useContext(RequestMoreDataContext);
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full">
       <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">Request more data</p>
       <div className="[&::-webkit-scrollbar]:hidden" style={{ display: "flex", gap: 16, overflowX: "auto", scrollbarWidth: "none", width: 366, paddingBottom: 4 }}>
-        <CompanyRequestCard initial="X" avatarColor="#0A0A0A" category="Social Media" name="X Corp" />
-        <CompanyRequestCard initial="B" avatarColor="#EA200D" category="Financial" name="Bradesco" />
+        <CompanyRequestCard initial="X" avatarColor="#0A0A0A" category="Social Media" name="X Corp" onRequest={onRequestMoreData} />
+        <CompanyRequestCard initial="B" avatarColor="#EA200D" category="Financial" name="Bradesco" onRequest={onRequestMoreData} />
       </div>
     </div>
   );

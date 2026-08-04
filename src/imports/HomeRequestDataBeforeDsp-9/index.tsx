@@ -419,7 +419,9 @@ function Frame24() {
   const onBack = useContext(GoBackContext);
   return (
     <button
-      className="content-stretch flex items-center relative shrink-0 w-[33px] cursor-pointer bg-transparent border-0 p-0"
+      type="button"
+      aria-label="Go back"
+      className="content-stretch flex items-center relative shrink-0 w-[44px] h-[44px] cursor-pointer bg-transparent border-0 p-0"
       onClick={onBack}
     >
       <div className="overflow-clip relative shrink-0 size-[24px]" data-name="Material / arrow_back_ios">
@@ -947,7 +949,9 @@ export default function HomeRequestDataBeforeDsp() {
           3405.07). Invisible via overflow-x, but its vertical extent still
           counted toward the scroll height, leaving ~2000px of empty canvas
           below the footer. The real footer is Component1, in flow in Frame34. */}
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-px items-center left-1/2 top-[76px] w-[390px]" data-name="Profile header">
+      {/* z-10: Frame34 is in-flow with pt-[147px] and paints after this header, so
+          its padding box otherwise eats taps on the back arrow. */}
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-px items-center left-1/2 top-[76px] w-[390px] z-10" data-name="Profile header">
         <Frame23 />
         <div className="h-0 relative shrink-0 w-[390px]">
           <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 32 32">

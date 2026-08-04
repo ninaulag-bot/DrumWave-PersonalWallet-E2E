@@ -14,7 +14,9 @@ interface TermsConditionsScreenProps {
 export function TermsConditionsScreen({ onBack, onAccept }: TermsConditionsScreenProps) {
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-      <div className="terms-conditions-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+      {/* 54px top pad: UnifiedStatusBar hides the baked 54px status band, which
+          collapsed the in-flow header up under the overlay. Keep that space. */}
+      <div className="terms-conditions-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", paddingTop: 54, boxSizing: "border-box" }}>
         <TermsBackContext.Provider value={onBack}>
           <TermsAcceptContext.Provider value={onAccept}>
             <TC />

@@ -153,8 +153,16 @@ export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={SPRING}
+            className="learn-more-sheet"
             style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", zIndex: 20 }}
           >
+            {/* Enroll-7 bakes its own Status Bar; shared UnifiedStatusBar already
+                covers the top — hide the duplicate chrome in the sheet. */}
+            <style>{`
+              .learn-more-sheet [data-name="Status Bar - iPhone"],
+              .learn-more-sheet [data-name="Status Bar"],
+              .learn-more-sheet [data-name="Navigation Bar - iPhone (Compact Size Class)"] { display: none !important; }
+            `}</style>
             <div style={{ position: "relative", width: "100%", height: `${LEARN_MORE_SHEET_H}px` }}>
               <Enroll7 />
 

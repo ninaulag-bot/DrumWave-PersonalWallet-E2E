@@ -819,36 +819,36 @@ function Frame42({ travelOn, setTravelOn, onContinue }: { travelOn: boolean; set
         <MultiSelectPills />
         <Frame28 travelOn={travelOn} setTravelOn={setTravelOn} />
       </div>
-      {/* 72px gap between the last knob and the "Continue without changes" button.
-          Navigates forward only once the required category knob is on. */}
+      {/* 72px gap between the last knob and the CTA. Copy flips to "Confirm
+          changes" once Travel & Transportation is on; advances only then. */}
       <button
         type="button"
         onClick={() => { if (travelOn) onContinue?.(); }}
         className={`mt-[72px] w-[342px] rounded-[500px] ${travelOn ? "cursor-pointer" : "cursor-not-allowed opacity-60"}`}
       >
-        <Frame5 />
+        <Frame5 label={travelOn ? "Confirm changes" : "Continue without changes"} />
       </button>
     </div>
   );
 }
 
-function Content() {
+function Content({ label }: { label: string }) {
   return (
     <div className="content-stretch flex gap-[8px] h-[24px] items-center relative shrink-0" data-name="Content">
       <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[#1d2023] text-[18px] text-center whitespace-nowrap">
-        <p className="leading-none">Continue without changes</p>
+        <p className="leading-none">{label}</p>
       </div>
     </div>
   );
 }
 
-function ButtonState() {
+function ButtonState({ label }: { label: string }) {
   return (
     <div className="bg-[#e3e3e3] content-stretch flex flex-[1_0_0] h-[48px] items-start min-w-px relative rounded-[500px]" data-name="_ButtonState">
       <div className="flex-[1_0_0] min-w-px relative rounded-[500px]" data-name="_ButtonBase">
         <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
           <div className="content-stretch flex items-center justify-center px-[24px] py-[12px] relative size-full">
-            <Content />
+            <Content label={label} />
           </div>
         </div>
         <div aria-hidden className="absolute border-[0.911px] border-solid border-white inset-0 pointer-events-none rounded-[500px]" />
@@ -857,18 +857,18 @@ function ButtonState() {
   );
 }
 
-function Button() {
+function Button({ label }: { label: string }) {
   return (
     <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-full" data-name="Button">
-      <ButtonState />
+      <ButtonState label={label} />
     </div>
   );
 }
 
-function Frame5() {
+function Frame5({ label = "Continue without changes" }: { label?: string }) {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-      <Button />
+      <Button label={label} />
     </div>
   );
 }

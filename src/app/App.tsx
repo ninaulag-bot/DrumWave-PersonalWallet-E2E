@@ -3992,6 +3992,8 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
               </p>
               {/* Request button (full width) */}
               <button
+                type="button"
+                onClick={onRequestData}
                 style={{
                   background: "var(--color-action-primary-bg)",
                   border: "none",
@@ -4076,6 +4078,7 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
     {/* Request button */}
     <button
       type="button"
+      onClick={onRequestData}
       style={{
         alignSelf: "stretch",
         height: "37px",
@@ -4761,6 +4764,8 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
               </p>
               {/* Request button (full width) */}
               <button
+                type="button"
+                onClick={onRequestData}
                 style={{
                   background: "var(--color-action-primary-bg)",
                   border: "none",
@@ -4845,6 +4850,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
     {/* Request button */}
     <button
       type="button"
+      onClick={onRequestData}
       style={{
         alignSelf: "stretch",
         height: "37px",
@@ -5643,6 +5649,8 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
               </p>
               {/* Request button (full width) */}
               <button
+                type="button"
+                onClick={onRequestData}
                 style={{
                   background: "var(--color-action-primary-bg)",
                   border: "none",
@@ -5727,6 +5735,7 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
     {/* Request button */}
     <button
       type="button"
+      onClick={onRequestData}
       style={{
         alignSelf: "stretch",
         height: "37px",
@@ -6584,6 +6593,8 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
               </p>
               {/* Request button (full width) */}
               <button
+                type="button"
+                onClick={onRequestData}
                 style={{
                   background: "var(--color-action-primary-bg)",
                   border: "none",
@@ -6668,6 +6679,7 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
     {/* Request button */}
     <button
       type="button"
+      onClick={onRequestData}
       style={{
         alignSelf: "stretch",
         height: "37px",
@@ -7852,10 +7864,11 @@ export default function App() {
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
-        {/* Smart's back arrow is a deliberate non-referrer exception: it always
-            lands on the all-plans overview (84), not wherever it was opened from. */}
-        {step === 59 && <ManageMyPlanScreen plan={managePlan} onBack={() => (managePlan === "smart" ? setStep(84) : goBack(managePlanBackDest))} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
+        {/* Counter shows step+1 → "60 / N" is this screen (Manage my plan).
+            Back always returns to the individual plan page that opened it
+            (56 Smart / 80 certs Smart / 83 Fitness), via history + managePlanBackDest. */}
+        {step === 59 && <ManageMyPlanScreen plan={managePlan} onBack={() => goBack(managePlanBackDest)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 60 && <RequestYourDataScreen onBack={() => goBack(30)} />}
         {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage.
             Deliberately not referrer-based: this is entered at the end of the
@@ -7873,7 +7886,7 @@ export default function App() {
         {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
-        {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} />}
+        {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} />}
         {/* Savings-plan tab destination for the noDsp / "Approved, No Plan" states.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
@@ -7883,6 +7896,7 @@ export default function App() {
             onHome={() => setStep(homeStep)}
             onMyData={() => setStep(MY_DATA_STEP)}
             onOffers={() => setStep(OFFERS_STEP)}
+            onRequestMoreData={() => setStep(MY_DATA_STEP)}
           />
         )}
         {/* Offers tab destination for the two pre-enrolment states. Figma frame
@@ -7948,6 +7962,7 @@ export default function App() {
             onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
             onDataBalance={() => setStep(81)}
             onDataContribution={() => setStep(74)}
+            onRequestMoreData={() => setStep(MY_DATA_STEP)}
           />
         )}
         {/* Figma 9:94403 — Data Balance, opened by the Data balance card on step 80. */}

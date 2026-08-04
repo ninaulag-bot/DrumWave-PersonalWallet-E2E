@@ -8,6 +8,7 @@ import { CashBalanceContext } from "@/imports/DspLanding-1/cash-balance-context"
 import { DataBalanceContext } from "@/imports/DspLanding-1/data-balance-context";
 import { ViewAllPlansContext } from "@/imports/DspLanding-1/view-all-plans-context";
 import { DataContributionContext } from "@/imports/DspLanding-1/data-contribution-context";
+import { RequestMoreDataContext } from "@/imports/DspLanding-1/request-more-data-context";
 import { BackToAllPlansContext } from "@/imports/DspLanding-1/back-to-all-plans-context";
 import { OfferVariantContext, type OfferVariant } from "@/imports/DspLanding-1/offer-variant-context";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
@@ -25,6 +26,8 @@ interface DspLanding1ScreenProps {
   /** Called when the "Data contribution" row is tapped. Only passed in the data
    *  certificates flow; left undefined elsewhere so the row stays inert. */
   onDataContribution?: () => void;
+  /** Request more data company pills → Request Data (step 10). */
+  onRequestMoreData?: () => void;
   /** Called by the "Back to all plans" link. Only passed when this screen was
    *  opened from the all-plans overview; left undefined elsewhere, which is what
    *  keeps the link from rendering at all. */
@@ -36,7 +39,7 @@ interface DspLanding1ScreenProps {
 
 /** "My Data Savings Plan" dashboard screen, reached after "Go to my plan"
  *  on the Welcome to your Data Savings Plan page. */
-export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, onBackToAllPlans, variant = "enrolled" }: DspLanding1ScreenProps) {
+export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, onRequestMoreData, onBackToAllPlans, variant = "enrolled" }: DspLanding1ScreenProps) {
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="dsp-landing1-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
@@ -50,9 +53,11 @@ export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, o
                     <DataBalanceContext.Provider value={onDataBalance}>
                       <ViewAllPlansContext.Provider value={onViewAllPlans}>
                         <DataContributionContext.Provider value={onDataContribution}>
+                          <RequestMoreDataContext.Provider value={onRequestMoreData}>
                           <BackToAllPlansContext.Provider value={onBackToAllPlans}>
                             <DspLanding1 />
                           </BackToAllPlansContext.Provider>
+                          </RequestMoreDataContext.Provider>
                         </DataContributionContext.Provider>
                       </ViewAllPlansContext.Provider>
                     </DataBalanceContext.Provider>

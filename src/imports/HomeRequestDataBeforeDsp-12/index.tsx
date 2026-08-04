@@ -1098,14 +1098,15 @@ function ButtonState() {
 function Button() {
   const onRequestMoreData = useContext(RequestMoreDataContext);
   return (
-    <div
-      className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px]"
+    <button
+      type="button"
+      className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px] bg-transparent border-0 p-0"
       data-name="Button"
       onClick={onRequestMoreData}
       style={onRequestMoreData ? { cursor: "pointer" } : undefined}
     >
       <ButtonState />
-    </div>
+    </button>
   );
 }
 
@@ -1120,12 +1121,12 @@ function Content1() {
 }
 
 function Frame62() {
-  // The only tappable element in this export — routes to My data requests.
   const onViewMyRequests = useContext(ViewMyRequestsContext);
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-[342px]">
-      <div
-        className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px]"
+      <button
+        type="button"
+        className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px] bg-transparent border-0 p-0"
         data-name="Button"
         onClick={onViewMyRequests}
         style={onViewMyRequests ? { cursor: "pointer" } : undefined}
@@ -1140,7 +1141,7 @@ function Frame62() {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   );
 }
@@ -1173,7 +1174,9 @@ function Frame113() {
 
 function Frame104() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[16px] items-center justify-center left-0 px-[24px] top-[398px] w-[390px]">
+    /* z-10: Frame122 is in-flow with pt-[774px] and paints after this block, so
+       its padding box otherwise eats taps on Request more data / View my requests. */
+    <div className="absolute content-stretch flex flex-col gap-[16px] items-center justify-center left-0 px-[24px] top-[398px] w-[390px] z-10">
       <Frame103 />
       <Frame113 />
     </div>
@@ -1947,14 +1950,20 @@ function Frame31() {
 }
 
 function Frame43() {
+  const onRequestMoreData = useContext(RequestMoreDataContext);
   return (
-    <div className="bg-white h-[37.133px] relative rounded-[41.259px] shrink-0 w-full">
+    <button
+      type="button"
+      onClick={onRequestMoreData}
+      className="bg-white h-[37.133px] relative rounded-[41.259px] shrink-0 w-full border-0 p-0"
+      style={onRequestMoreData ? { cursor: "pointer" } : undefined}
+    >
       <div className="flex flex-row items-center justify-center size-full">
         <div className="content-stretch flex items-center justify-center p-[10.315px] relative size-full">
           <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#1a1b1c] text-[16.504px] text-center whitespace-nowrap">Request</p>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -2012,14 +2021,20 @@ function Artwork() {
 }
 
 function Frame44() {
+  const onRequestMoreData = useContext(RequestMoreDataContext);
   return (
-    <div className="bg-white h-[37.133px] relative rounded-[41.259px] shrink-0 w-full">
+    <button
+      type="button"
+      onClick={onRequestMoreData}
+      className="bg-white h-[37.133px] relative rounded-[41.259px] shrink-0 w-full border-0 p-0"
+      style={onRequestMoreData ? { cursor: "pointer" } : undefined}
+    >
       <div className="flex flex-row items-center justify-center size-full">
         <div className="content-stretch flex items-center justify-center p-[10.315px] relative size-full">
           <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#1a1b1c] text-[16.504px] text-center tracking-[-0.6601px] whitespace-nowrap">Request</p>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

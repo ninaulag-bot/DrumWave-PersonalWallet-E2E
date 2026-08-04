@@ -16,9 +16,11 @@ interface SmartTermsConditionsScreenProps {
 export function SmartTermsConditionsScreen({ onAccept, onBack }: SmartTermsConditionsScreenProps) {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      {/* 54px top pad: same as TermsConditionsScreen — hiding the baked status
+          band was collapsing the header under the overlay. */}
       <div
         className="smart-terms-sb [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-        style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
+        style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", paddingTop: 54, boxSizing: "border-box" }}
       >
         <SmartTermsAcceptContext.Provider value={onAccept}>
           <SmartTermsBackContext.Provider value={onBack}>

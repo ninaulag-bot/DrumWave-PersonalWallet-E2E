@@ -93,20 +93,21 @@ function Group1() {
 
 function Frame56({ onBack }: { onBack?: () => void }) {
   return (
-    <div className="content-stretch flex items-center relative shrink-0 w-[33px]">
-      <div
-        className="overflow-clip relative shrink-0 size-[24px]"
-        data-name="Material / arrow_back_ios"
-        onClick={onBack}
-        style={{ cursor: onBack ? "pointer" : undefined }}
-      >
+    <button
+      type="button"
+      aria-label="Go back"
+      onClick={onBack}
+      className="content-stretch flex items-center relative shrink-0 w-[44px] h-[44px] bg-transparent border-0 p-0"
+      style={{ cursor: onBack ? "pointer" : "default" }}
+    >
+      <div className="overflow-clip relative shrink-0 size-[24px]" data-name="Material / arrow_back_ios">
         <div className="absolute inset-[8.33%_50.94%_8.33%_0]" data-name="Vector">
           <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.775 20">
             <path d={svgPaths.p30d4a680} fill="var(--fill-0, white)" id="Vector" />
           </svg>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -773,7 +774,7 @@ export default function Component3RequestYourDAta({ onBack }: { onBack?: () => v
       <Frame30 />
       <Group1 />
       <p className="-translate-x-1/2 [word-break:break-word] absolute font-['Titillium_Web:Regular',sans-serif] leading-[1.2] left-1/2 not-italic text-[32px] text-center text-white top-[392px] w-[342px]">Declined requests</p>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-px items-center left-1/2 top-[66px] w-[390px]" data-name="Profile header">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-px items-center left-1/2 top-[66px] w-[390px] z-10" data-name="Profile header">
         <Frame40 onBack={onBack} />
         <div className="h-0 relative shrink-0 w-[390px]">
           <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 32 32">

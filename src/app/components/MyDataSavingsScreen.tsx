@@ -271,9 +271,10 @@ interface MyDataSavingsScreenProps {
   onHome?: () => void;
   onMyData?: () => void;
   onOffers?: () => void;
+  onRequestMoreData?: () => void;
 }
 
-export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyData, onOffers }: MyDataSavingsScreenProps) {
+export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyData, onOffers, onRequestMoreData }: MyDataSavingsScreenProps) {
   return (
     <div
       style={{
@@ -397,9 +398,8 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyDa
                 scrollbarWidth: "none",
               }}
             >
-              {/* TODO(wiring): Request has no destination screen yet — left as a no-op. */}
-              <CompanyRequestCard initial="N" avatarColor="#820AD1" category="Banks" name="Nubank" />
-              <CompanyRequestCard initial="B" avatarColor="#EA200D" category="Financial" name="Bradesco" />
+              <CompanyRequestCard initial="N" avatarColor="#820AD1" category="Banks" name="Nubank" onRequest={onRequestMoreData} />
+              <CompanyRequestCard initial="B" avatarColor="#EA200D" category="Financial" name="Bradesco" onRequest={onRequestMoreData} />
             </div>
           </div>
         </div>
