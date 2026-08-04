@@ -1,4 +1,5 @@
 import Success from "@/imports/Success/index";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 /** Authored frame size from Figma (node 361:117614). */
 const FRAME_W = 390;
@@ -18,7 +19,8 @@ interface UploadSuccessScreenProps {
  *  letterboxes it and leaves a visible seam at the stage edge). */
 export function UploadSuccessScreen({ onContinue }: UploadSuccessScreenProps) {
   return (
-    <div
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
       style={{
         position: "absolute",
         inset: 0,
@@ -27,39 +29,41 @@ export function UploadSuccessScreen({ onContinue }: UploadSuccessScreenProps) {
         background: "#070707",
         scrollbarWidth: "none",
       }}
-      className="[&::-webkit-scrollbar]:hidden"
+      className="[&::-webkit-scrollbar]:hidden upload-success-sb"
     >
-      {/* Fixed-size canvas at authored dimensions — never width/height 100%,
-          or the geometry inside distorts. */}
-      <div
-        style={{
-          position: "relative",
-          width: `${FRAME_W}px`,
-          height: `${FRAME_H}px`,
-          margin: "0 auto",
-          overflow: "hidden",
-        }}
-      >
-        <Success />
-
-        {/* Transparent tap-target over the imported "Continue" button. */}
-        <button
-          type="button"
-          onClick={onContinue}
-          aria-label="Continue"
+        {/* Fixed-size canvas at authored dimensions — never width/height 100%,
+            or the geometry inside distorts. */}
+        <div
           style={{
-            position: "absolute",
-            left: `${BTN.left}px`,
-            top: `${BTN.top}px`,
-            width: `${BTN.width}px`,
-            height: `${BTN.height}px`,
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            zIndex: 5,
+            position: "relative",
+            width: `${FRAME_W}px`,
+            height: `${FRAME_H}px`,
+            margin: "0 auto",
+            overflow: "hidden",
           }}
-        />
-      </div>
+        >
+          <Success />
+
+          {/* Transparent tap-target over the imported "Continue" button. */}
+          <button
+            type="button"
+            onClick={onContinue}
+            aria-label="Continue"
+            style={{
+              position: "absolute",
+              left: `${BTN.left}px`,
+              top: `${BTN.top}px`,
+              width: `${BTN.width}px`,
+              height: `${BTN.height}px`,
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 5,
+            }}
+          />
+        </div>
+          </div>
+      <UnifiedStatusBar hostClass="upload-success-sb" />
     </div>
   );
 }

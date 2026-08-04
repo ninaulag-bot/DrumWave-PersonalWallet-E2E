@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { StatusBar } from "@/app/components/ui/StatusBar";
 
 interface RequestDataProgressScreenProps {
   /** Called ~0.8s after the counter reaches 100%. If omitted, the animation loops. */
@@ -148,22 +149,6 @@ function ConcentricRings() {
   );
 }
 
-/** Minimal status bar (9:41 + glyphs). */
-function StatusBar() {
-  return (
-    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "54px", paddingTop: "21px", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "21px 20px 0", zIndex: 20 }}>
-      <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "17px", color: "white" }}>9:41</span>
-      <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-        <div style={{ width: "18px", height: "12px", background: "white", clipPath: "polygon(0 100%,20% 60%,20% 100%,40% 40%,40% 100%,60% 25%,60% 100%,80% 10%,80% 100%,100% 0,100% 100%)" }} />
-        <div style={{ width: "17px", height: "12px", borderRadius: "2px", background: "white", opacity: 0.9 }} />
-        <div style={{ width: "24px", height: "12px", borderRadius: "3px", border: "1px solid white", position: "relative" }}>
-          <div style={{ position: "absolute", inset: "2px", right: "4px", background: "white", borderRadius: "1px" }} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function RequestDataProgressScreen({ onComplete, durationMs = 5000 }: RequestDataProgressScreenProps) {
   const [percent, setPercent] = useState(0);
   const startRef = useRef<number | null>(null);
@@ -266,7 +251,9 @@ export function RequestDataProgressScreen({ onComplete, durationMs = 5000 }: Req
       </div>
 
       {/* Status bar */}
-      <StatusBar />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 20, pointerEvents: "none" }}>
+        <StatusBar />
+      </div>
 
       {/* Back arrow (top-left, Figma: top 69 left 24) */}
       <div style={{ position: "absolute", top: 69, left: 24, width: 24, height: 24, zIndex: 20 }}>

@@ -172,7 +172,7 @@ export function FaqScreen({ onBack }: FaqScreenProps) {
           justifyContent: "space-between",
           height: "48px",
           width: "342px",
-          margin: "17px auto 0",
+          margin: "71px auto 0",
         }}
       >
         <button

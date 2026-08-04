@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Name1Import from "@/imports/Name-1/index";
 import svgPaths from "@/imports/Name-1/svg-nk770tkaph";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 function EyeIcon() {
   return (
@@ -109,152 +110,155 @@ export function ChangePasswordScreen({ onBack, onSuccess }: ChangePasswordScreen
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {/* Name-1 import: renders status bar, "Change password" header, home indicator.
-          The static form area underneath will be hidden by our overlay. */}
-      <Name1Import />
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="change-password-sb" style={{ position: "relative", width: "100%", height: "100%" }}>
+        {/* Name-1 import: renders status bar, "Change password" header, home indicator.
+            The static form area underneath will be hidden by our overlay. */}
+        <Name1Import />
 
-      {/* Back button — covers the static back arrow */}
-      <button
-        type="button"
-        onClick={onBack}
-        aria-label="Go back"
-        style={{
-          position: "absolute",
-          top: "71px",
-          left: "12px",
-          width: "80px",
-          height: "48px",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          zIndex: 20,
-        }}
-      />
+        {/* Back button — covers the static back arrow */}
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label="Go back"
+          style={{
+            position: "absolute",
+            top: "71px",
+            left: "12px",
+            width: "80px",
+            height: "48px",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            zIndex: 20,
+          }}
+        />
 
-      {/* Form overlay — covers the static input area with real interactive fields */}
-      <div
-        style={{
-          position: "absolute",
-          top: "144px",
-          left: "24px",
-          width: "342px",
-          background: "var(--color-bg-base)",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px",
-        }}
-      >
-        {/* Current password */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>Enter current password</p>
-          <PasswordField
-            value={currentPassword}
-            onChange={setCurrentPassword}
-            show={showCurrent}
-            onToggle={() => setShowCurrent((v) => !v)}
-          />
-        </div>
-
-        {/* New + Confirm */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* New password */}
+        {/* Form overlay — covers the static input area with real interactive fields */}
+        <div
+          style={{
+            position: "absolute",
+            top: "144px",
+            left: "24px",
+            width: "342px",
+            background: "var(--color-bg-base)",
+            zIndex: 10,
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+          }}
+        >
+          {/* Current password */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>New password</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 400,
-                  fontSize: "14px",
-                  lineHeight: 1.2,
-                  color: "var(--color-text-primary)",
-                  opacity: 0.8,
-                }}
-              >
-                Passwords must have 12+ characters
-              </p>
-              <PasswordField
-                value={newPassword}
-                onChange={setNewPassword}
-                show={showNew}
-                onToggle={() => setShowNew((v) => !v)}
-              />
-            </div>
+            <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>Enter current password</p>
+            <PasswordField
+              value={currentPassword}
+              onChange={setCurrentPassword}
+              show={showCurrent}
+              onToggle={() => setShowCurrent((v) => !v)}
+            />
           </div>
 
-          {/* Confirm password */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>Confirm password</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-              <PasswordField
-                value={confirmPassword}
-                onChange={setConfirmPassword}
-                show={showConfirm}
-                onToggle={() => setShowConfirm((v) => !v)}
-              />
-              {/* "Passwords match" / "Passwords don't match" indicator */}
-              {confirmPassword.length > 0 && (
+          {/* New + Confirm */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {/* New password */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>New password</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <p
                   style={{
                     margin: 0,
                     fontFamily: "var(--font-body)",
                     fontWeight: 400,
-                    fontSize: "12px",
-                    lineHeight: 1.5,
-                    color: passwordsMatch
-                      ? "var(--color-status-success)"
-                      : "var(--color-status-error)",
-                    textAlign: "right",
-                    width: "100%",
+                    fontSize: "14px",
+                    lineHeight: 1.2,
+                    color: "var(--color-text-primary)",
+                    opacity: 0.8,
                   }}
                 >
-                  {passwordsMatch ? "Passwords match" : "Passwords don't match"}
+                  Passwords must have 12+ characters
                 </p>
-              )}
+                <PasswordField
+                  value={newPassword}
+                  onChange={setNewPassword}
+                  show={showNew}
+                  onToggle={() => setShowNew((v) => !v)}
+                />
+              </div>
+            </div>
+
+            {/* Confirm password */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <p style={{ ...labelStyle, fontFamily: "var(--font-family-secondary)", fontSize: "14px" }}>Confirm password</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <PasswordField
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  show={showConfirm}
+                  onToggle={() => setShowConfirm((v) => !v)}
+                />
+                {/* "Passwords match" / "Passwords don't match" indicator */}
+                {confirmPassword.length > 0 && (
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 400,
+                      fontSize: "12px",
+                      lineHeight: 1.5,
+                      color: passwordsMatch
+                        ? "var(--color-status-success)"
+                        : "var(--color-status-error)",
+                      textAlign: "right",
+                      width: "100%",
+                    }}
+                  >
+                    {passwordsMatch ? "Passwords match" : "Passwords don't match"}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Submit button — dynamic active/disabled state */}
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={!isValid}
-        style={{
-          position: "absolute",
-          top: "753px",
-          left: "24px",
-          width: "342px",
-          height: "44px",
-          borderRadius: "500px",
-          background: isValid
-            ? "var(--color-action-primary-bg)"
-            : "var(--color-border-secondary)",
-          border: "none",
-          cursor: isValid ? "pointer" : "default",
-          zIndex: 20,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span
+        {/* Submit button — dynamic active/disabled state */}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={!isValid}
           style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 600,
-            fontSize: "18px",
-            color: isValid
-              ? "var(--color-action-primary-text)"
-              : "var(--color-text-disabled)",
+            position: "absolute",
+            top: "753px",
+            left: "24px",
+            width: "342px",
+            height: "44px",
+            borderRadius: "500px",
+            background: isValid
+              ? "var(--color-action-primary-bg)"
+              : "var(--color-border-secondary)",
+            border: "none",
+            cursor: isValid ? "pointer" : "default",
+            zIndex: 20,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          Change password
-        </span>
-      </button>
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 600,
+              fontSize: "18px",
+              color: isValid
+                ? "var(--color-action-primary-text)"
+                : "var(--color-text-disabled)",
+            }}
+          >
+            Change password
+          </span>
+        </button>
+          </div>
+      <UnifiedStatusBar hostClass="change-password-sb" />
     </div>
   );
 }

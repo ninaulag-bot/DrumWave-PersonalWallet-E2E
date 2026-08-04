@@ -13,19 +13,18 @@ import offerCardRetail from "@/imports/OffersNotEnrolled/offer-card-retail.png";
  * - The three fanned cards are flattened card renders exported from Figma
  *   (auto centre, retail left, travel right). They are NOT the PhotoFanStack
  *   component, which is a different 3D-skewed hero treatment on remote images.
- * - Offsets below are the frame's absolute tops minus the 54px status bar,
- *   since the scroll area starts below it.
+ * - Offsets below are frame-absolute tops; the status bar overlays the
+ *   screen (no reserved band), same as the enrolled OneDsp home.
  * - The New/Claimed toggle is local: MyDataRequestsScreen's segmented control
  *   looks similar but uses different tokens (status dots, --color-bg-overlay,
  *   --radius-md/xs), so it isn't a drop-in match for this design.
  */
 
 const NAV_H = 72;
-const STATUS_H = 54;
-/** Frame-absolute top → scroll-content top. */
-const y = (frameTop: number) => frameTop - STATUS_H;
+/** Frame-absolute top (status bar overlays; scroll starts at 0). */
+const y = (frameTop: number) => frameTop;
 /** Tallest content is the button bottom (714.19 + 44); pad a little past it. */
-const CONTENT_H = 730;
+const CONTENT_H = 780;
 
 /**
  * Title + subtitle + New/Claimed toggle — Figma 16:83092. Authored identically
@@ -210,7 +209,7 @@ export function OffersNotEnrolledScreen({ onRequestMoreData, onHome, onMyData, o
         className="[&::-webkit-scrollbar]:hidden"
         style={{
           position: "absolute",
-          top: `${STATUS_H}px`,
+          top: 0,
           left: 0,
           right: 0,
           bottom: `${NAV_H}px`,

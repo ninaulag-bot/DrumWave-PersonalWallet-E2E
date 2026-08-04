@@ -261,7 +261,11 @@ export function HomeRequestDataBeforeDspScreen({
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "auto" }}>
+    <div className="home-req-before-dsp-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "auto" }}>
+      <style>{`
+        .home-req-before-dsp-sb [data-name="Status Bar - iPhone"],
+        .home-req-before-dsp-sb [data-name="Status Bar"] { display: none !important; }
+      `}</style>
       {/* Read-only baked import — always renders the pending state */}
       <HomeRequestDataBeforeDsp />
 

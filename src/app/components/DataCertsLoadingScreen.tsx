@@ -4,6 +4,7 @@ import { TeslaCertificatesCircles } from "./TeslaCertificatesCircles";
 import teslaMotorsLogo from "@/imports/tesla-motors-loading.png";
 import model3Img from "@/imports/DataCertsSuccess/58fa28d3afb64afb3af10674263f1f23970861cf.png";
 import fullSelfDrivingImg from "@/imports/DataCertsSuccess/f3855eeaf675891208a6a8b617dc84d96cce491d.png";
+import { StatusBar } from "@/app/components/ui/StatusBar";
 
 const FRAME_W = 390;
 const FRAME_H = 844;
@@ -57,28 +58,8 @@ export function DataCertsLoadingScreen({ onViewCertificates, onClose }: DataCert
           }}
         />
 
-        {/* Status bar */}
-        <div
-          style={{
-            position: "absolute",
-            top: "21px",
-            left: 0,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 24px",
-            height: "22px",
-          }}
-        >
-          <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "17px", color: "var(--color-text-white)" }}>
-            9:41
-          </span>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-text-white)" }}>
-            <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor" /><rect x="5" y="4" width="3" height="8" rx="1" fill="currentColor" /><rect x="10" y="1" width="3" height="11" rx="1" fill="currentColor" /><rect x="15" y="1" width="3" height="11" rx="1" fill="currentColor" opacity="0.4" /></svg>
-            <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 2.5C11 2.5 13.3 3.5 15 5.2l1.4-1.5C14.3 1.5 11.5 0.3 8.5 0.3S2.7 1.5 0.6 3.7L2 5.2C3.7 3.5 6 2.5 8.5 2.5Z" fill="currentColor" /><path d="M8.5 6.2c1.3 0 2.5 0.5 3.4 1.4l1.4-1.5C11.9 4.8 10.3 4 8.5 4S5.1 4.8 3.7 6.1l1.4 1.5C6 6.7 7.2 6.2 8.5 6.2Z" fill="currentColor" /><path d="M8.5 9.8 10.7 7.6C10.1 7 9.3 6.7 8.5 6.7s-1.6 0.3-2.2 0.9L8.5 9.8Z" fill="currentColor" /></svg>
-            <svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="24" height="12" rx="3.8" stroke="currentColor" strokeOpacity="0.35" /><rect x="2" y="2" width="21" height="9" rx="2.5" fill="currentColor" /><path d="M26 4v5c0.8-0.3 1.3-1.1 1.3-2.5S26.8 4.3 26 4Z" fill="currentColor" fillOpacity="0.4" /></svg>
-          </div>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50, pointerEvents: "none" }}>
+          <StatusBar />
         </div>
 
         {/* Title — crossfades from the "gathering" copy to "Almost done" + subtitle */}

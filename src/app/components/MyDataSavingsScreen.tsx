@@ -310,7 +310,7 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyDa
         className="[&::-webkit-scrollbar]:hidden"
         style={{
           position: "absolute",
-          top: "54px",
+          top: 0,
           left: 0,
           right: 0,
           bottom: `${NAV_H}px`,
@@ -319,7 +319,8 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyDa
           scrollbarWidth: "none",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px", padding: "40px 0 48px" }}>
+        {/* 94px top padding = status-bar overlay + gap to title (Figma y=94) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px", padding: "94px 0 48px" }}>
           {/* Header */}
           <div style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "12px" }}>
             <p

@@ -33,6 +33,7 @@ import { CashBalanceContext } from "./cash-balance-context";
 import { DataBalanceContext } from "./data-balance-context";
 import { ViewAllPlansContext } from "./view-all-plans-context";
 import { DataContributionContext } from "./data-contribution-context";
+import { BackToAllPlansContext } from "./back-to-all-plans-context";
 
 export function Group10() {
   return (
@@ -198,7 +199,7 @@ function Frame52() {
   return (
     <div className="content-stretch flex flex-col items-center relative shrink-0 w-full">
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.02] relative shrink-0 text-[31.788px] text-white tracking-[-0.9536px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>
-        My Data Savings
+        My Data Savings Plan
       </p>
     </div>
   );
@@ -209,6 +210,38 @@ function Frame90() {
     <div className="content-stretch flex flex-col gap-[8px] items-start w-[344px]">
       <Frame52 />
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#999] text-[14px] w-full" style={{ fontVariationSettings: '"wdth" 100' }}>{`Own, save, and benefit from the value of your data. `}</p>
+    </div>
+  );
+}
+
+/* "Back to all plans" — same treatment as the step-83 dashboard (Figma 15:35167).
+   Renders only when the all-plans overview provided a handler. */
+function BackArrowIcon() {
+  return (
+    <div className="overflow-clip relative shrink-0 size-[16px]" data-name="Material / arrow_back_ios">
+      <div className="absolute inset-[8.33%_50.94%_8.33%_0]" data-name="Vector">
+        <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.775 20">
+          <path d={svgPaths.p30d4a680} fill="var(--fill-0, #E3E3E3)" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function BackToAllPlansRow() {
+  const onBackToAllPlans = useContext(BackToAllPlansContext);
+  if (!onBackToAllPlans) return null;
+  return (
+    <div style={{ marginTop: "24px", marginLeft: "24px" }}>
+      <button
+        className="content-stretch flex gap-[8px] h-[24px] items-center relative cursor-pointer bg-transparent border-0 p-0 text-left"
+        onClick={onBackToAllPlans}
+      >
+        <BackArrowIcon />
+        <p className="[word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[20px] whitespace-nowrap">
+          Back to all plans
+        </p>
+      </button>
     </div>
   );
 }
@@ -2482,23 +2515,16 @@ export default function DspLanding() {
 
       {/* ScreenWithNavBar handles scroll area + pinned tab bar */}
       <ScreenWithNavBar navBar={<MainBottomNav activeTab="savingsPlan" onHome={onGoToHome} onMyData={onMyData} onOffers={onOffers} />}>
-        {/* 71px spacer — matches original top-[71px] of Profile header */}
-        <div style={{ height: "71px" }} />
-
-        {/* Profile header */}
-        <div className="content-stretch flex flex-col gap-px items-center w-full" data-name="Profile header">
-          <Frame15 />
-          <div className="h-0 relative shrink-0 w-[390px]">
-            <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 32 32">
-              <path d="M0 0H390" id="Vector 879" opacity="0" stroke="var(--stroke-0, #3D3D3D)" />
-            </svg>
-          </div>
-        </div>
+        {/* 54px status bar + 40px to the title — same as Fitness / all-plans (Figma y=94).
+            Dropped the old 71px + invisible 48px Skip header that left a large empty band. */}
+        <div style={{ height: "94px" }} />
 
         {/* Frame90 — title + subtitle */}
-        <div style={{ marginTop: "16px", marginLeft: "24px" }}>
+        <div style={{ marginLeft: "24px" }}>
           <Frame90 />
         </div>
+
+        <BackToAllPlansRow />
 
         {/* Frame87 — hero card */}
         <div style={{ marginTop: "48px", marginLeft: "24px" }}>

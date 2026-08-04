@@ -9,7 +9,9 @@ import SmallCards6 from "@/imports/SmallCards-6/index";
 import SmallCards7 from "@/imports/SmallCards-7/index";
 import Enroll7 from "@/imports/Enroll-7/index";
 import FiltersImport from "@/imports/Filters/index";
+import { OpenCertificateContext } from "@/imports/SmallCards-2/open-certificate-context";
 import { MainBottomNav } from "./MainBottomNav";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 const CARD_W = 342;
 const CARD_H = 200;
@@ -21,7 +23,7 @@ const FILTERS_SHEET_H = 960;
 
 const SPRING = { type: "spring" as const, damping: 30, stiffness: 260 };
 
-export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers }: { onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void } = {}) {
+export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers, onOpenVehicleRegistration }: { onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; onOpenVehicleRegistration?: () => void } = {}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -30,11 +32,17 @@ export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
 
       {/* Base design: status bar, header, filter row. Its own baked bottom nav
-          is hidden below in favor of the shared MainBottomNav. */}
-      <style>{`.mycertificates-import .h-\\[72px\\] { display: none !important; }`}</style>
+          is hidden below in favor of the shared MainBottomNav. Baked status bar
+          is hidden; shared StatusBar overlays at the top. */}
+      <style>{`
+        .mycertificates-import .h-\\[72px\\] { display: none !important; }
+        .mycertificates-import [data-name="Status Bar - iPhone"],
+        .mycertificates-import [data-name="Status Bar"] { display: none !important; }
+      `}</style>
       <div className="mycertificates-import" style={{ position: "absolute", inset: 0 }}>
         <DataCertificates1 />
       </div>
+      <UnifiedStatusBar hostClass="mycertificates-import" />
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
         <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
@@ -56,7 +64,13 @@ export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers
           padding: "16px 0 16px",
         }}
       >
-        <div style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, flexShrink: 0 }}><SmallCards2 /></div>
+        {/* Only Vehicle Registration gets the provider — it is the sole certificate
+            with a detail design in Figma (see src/app/data/certificates.ts). */}
+        <div style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, flexShrink: 0 }}>
+          <OpenCertificateContext.Provider value={onOpenVehicleRegistration}>
+            <SmallCards2 />
+          </OpenCertificateContext.Provider>
+        </div>
         <div style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, flexShrink: 0 }}><SmallCards3 /></div>
         <div style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, flexShrink: 0 }}><SmallCards4 /></div>
         <div style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, flexShrink: 0 }}><SmallCards5 /></div>

@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import svgPaths from "./svg-01agbew4hd";
 import imgImage from "./01a8778b58788d96c694fa6a7249432e354bd4f4.png";
+import { OpenCertificateContext } from "./open-certificate-context";
 
 function Frame() {
   return (
@@ -79,8 +81,14 @@ function Icon() {
 }
 
 export default function SmallCards() {
+  const onOpenCertificate = useContext(OpenCertificateContext);
   return (
-    <div className="border border-[rgba(255,255,255,0.05)] border-solid overflow-clip relative rounded-[24px] size-full" data-name="Small cards">
+    <div
+      className="border border-[rgba(255,255,255,0.05)] border-solid overflow-clip relative rounded-[24px] size-full"
+      data-name="Small cards"
+      onClick={onOpenCertificate}
+      style={onOpenCertificate ? { cursor: "pointer" } : undefined}
+    >
       <div className="absolute h-[200px] left-[-1px] pointer-events-none top-[-1px] w-[342px]" data-name="image">
         <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={imgImage} />
         <div className="absolute inset-0 rounded-[inherit] shadow-[inset_-4px_-4px_11px_0px_rgba(0,0,0,0.06),inset_4px_4px_12px_0px_rgba(0,0,0,0.1)]" />

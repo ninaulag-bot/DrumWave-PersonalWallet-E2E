@@ -30,7 +30,7 @@ export function LegalScreen({ onBack }: LegalScreenProps) {
           justifyContent: "space-between",
           height: "48px",
           width: "342px",
-          margin: "17px auto 0",
+          margin: "71px auto 0",
           flexShrink: 0,
         }}
       >

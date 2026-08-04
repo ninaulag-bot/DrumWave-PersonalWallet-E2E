@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "@/imports/RequestData/svg-te9anx1ork";
 import uploadSvg from "@/imports/Upload3/svg-6h72v7eg5k";
+import { StatusBar } from "@/app/components/ui/StatusBar";
 
 // The first file is present as soon as files are selected…
 const INITIAL_FILE = { id: "tesla", name: "Tesladata.zip", size: "33.4 MB" };
@@ -109,32 +110,6 @@ function SelectFilesBox({ onClick, disabled = false }: { onClick?: () => void; d
       >
         Select file(s) to upload
       </button>
-    </div>
-  );
-}
-
-/** Minimal status bar (9:41 + right-side glyphs). Prototype-level, not pixel-exact. */
-function StatusBar() {
-  return (
-    <div
-      style={{
-        height: "54px",
-        flexShrink: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "21px 20px 0",
-        boxSizing: "border-box",
-      }}
-    >
-      <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "17px", color: "white" }}>9:41</span>
-      <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-        <div style={{ width: "18px", height: "12px", background: "white", clipPath: "polygon(0 100%,20% 60%,20% 100%,40% 40%,40% 100%,60% 25%,60% 100%,80% 10%,80% 100%,100% 0,100% 100%)" }} />
-        <div style={{ width: "17px", height: "12px", borderRadius: "2px", background: "white", opacity: 0.9 }} />
-        <div style={{ width: "24px", height: "12px", borderRadius: "3px", border: "1px solid white", position: "relative" }}>
-          <div style={{ position: "absolute", inset: "2px", right: "4px", background: "white", borderRadius: "1px" }} />
-        </div>
-      </div>
     </div>
   );
 }

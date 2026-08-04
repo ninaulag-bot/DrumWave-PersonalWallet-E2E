@@ -66,24 +66,28 @@ function OffersIcon({ active }: { active: boolean }) {
 }
 
 export function MainBottomNav({
-  activeTab = "home",
+  activeTab: activeTabProp,
   onHome,
   onMyData,
   onSavingsPlan,
   onOffers,
 }: {
-  activeTab?: ActiveTab;
+  // undefined → default Home; null → no tab lit (e.g. My data requests via View my requests)
+  activeTab?: ActiveTab | null;
   onHome?: () => void;
   onMyData?: () => void;
   onSavingsPlan?: () => void;
   onOffers?: () => void;
 }) {
+  const activeTab = activeTabProp === undefined ? "home" : activeTabProp;
   const tabLabel: React.CSSProperties = { fontVariationSettings: '"wdth" 100' };
   const labelStyle = (active: boolean): React.CSSProperties => ({ ...tabLabel, color: active ? "var(--color-text-primary)" : "#888" });
   // Glow center tracks each tab's center under justify-between layout (24px padding,
   // 70px tabs, ~20px gaps): home 12 (design value), requests 106, savingsPlan 198
   // (design value), offers 287 — the last computed the same way as the other three.
-  const glowLeft = { home: "12px", requests: "106px", savingsPlan: "198px", offers: "287px" }[activeTab];
+  const glowLeft = activeTab
+    ? { home: "12px", requests: "106px", savingsPlan: "198px", offers: "287px" }[activeTab]
+    : undefined;
 
   return (
     <div
@@ -92,6 +96,7 @@ export function MainBottomNav({
       data-name="Main bottom nav"
     >
       {/* Ambient glow behind whichever tab is active */}
+      {glowLeft && (
       <div className="absolute size-[86px] top-[-45px]" style={{ left: glowLeft }}>
         <div className="absolute inset-[-58.14%]">
           <svg className="block size-full" fill="none" height="186" preserveAspectRatio="none" viewBox="0 0 186 186" width="186">
@@ -108,6 +113,7 @@ export function MainBottomNav({
           </svg>
         </div>
       </div>
+      )}
 
       <div className="absolute content-stretch flex items-center justify-between left-0 px-[24px] top-[-1px] w-[389px]">
         <button

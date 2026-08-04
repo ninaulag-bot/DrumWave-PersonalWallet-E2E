@@ -3,6 +3,7 @@ import svgPaths from "@/imports/RequestData-1/svg-s0ia0gm4yp";
 import Step1Open from "@/imports/Frame2095586464/index";
 import Step2Image from "@/imports/Frame2095586924/index";
 import Step3Open from "@/imports/Frame2095586466/index";
+import { StatusBar } from "@/app/components/ui/StatusBar";
 
 interface HowToGetDataScreenProps {
   onBack: () => void;
@@ -123,22 +124,10 @@ export function HowToGetDataScreen({ onBack, onGetData }: HowToGetDataScreenProp
         flexDirection: "column",
       }}
     >
-      {/* Status bar */}
-      <div style={{ height: "54px", paddingTop: "21px", paddingLeft: "16px", paddingRight: "16px", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-        <p style={{ margin: 0, fontFamily: "var(--font-body), sans-serif", fontWeight: 600, fontSize: "17px", lineHeight: "22px", color: "white" }}>9:41</p>
-        <div style={{ display: "flex", gap: "7px", alignItems: "center" }}>
-          <svg width="19.2" height="12.2264" viewBox="0 0 19.2 12.2264" fill="none"><path clipRule="evenodd" d={svgPaths.p1e09e400} fill="white" fillRule="evenodd" /></svg>
-          <svg width="17.1417" height="12.3283" viewBox="0 0 17.1417 12.3283" fill="none"><path clipRule="evenodd" d={svgPaths.p18b35300} fill="white" fillRule="evenodd" /></svg>
-          <svg width="27.328" height="13" viewBox="0 0 27.328 13" fill="none">
-            <rect height="12" opacity="0.35" rx="3.8" stroke="white" width="24" x="0.5" y="0.5" />
-            <path d={svgPaths.p3bbd9700} fill="white" opacity="0.4" />
-            <rect fill="white" height="9" rx="2.5" width="21" x="2" y="2" />
-          </svg>
-        </div>
-      </div>
+      <StatusBar />
 
       {/* Back arrow */}
-      <div style={{ paddingLeft: "24px", paddingTop: "15px", flexShrink: 0 }}>
+      <div style={{ paddingLeft: "24px", paddingTop: "69px", flexShrink: 0 }}>
         <button type="button" onClick={onBack} aria-label="Go back" style={{ width: "24px", height: "24px", background: "transparent", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
           <svg width="11.775" height="20" viewBox="0 0 11.775 20" fill="none"><path d={svgPaths.p30d4a680} fill="white" /></svg>
         </button>

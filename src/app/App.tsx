@@ -13,6 +13,7 @@ import { MyDataSavingsScreen } from "@/app/components/MyDataSavingsScreen";
 import { OffersNotEnrolledScreen } from "@/app/components/OffersNotEnrolledScreen";
 import { OffersEnrolledScreen } from "@/app/components/OffersEnrolledScreen";
 import { StatusBar } from "@/app/components/ui/StatusBar";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 import { EnrollHeroVisual } from "@/app/components/EnrollHeroVisual";
 import { PhotoFanStack } from "@/app/components/PhotoFanStack";
 import EnrollForm from "@/imports/Enroll/index";
@@ -81,6 +82,7 @@ import { CashBalanceUSScreen } from "@/app/components/CashBalanceUSScreen";
 import { Enroll6Screen } from "@/app/components/Enroll6Screen";
 import { Success1Screen } from "@/app/components/Success1Screen";
 import { OneDspHomeScreen } from "@/app/components/OneDspHomeScreen";
+import { TopNav } from "@/app/components/TopNav";
 import { TwoStepVerificationScreen } from "@/app/components/TwoStepVerificationScreen";
 import { AddPhoneNumberScreen } from "@/app/components/AddPhoneNumberScreen";
 import { VerifyPhoneNumberScreen } from "@/app/components/VerifyPhoneNumberScreen";
@@ -111,7 +113,6 @@ import ringsBg from "@/imports/rings-bg.png";
 import sparkles from "@/imports/sparkles.png";
 import lockPng from "@/imports/lock.png";
 import teslaMotorsLogo from "@/imports/tesla-motors-loading.png";
-import accountCirclePng from "@/imports/account_circle.png";
 import teslaOfferImg from "@/imports/tesla-car.png";
 import teslaDrivingImg from "@/imports/tesla-driving-source.png";
 import categorySvgTravel from "@/imports/Categories/svg-h3d1gqb6et";
@@ -2571,191 +2572,6 @@ const SPRING_EASING = "cubic-bezier(0.34, 1.2, 0.4, 1)";
 
 // ─── Persistent Top Nav ───────────────────────────────────────────────────────
 
-function TopNav({ name, onAccountSettings }: { name: string; onAccountSettings?: () => void }) {
-  const [expanded, setExpanded] = useState(false);
-  const firstName = name.split(" ")[0] || "Carolina";
-  const tw: React.CSSProperties = {
-    fontFamily: "var(--font-display)",
-  };
-
-  const rowStyle: React.CSSProperties = {
-    height: "36px",
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    paddingTop: "4px",
-  };
-
-  return (
-    <>
-      {/* Tap-outside dismissal */}
-      {expanded && (
-        <div
-          onClick={() => setExpanded(false)}
-          style={{ position: "absolute", inset: 0, zIndex: 99 }}
-        />
-      )}
-
-      {/* Nav pill */}
-      <div
-        style={{
-          position: "absolute",
-          top: "70px",
-          left: "24px",
-          width: "342px",
-          background: "rgba(41, 41, 41, 0.60)",
-          backdropFilter: "blur(2.5px)",
-          WebkitBackdropFilter: "blur(2.5px)",
-          borderRadius: "12px",
-          padding: "8px 16px",
-          display: "flex",
-          flexDirection: "column",
-          zIndex: 100,
-          boxSizing: "border-box",
-        }}
-      >
-        {/* Header row — always visible */}
-        <div style={{
-          height: "36px",
-          display: "flex",
-          alignItems: "center",
-          gap: "16px",
-        }}>
-          {/* Content group: logo + text */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
-            <DrumWaveLogo size={24} />
-            <span
-              style={{
-                fontFamily: "var(--mobile-subheading-small-regular-font-family)",
-                fontWeight: "var(--mobile-subheading-small-regular-font-weight)" as React.CSSProperties["fontWeight"],
-                fontSize: "var(--mobile-subheading-small-regular-font-size)",
-                lineHeight: "var(--mobile-subheading-small-regular-line-height)",
-                color: "#FFFFFF",
-              }}
-            >
-              Welcome back, {firstName}!
-            </span>
-          </div>
-
-          {/* Hamburger / X toggle */}
-          <button
-            type="button"
-            onClick={() => setExpanded((v) => !v)}
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              width: "24px",
-              height: "24px",
-              position: "relative",
-              flexShrink: 0,
-              padding: 0,
-            }}
-          >
-            {expanded ? (
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                style={{ position: "absolute", left: "5px", top: "5px" }}
-              >
-                <path
-                  d="M1 1l12 12M13 1L1 13"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                width="18"
-                height="12"
-                viewBox="0 0 18 12"
-                fill="none"
-                style={{ position: "absolute", left: "3px", top: "6px" }}
-              >
-                <rect y="0" width="18" height="1.5" rx="0.75" fill="white" />
-                <rect y="5" width="18" height="1.5" rx="0.75" fill="white" />
-                <rect y="10" width="18" height="1.5" rx="0.75" fill="white" />
-              </svg>
-            )}
-          </button>
-        </div>
-
-        {/* Expanded rows */}
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              key="menu-items"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              style={{ overflow: "hidden", display: "flex", flexDirection: "column", gap: "24px", marginTop: "24px" }}
-            >
-              {/* Account settings */}
-              <div style={{ ...rowStyle, cursor: "pointer" }} onClick={onAccountSettings}>
-                <img
-                  src={accountCirclePng}
-                  alt="Profile"
-                  style={{ width: "24px", height: "24px", flexShrink: 0 }}
-                />
-                <span
-                  style={{
-                    fontFamily: "var(--mobile-subheading-regular-14-font-family)",
-                    fontWeight: "var(--mobile-subheading-regular-14-font-weight)" as React.CSSProperties["fontWeight"],
-                    fontSize: "var(--mobile-subheading-regular-14-font-size)",
-                    lineHeight: "var(--mobile-subheading-regular-14-line-height)",
-                    color: "#C9C9C9",
-                  }}
-                >
-                  Account settings
-                </span>
-              </div>
-
-              {/* Logout */}
-              <div style={{ ...rowStyle, cursor: "pointer" }}>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  style={{ flexShrink: 0 }}
-                >
-                  <path
-                    d="M10 19H5a1 1 0 01-1-1V6a1 1 0 011-1h5"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M15 16l4-4-4-4M19 12H9"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span
-                  style={{
-                    fontFamily: "var(--mobile-subheading-regular-14-font-family)",
-                    fontWeight: "var(--mobile-subheading-regular-14-font-weight)" as React.CSSProperties["fontWeight"],
-                    fontSize: "var(--mobile-subheading-regular-14-font-size)",
-                    lineHeight: "var(--mobile-subheading-regular-14-line-height)",
-                    color: "#C9C9C9",
-                  }}
-                >
-                  Logout
-                </span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </>
-  );
-}
 const GLOW_TRANSITION = `left 1500ms ${SPRING_EASING}, top 1500ms ${SPRING_EASING}, transform 1500ms ${SPRING_EASING}`;
 
 function CongratsScreen({
@@ -3517,7 +3333,7 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab={isCerts ? "home" : "requests"} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        <MainBottomNav activeTab={isCerts ? "home" : null} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -3679,8 +3495,8 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
 <div
   style={{
     position: "absolute",
-    top: "50px",
-    paddingTop: "67px",
+    top: 0,
+    paddingTop: "117px",
     left: 0,
     right: 0,
     bottom: "72px",
@@ -4439,7 +4255,7 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onRequestData} />
       </div>
     </div>
   );
@@ -4535,8 +4351,8 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
 <div
   style={{
     position: "absolute",
-    top: "50px",
-    paddingTop: "67px",
+    top: 0,
+    paddingTop: "117px",
     left: 0,
     right: 0,
     bottom: "72px",
@@ -5220,7 +5036,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        <MainBottomNav onHome={onHome} onMyData={onRequestData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -5335,8 +5151,8 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
 <div
   style={{
     position: "absolute",
-    top: "50px",
-    paddingTop: "67px",
+    top: 0,
+    paddingTop: "117px",
     left: 0,
     right: 0,
     bottom: "72px",
@@ -6175,7 +5991,7 @@ function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, on
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onRequestData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -6271,8 +6087,8 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
 <div
   style={{
     position: "absolute",
-    top: "50px",
-    paddingTop: "67px",
+    top: 0,
+    paddingTop: "117px",
     left: 0,
     right: 0,
     bottom: "72px",
@@ -7031,7 +6847,7 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
 
       {/* Persistent bottom nav */}
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onViewRequests} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onRequestData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
     </div>
   );
@@ -7039,29 +6855,32 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
 
 function SpiritDetailScreen({ onBack, onContinue, onHome, onMyData, onSavingsPlan, onOffers }: { onBack: () => void; onContinue?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      <HomeRequestDataBeforeDsp />
-      {/* Transparent overlay button aligned to the Figma back-arrow position */}
-      <button
-        onClick={onBack}
-        style={{
-          position: "absolute",
-          top: 62,
-          left: 24,
-          width: 40,
-          height: 40,
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          zIndex: 20,
-        }}
-        aria-label="Back"
-      />
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="spirit-detail-sb" style={{ position: "relative", width: "100%", height: "100%" }}>
+        <HomeRequestDataBeforeDsp />
+        {/* Transparent overlay button aligned to the Figma back-arrow position */}
+        <button
+          onClick={onBack}
+          style={{
+            position: "absolute",
+            top: 62,
+            left: 24,
+            width: 40,
+            height: 40,
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            zIndex: 20,
+          }}
+          aria-label="Back"
+        />
 
-      {/* Persistent bottom nav */}
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="requests" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        {/* Persistent bottom nav */}
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <MainBottomNav activeTab="requests" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        </div>
       </div>
+      <UnifiedStatusBar hostClass="spirit-detail-sb" />
     </div>
   );
 }
@@ -7155,54 +6974,60 @@ function EnrollBenefitCaption({ title, body }: { title: string; body: string }) 
 
 function EnrollInfoScreen({ onBack, onRequestData }: { onBack?: () => void; onRequestData?: () => void }) {
   return (
-    <div
-      style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
-      className="[&::-webkit-scrollbar]:hidden"
-    >
-      <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
-        <Enroll4 />
-        {/* Back arrow overlay — covers the back arrow icon in Frame29 */}
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Go back"
-          style={{ position: "absolute", top: "60px", left: "12px", width: "52px", height: "52px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
-        />
-        {/* Request more data button overlay — covers the CTA at the bottom of Frame32 */}
-        <button
-          type="button"
-          onClick={onRequestData}
-          aria-label="Request more data"
-          style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
-        />
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        className="enroll-info-sb [&::-webkit-scrollbar]:hidden"
+        style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
+      >
+        <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
+          <Enroll4 />
+          {/* Back arrow overlay — covers the back arrow icon in Frame29 */}
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Go back"
+            style={{ position: "absolute", top: "60px", left: "12px", width: "52px", height: "52px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
+          />
+          {/* Request more data button overlay — covers the CTA at the bottom of Frame32 */}
+          <button
+            type="button"
+            onClick={onRequestData}
+            aria-label="Request more data"
+            style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
+          />
+        </div>
       </div>
+      <UnifiedStatusBar hostClass="enroll-info-sb" />
     </div>
   );
 }
 
 function EnrollOffersScreen({ onBack, onRequestData }: { onBack?: () => void; onRequestData?: () => void }) {
   return (
-    <div
-      style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
-      className="[&::-webkit-scrollbar]:hidden"
-    >
-      <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
-        <Enroll5 />
-        {/* Back arrow overlay */}
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Go back"
-          style={{ position: "absolute", top: "60px", left: "12px", width: "52px", height: "52px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
-        />
-        {/* Request more data button overlay */}
-        <button
-          type="button"
-          onClick={onRequestData}
-          aria-label="Request more data"
-          style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
-        />
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        className="enroll-offers-sb [&::-webkit-scrollbar]:hidden"
+        style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
+      >
+        <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
+          <Enroll5 />
+          {/* Back arrow overlay */}
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Go back"
+            style={{ position: "absolute", top: "60px", left: "12px", width: "52px", height: "52px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
+          />
+          {/* Request more data button overlay */}
+          <button
+            type="button"
+            onClick={onRequestData}
+            aria-label="Request more data"
+            style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
+          />
+        </div>
       </div>
+      <UnifiedStatusBar hostClass="enroll-offers-sb" />
     </div>
   );
 }
@@ -7214,31 +7039,34 @@ function EnrollScreen({ onClose, onApply }: { onClose?: () => void; onApply?: ()
   // explicit height and overlay transparent tap targets for the close (X) and
   // "Apply now" controls.
   return (
-    <div
-      style={{ background: "var(--color-bg-base)", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
-      className="[&::-webkit-scrollbar]:hidden"
-    >
-      <div style={{ position: "relative", width: "390px", height: "2920px", margin: "0 auto" }}>
-        <Enroll3 />
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        className="enroll-screen-sb [&::-webkit-scrollbar]:hidden"
+        style={{ background: "var(--color-bg-base)", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
+      >
+        <div style={{ position: "relative", width: "390px", height: "2920px", margin: "0 auto" }}>
+          <Enroll3 />
 
-        {/* Close (X) — top-right of the header */}
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          style={{ position: "absolute", top: "63px", left: "322px", width: "48px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
-        />
+          {/* Close (X) — top-right of the header */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            style={{ position: "absolute", top: "63px", left: "322px", width: "48px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
+          />
 
-        {/* Apply now — pinned button at the bottom of the frame */}
-        <button
-          type="button"
-          onClick={onApply}
-          aria-label="Apply now"
-          style={{ position: "absolute", bottom: "45px", left: "24px", width: "342px", height: "48px", borderRadius: "500px", background: "#e3e3e3", border: "0.911px solid #ffffff", cursor: "pointer", zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center" }}
-        >
-          <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "18px", lineHeight: 1, color: "#1d2023" }}>Apply now</span>
-        </button>
+          {/* Apply now — pinned button at the bottom of the frame */}
+          <button
+            type="button"
+            onClick={onApply}
+            aria-label="Apply now"
+            style={{ position: "absolute", bottom: "45px", left: "24px", width: "342px", height: "48px", borderRadius: "500px", background: "#e3e3e3", border: "0.911px solid #ffffff", cursor: "pointer", zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "18px", lineHeight: 1, color: "#1d2023" }}>Apply now</span>
+          </button>
+        </div>
       </div>
+      <UnifiedStatusBar hostClass="enroll-screen-sb" />
     </div>
   );
 }
@@ -7449,6 +7277,9 @@ export default function App() {
   // Varies by account state: the two pre-enrolment states keep the not-enrolled
   // Offers frame (61); the three enrolled states get the offer carousel (85).
   const OFFERS_STEP = preEnrollment ? 61 : 85;
+  // My data tab → Request Data (step 10). My data requests (12) is only reached
+  // via "View my requests" on the home screens.
+  const MY_DATA_STEP = 10;
   // Tracks which step to return to when closing the ChoosePlans screen.
   const [choosePlansCloseDest, setChoosePlansCloseDest] = useState(44);
   // Tracks which step to return to when going back from ManageMyPlan.
@@ -7458,6 +7289,10 @@ export default function App() {
   // Cash balance is reachable from step 56 and from the certificates flow (80);
   // its back arrow returns to whichever opened it.
   const [cashBalanceBackDest, setCashBalanceBackDest] = useState(56);
+  // True once the user has joined a second DSP (Fitness). Drives the plural
+  // "Data Savings Plans" label on the enrolled home, routes that section to the
+  // all-plans overview (84), and shows "Back to all plans" on the Smart dashboard.
+  const [hasSecondPlan, setHasSecondPlan] = useState(false);
   // Offer 1.0: when true, the sign-up flow ends on the "Claiming your Tesla data"
   // loading screen instead of the dashboard.
   const [claimFlow, setClaimFlow] = useState(false);
@@ -7720,7 +7555,7 @@ export default function App() {
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
-            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen variant="dataCertificates" onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
+            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen name={homeProps.name} onAccountSettings={homeProps.onAccountSettings} variant="dataCertificates" hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
             return <DashboardScreenOneDsp {...homeProps} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
           }
           return <DashboardScreen {...homeProps} />;
@@ -7748,7 +7583,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -7759,7 +7594,7 @@ export default function App() {
       setStep(14);
     }}
     onHome={() => setStep(homeStep)}
-    onMyData={() => setStep(12)}
+    onMyData={() => setStep(MY_DATA_STEP)}
     onSavingsPlan={() => setStep(savingsPlanStep)}
     onOffers={() => setStep(OFFERS_STEP)}
   />
@@ -7767,59 +7602,64 @@ export default function App() {
         {step === 12 && (
           /* Nothing is accepted until a DSP is joined — Onboarding/Enrollment and
              Approved-No-Plan both show the empty Accepted state. */
-          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => goBack(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onViewCertificate={() => setStep(73)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => goBack(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onViewCertificate={() => { setDemoScreen("dataRequestAccepted"); setStep(72); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 14 && (
-          <EnrollForm
-            step={enrollSubStep}
-            totalSteps={5}
-            stepLabel={enrollEditLabel ?? undefined}
-            firstName={firstName}
-            setFirstName={setFirstName}
-            lastName={lastName}
-            setLastName={setLastName}
-            email={enrollEmail}
-            setEmail={setEnrollEmail}
-            dob={enrollDob}
-            setDob={setEnrollDob}
-            ssn={enrollSsn}
-            setSsn={setEnrollSsn}
-            phone={enrollPhone}
-            setPhone={setEnrollPhone}
-            addr1={enrollAddr1} setAddr1={setEnrollAddr1}
-            addr2={enrollAddr2} setAddr2={setEnrollAddr2}
-            city={enrollCity} setCity={setEnrollCity}
-            addrState={enrollAddrState} setAddrState={setEnrollAddrState}
-            zip={enrollZip} setZip={setEnrollZip}
-            bankName={enrollBankName} setBankName={setEnrollBankName}
-            routing={enrollRouting} setRouting={setEnrollRouting}
-            account={enrollAccount} setAccount={setEnrollAccount}
-            toggles={enrollToggles} onToggle={handleEnrollToggle}
-            goalValue={enrollGoalValue} setGoalValue={setEnrollGoalValue}
-            preferNotToMonetize={enrollPreferNotToMonetize} setPreferNotToMonetize={setEnrollPreferNotToMonetize}
-            onBack={() => {
-              // Editing a single section: return to the Confirm screen.
-              if (enrollEditLabel) {
-                setEnrollEditLabel(null);
-                setStep(15);
-              } else if (enrollSubStep > 1) {
-                setEnrollSubStep(enrollSubStep - 1);
-              } else {
-                goBack(9);
-              }
-            }}
-            onContinue={() => {
-              // Editing a single section: save and return to the Confirm screen.
-              if (enrollEditLabel) {
-                setEnrollEditLabel(null);
-                setStep(15);
-              } else if (enrollSubStep < 5) {
-                setEnrollSubStep(enrollSubStep + 1);
-              } else {
-                setStep(15);
-              }
-            }}
-          />
+          <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+            <div className="enroll-form-sb" style={{ position: "relative", width: "100%", height: "100%" }}>
+              <EnrollForm
+                step={enrollSubStep}
+                totalSteps={5}
+                stepLabel={enrollEditLabel ?? undefined}
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                email={enrollEmail}
+                setEmail={setEnrollEmail}
+                dob={enrollDob}
+                setDob={setEnrollDob}
+                ssn={enrollSsn}
+                setSsn={setEnrollSsn}
+                phone={enrollPhone}
+                setPhone={setEnrollPhone}
+                addr1={enrollAddr1} setAddr1={setEnrollAddr1}
+                addr2={enrollAddr2} setAddr2={setEnrollAddr2}
+                city={enrollCity} setCity={setEnrollCity}
+                addrState={enrollAddrState} setAddrState={setEnrollAddrState}
+                zip={enrollZip} setZip={setEnrollZip}
+                bankName={enrollBankName} setBankName={setEnrollBankName}
+                routing={enrollRouting} setRouting={setEnrollRouting}
+                account={enrollAccount} setAccount={setEnrollAccount}
+                toggles={enrollToggles} onToggle={handleEnrollToggle}
+                goalValue={enrollGoalValue} setGoalValue={setEnrollGoalValue}
+                preferNotToMonetize={enrollPreferNotToMonetize} setPreferNotToMonetize={setEnrollPreferNotToMonetize}
+                onBack={() => {
+                  // Editing a single section: return to the Confirm screen.
+                  if (enrollEditLabel) {
+                    setEnrollEditLabel(null);
+                    setStep(15);
+                  } else if (enrollSubStep > 1) {
+                    setEnrollSubStep(enrollSubStep - 1);
+                  } else {
+                    goBack(9);
+                  }
+                }}
+                onContinue={() => {
+                  // Editing a single section: save and return to the Confirm screen.
+                  if (enrollEditLabel) {
+                    setEnrollEditLabel(null);
+                    setStep(15);
+                  } else if (enrollSubStep < 5) {
+                    setEnrollSubStep(enrollSubStep + 1);
+                  } else {
+                    setStep(15);
+                  }
+                }}
+              />
+            </div>
+            <UnifiedStatusBar hostClass="enroll-form-sb" />
+          </div>
         )}
         {step === 15 && (
           <ConfirmApplicationScreen
@@ -7852,7 +7692,7 @@ export default function App() {
         )}
         {step === 16 && (
           <AccountSettingsScreen
-            onBack={() => goBack(9)}
+            onBack={() => setStep(homeStep)}
             onCarolinaClick={() => setStep(17)}
             onChangePassword={() => setStep(21)}
             onRequestDrumwaveData={() => setStep(22)}
@@ -7893,6 +7733,7 @@ export default function App() {
           <ProfileUpdatedScreen
             onBack={() => setStep(16)}
             onUploadClick={() => setStep(18)}
+           
           />
         )}
         {step === 21 && (
@@ -7988,7 +7829,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => goBack(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
-        {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 45 && <TermsConditionsScreen onBack={() => goBack(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
         {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
         {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
@@ -7998,14 +7839,14 @@ export default function App() {
         {/* Reached from both plan-detail screens (49 and 50), so the header arrow
             has to follow the referrer; 49 is only the fallback. */}
         {step === 51 && <DspLandingScreen onUpdate={() => setStep(52)} onBack={() => goBack(49)} />}
-        {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setStep(54); }} onBack={() => goBack(51)} />}
+        {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setHasSecondPlan(true); setStep(54); }} onBack={() => goBack(51)} />}
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
-        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} />}
+        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
         {/* Smart's back arrow is a deliberate non-referrer exception: it always
             lands on the all-plans overview (84), not wherever it was opened from. */}
-        {step === 59 && <ManageMyPlanScreen plan={managePlan} onBack={() => (managePlan === "smart" ? setStep(84) : goBack(managePlanBackDest))} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 59 && <ManageMyPlanScreen plan={managePlan} onBack={() => (managePlan === "smart" ? setStep(84) : goBack(managePlanBackDest))} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 60 && <RequestYourDataScreen onBack={() => goBack(30)} />}
         {/* Slide 63 in the prototype counter (it shows step + 1). Back → homepage.
             Deliberately not referrer-based: this is entered at the end of the
@@ -8013,17 +7854,17 @@ export default function App() {
             leave the flow rather than re-enter its success screen. */}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
         {/* Slide 64 in the prototype counter. Back → slide 63 (step 62). */}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(62)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(63)} />}
-        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(cashBalanceBackDest)} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(62)} />}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(63)} />}
+        {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(cashBalanceBackDest)} />}
         {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => goBack(66)} />}
         {/* Back stays hardcoded: the referrer is the payout form (67) the user just
             submitted, and returning into a completed flow isn't what back means. */}
         {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
-        {step === 69 && <OneDspHomeScreen variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} onHome={() => setStep(69)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} />}
         {/* Savings-plan tab destination for the noDsp / "Approved, No Plan" states.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
@@ -8031,7 +7872,7 @@ export default function App() {
             onApplyForDsp={openDsp}
             onLearnMore={() => setStep(57)}
             onHome={() => setStep(homeStep)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
@@ -8042,19 +7883,19 @@ export default function App() {
           <OffersNotEnrolledScreen
             onRequestMoreData={() => setStep(10)}
             onHome={() => setStep(homeStep)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onSavingsPlan={() => setStep(savingsPlanStep)}
           />
         )}
         {step === 71 && <InitialEmailScreen onViewCertificates={() => { setCertsFlow(true); setStep(1); }} />}
         {step === 72 && <DataCertsLoadingScreen onViewCertificates={() => setStep(73)} onClose={() => setStep(71)} />}
-        {/* Only reached via the Request Data / certsFlow path today (step 71→72→73) — hence "requests".
+        {/* Cert detail: light Home (certs flow); My data tab still goes to Request Data.
             If a future call site reaches this screen from the 23andMe / DA Home flow, pass "home" there instead. */}
         {/* Home resolves through homeStep, which is 69 for the enrolled states —
             9 falls through to DashboardScreenOneDsp, whereas 69 is OneDspHomeScreen,
             the build of Figma frame 13:73059 and these states' home. */}
-        {step === 73 && <DataCertsDetailScreen activeTab="requests" onDone={() => setStep(74)} onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 74 && <MyCertificatesScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 73 && <DataCertsDetailScreen activeTab="home" onDone={() => setStep(74)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 74 && <MyCertificatesScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onOpenVehicleRegistration={() => setStep(73)} />}
         {/* Figma 9:89701 — opened by the Tesla tile under "My relationships" on the
             certificates home. Back returns to the screen that opened it (69); the
             Tesla row opens the Tesla company page (79). */}
@@ -8066,7 +7907,7 @@ export default function App() {
             onUploadManually={() => setStep(27)}
             onSeeHow={() => setStep(28)}
             onGoToDWCloud={() => setStep(31)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onViewCertificate={() => setStep(79)}
             onSavingsPlan={() => setStep(savingsPlanStep)}
             onOffers={() => setStep(OFFERS_STEP)}
@@ -8078,7 +7919,7 @@ export default function App() {
           <TeslaDataJourneyScreen
             onBack={() => goBack(78)}
             onHome={() => setStep(homeStep)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onViewCertificates={() => setStep(74)}
             onSavingsPlan={() => setStep(savingsPlanStep)}
             onOffers={() => setStep(OFFERS_STEP)}
@@ -8092,7 +7933,7 @@ export default function App() {
             variant="dataCertificates"
             onLearnMore={() => setStep(58)}
             onGoHome={() => setStep(homeStep)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onOffers={() => setStep(OFFERS_STEP)}
             onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(80); setStep(59); }}
             onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
@@ -8104,14 +7945,14 @@ export default function App() {
         {step === 81 && <DataBalanceScreen onBack={() => goBack(80)} onTransaction={() => setStep(82)} />}
         {/* Figma 9:94266 — the Tesla Model 3 (+Ð 0.08) transaction on step 81. */}
         {step === 82 && <DataTransactionScreen onBack={() => goBack(81)} />}
-        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {/* Figma 15:34974 — "My Data Savings" all-plans overview, reached from "Back to all plans" on step 83. */}
         {/* No "Manage my plan" control renders on 84 (see DspActivePlansScreen —
             Frame49 isn't in its subtree), so onManageMyPlan here is unreachable;
             "fitness" matches where this screen's card taps already lead (83). */}
-        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(56)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(12)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(56)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {/* Figma 16:83035 — the Offers frame authored for the enrolled states; OFFERS_STEP routes oneDsp/offer1/dataRequestAccepted here instead of 61. */}
-        {step === 85 && <OffersEnrolledScreen onGoHome={() => setStep(homeStep)} onMyData={() => setStep(12)} onSavingsPlan={() => setStep(savingsPlanStep)} onClaimOffer={() => setStep(36)} />}
+        {step === 85 && <OffersEnrolledScreen onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onClaimOffer={() => setStep(36)} />}
         {step === 33 && (
           <OfferCampaignScreen
             onBack={() => goBack(9)}
@@ -8121,7 +7962,7 @@ export default function App() {
               setStep(14);
             }}
             onHome={() => setStep(homeStep)}
-            onMyData={() => setStep(12)}
+            onMyData={() => setStep(MY_DATA_STEP)}
             onSavingsPlan={() => setStep(savingsPlanStep)}
           />
         )}

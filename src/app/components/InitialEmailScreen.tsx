@@ -18,33 +18,37 @@ const CONTENT_H = 2480;
  */
 export function InitialEmailScreen({ onViewCertificates }: InitialEmailScreenProps) {
   return (
-    <div
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
       style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", background: "var(--color-bg-base)" }}
       className="[&::-webkit-scrollbar]:hidden"
     >
-      <div style={{ position: "relative", width: `${FRAME_W}px`, height: `${CONTENT_H}px`, margin: "0 auto", overflow: "hidden" }}>
-        <InitialEmail />
+        <div style={{ position: "relative", width: `${FRAME_W}px`, height: `${CONTENT_H}px`, margin: "0 auto", overflow: "hidden" }}>
+          <InitialEmail />
 
-        {/* Transparent tap target over the hero "View my data certificates" button
-            (import positions it at top:527.5px, width:331, height:48, centered). */}
-        <button
-          type="button"
-          onClick={onViewCertificates}
-          aria-label="View my data certificates"
-          style={{
-            position: "absolute",
-            top: "527.5px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "331px",
-            height: "48px",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            zIndex: 20,
-          }}
-        />
-      </div>
+          {/* Transparent tap target over the hero "View my data certificates" button
+              (import positions it at top:527.5px, width:331, height:48, centered). */}
+          <button
+            type="button"
+            onClick={onViewCertificates}
+            aria-label="View my data certificates"
+            style={{
+              position: "absolute",
+              top: "527.5px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "331px",
+              height: "48px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 20,
+            }}
+          />
+        </div>
+          </div>
+      {/* No UnifiedStatusBar — InitialEmail's IMG_6075 chrome already paints
+          time/wifi/battery at the top. */}
     </div>
   );
 }

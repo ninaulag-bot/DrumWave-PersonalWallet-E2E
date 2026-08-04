@@ -1,6 +1,7 @@
 import DspLanding from "@/imports/DspLanding/index";
 import { UpdateContributionsContext } from "@/imports/DspLanding/update-context";
 import { GoBackContext } from "@/imports/DspLanding/go-back-context";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface DspLandingScreenProps {
   /** Called when the "Update data contributions" button is pressed. */
@@ -14,15 +15,18 @@ interface DspLandingScreenProps {
  *  scrolls vertically. */
 export function DspLandingScreen({ onUpdate, onBack }: DspLandingScreenProps) {
   return (
-    <div
-      className="[&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-      style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
-    >
-      <UpdateContributionsContext.Provider value={onUpdate}>
-        <GoBackContext.Provider value={onBack}>
-          <DspLanding />
-        </GoBackContext.Provider>
-      </UpdateContributionsContext.Provider>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        className="dsp-landing-sb [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+        style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
+      >
+        <UpdateContributionsContext.Provider value={onUpdate}>
+          <GoBackContext.Provider value={onBack}>
+            <DspLanding />
+          </GoBackContext.Provider>
+        </UpdateContributionsContext.Provider>
+      </div>
+      <UnifiedStatusBar hostClass="dsp-landing-sb" />
     </div>
   );
 }

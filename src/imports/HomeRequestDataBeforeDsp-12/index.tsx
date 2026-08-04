@@ -10,6 +10,10 @@ import imgRivianOffers from "../DspLanding-1/rivian-offers.png";
 // folder (smart-card-photo.png).
 import { OfferVariantContext } from "../DspLanding-1/offer-variant-context";
 import { ViewMyRequestsContext, TeslaRelationshipContext } from "./view-my-requests-context";
+import { RequestMoreDataContext } from "./request-more-data-context";
+import { SavingsPlanSectionContext } from "./savings-plan-context";
+import { RedeemOfferContext } from "./redeem-offer-context";
+import { HasSecondPlanContext } from "./has-second-plan-context";
 import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
 // The white Tesla mark already used on the red disc in DataCertsLoadingScreen —
 // same treatment here, so the two certificate screens share one asset.
@@ -1092,8 +1096,14 @@ function ButtonState() {
 }
 
 function Button() {
+  const onRequestMoreData = useContext(RequestMoreDataContext);
   return (
-    <div className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px]" data-name="Button">
+    <div
+      className="content-stretch flex items-start relative rounded-[500px] shrink-0 w-[342px]"
+      data-name="Button"
+      onClick={onRequestMoreData}
+      style={onRequestMoreData ? { cursor: "pointer" } : undefined}
+    >
       <ButtonState />
     </div>
   );
@@ -1171,9 +1181,10 @@ function Frame104() {
 }
 
 function Frame115() {
+  const hasSecondPlan = useContext(HasSecondPlanContext);
   return (
     <div className="content-stretch flex flex-[1_0_0] h-[24px] items-center min-w-px relative">
-      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">Data Savings Plan</p>
+      <p className="[word-break:break-word] font-['Titillium_Web:Regular',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[24px] whitespace-nowrap">{hasSecondPlan ? "Data Savings Plans" : "Data Savings Plan"}</p>
     </div>
   );
 }
@@ -1196,8 +1207,13 @@ function Frame40() {
 }
 
 function Frame49() {
+  const onSavingsPlan = useContext(SavingsPlanSectionContext);
   return (
-    <div className="content-stretch flex gap-[25px] items-start relative shrink-0 w-[342px]">
+    <div
+      className="content-stretch flex gap-[25px] items-start relative shrink-0 w-[342px]"
+      onClick={onSavingsPlan}
+      style={onSavingsPlan ? { cursor: "pointer" } : undefined}
+    >
       <Frame115 />
       <Frame40 />
     </div>
@@ -1737,6 +1753,7 @@ function Frame119() {
 function OfferCard() {
   // Receiving Offers gets the Rivian hero; Enrolled in a DSP keeps the Tesla one.
   const variant = useContext(OfferVariantContext);
+  const onRedeemOffer = useContext(RedeemOfferContext);
   return (
     <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-name="Offer cards">
       <div className="border border-[#2a2a2a] border-solid h-[456px] mb-[-1px] overflow-clip relative rounded-tl-[24px] rounded-tr-[24px] shrink-0 w-full">
@@ -1815,7 +1832,11 @@ function OfferCard() {
           </div>
         </div>
         <div className="h-[36px] relative shrink-0 w-full" data-name="Offer CTAs">
-          <div className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]">
+          <div
+            className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]"
+            onClick={onRedeemOffer}
+            style={onRedeemOffer ? { cursor: "pointer" } : undefined}
+          >
             <div className="[word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[18px] text-center text-white tracking-[0.36px] whitespace-nowrap">
               <p className="leading-[1.2]">Redeem offer</p>
             </div>

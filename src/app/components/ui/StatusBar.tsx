@@ -1,6 +1,8 @@
 import React from "react";
 
-// iOS status bar — reusable chrome. Render <StatusBar /> on every screen.
+// iOS status bar — reusable chrome. Always overlays the screen (absolute),
+// matching the enrolled OneDsp home: time / signal / wifi / battery sit in
+// the same spot on top of existing content, not as their own layout section.
 // Icons use the real Figma-exported vector cluster (cellular, wifi, battery).
 export function StatusBar({
   time = "9:41",
@@ -12,8 +14,12 @@ export function StatusBar({
   return (
     <div className="px-[16px] pt-[21px] pb-[0px]"
       style={{
-        position: "relative",
-        zIndex: 1,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        pointerEvents: "none",
         width: "100%",
         height: 54,
         paddingTop: 21,

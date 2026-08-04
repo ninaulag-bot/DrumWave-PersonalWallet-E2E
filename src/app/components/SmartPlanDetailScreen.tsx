@@ -1,5 +1,6 @@
 import PlanDetaillPage from "@/imports/PlanDetaillPage-1/index";
 import { SmartJoinPlanContext, SmartPlanDetailBackContext } from "@/imports/PlanDetaillPage-1/smart-plan-context";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface SmartPlanDetailScreenProps {
   /** Called when "Join this plan" is pressed. */
@@ -13,15 +14,18 @@ interface SmartPlanDetailScreenProps {
  *  frame, so it scrolls vertically. */
 export function SmartPlanDetailScreen({ onJoin, onBack }: SmartPlanDetailScreenProps) {
   return (
-    <div
-      className="[&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-      style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
-    >
-      <SmartPlanDetailBackContext.Provider value={onBack}>
-        <SmartJoinPlanContext.Provider value={onJoin}>
-          <PlanDetaillPage />
-        </SmartJoinPlanContext.Provider>
-      </SmartPlanDetailBackContext.Provider>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        className="smart-plan-detail-sb [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+        style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
+      >
+        <SmartPlanDetailBackContext.Provider value={onBack}>
+          <SmartJoinPlanContext.Provider value={onJoin}>
+            <PlanDetaillPage />
+          </SmartJoinPlanContext.Provider>
+        </SmartPlanDetailBackContext.Provider>
+      </div>
+      <UnifiedStatusBar hostClass="smart-plan-detail-sb" />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { AutoRenewToggleContext } from "@/imports/HomeRequestDataBeforeDsp-9/aut
 import { AutoRenewStateContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto-renew-state-context";
 import { PlanContext, type ManagedPlan } from "@/imports/HomeRequestDataBeforeDsp-9/plan-context";
 import { MainBottomNav } from "./MainBottomNav";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 const NAV_H = 72;
 // The import's main column (Frame34) now runs in flow and carries the DrumWave
@@ -139,47 +140,50 @@ export function ManageMyPlanScreen({ plan = "fitness", onBack, onHome, onMyData,
   }
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-      <div
-        className="[&::-webkit-scrollbar]:hidden"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: `${NAV_H}px`,
-          overflowY: "auto",
-          overflowX: "hidden",
-          scrollbarWidth: "none",
-        }}
-      >
-        {/* overflow:hidden so the import's remaining absolute leftovers (the
-            #2067d1 glows at top 1458/2088, the home indicator at bottom -21)
-            can't extend the scroll height past the content. Height stays auto —
-            nothing vertical to clip, so this can't reintroduce the cut-off. */}
-        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
-          <GoBackContext.Provider value={onBack}>
-            <PlanContext.Provider value={plan}>
-              <AutoRenewStateContext.Provider value={autoRenewOn}>
-                <AutoRenewToggleContext.Provider value={handleToggle}>
-                  <HomeRequestDataBeforeDsp9 />
-                </AutoRenewToggleContext.Provider>
-              </AutoRenewStateContext.Provider>
-            </PlanContext.Provider>
-          </GoBackContext.Provider>
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="manage-my-plan-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+        <div
+          className="[&::-webkit-scrollbar]:hidden"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: `${NAV_H}px`,
+            overflowY: "auto",
+            overflowX: "hidden",
+            scrollbarWidth: "none",
+          }}
+        >
+          {/* overflow:hidden so the import's remaining absolute leftovers (the
+              #2067d1 glows at top 1458/2088, the home indicator at bottom -21)
+              can't extend the scroll height past the content. Height stays auto —
+              nothing vertical to clip, so this can't reintroduce the cut-off. */}
+          <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+            <GoBackContext.Provider value={onBack}>
+              <PlanContext.Provider value={plan}>
+                <AutoRenewStateContext.Provider value={autoRenewOn}>
+                  <AutoRenewToggleContext.Provider value={handleToggle}>
+                    <HomeRequestDataBeforeDsp9 />
+                  </AutoRenewToggleContext.Provider>
+                </AutoRenewStateContext.Provider>
+              </PlanContext.Provider>
+            </GoBackContext.Provider>
+          </div>
         </div>
-      </div>
 
-      {showCancelModal && (
-        <CancelAutoRenewModal
-          onClose={() => setShowCancelModal(false)}
-          onConfirm={handleConfirmCancel}
-        />
-      )}
+        {showCancelModal && (
+          <CancelAutoRenewModal
+            onClose={() => setShowCancelModal(false)}
+            onConfirm={handleConfirmCancel}
+          />
+        )}
 
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
-      </div>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
+        </div>
+          </div>
+      <UnifiedStatusBar hostClass="manage-my-plan-sb" />
     </div>
   );
 }

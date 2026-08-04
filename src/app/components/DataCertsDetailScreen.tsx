@@ -4,6 +4,7 @@ import { CertificateCompaniesContext } from "@/imports/DataCerts-1/companies-con
 import { CertificateCompaniesSection } from "@/app/components/CertificateCompaniesSection";
 import { VEHICLE_REGISTRATION, type Certificate } from "@/app/data/certificates";
 import { MainBottomNav } from "@/app/components/MainBottomNav";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 const FRAME_W = 390;
 // Figma frame is 390×1925. Content (My data value card) ends at y=1831 with 94px breathing
@@ -59,49 +60,52 @@ export function DataCertsDetailScreen({
   );
 
   return (
-    <div style={{ position: "absolute", inset: 0, background: "#070707" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto" }}>
-      <div style={{ position: "relative", width: `${FRAME_W}px`, margin: "0 auto" }}>
-        {/* Inner frame clipped to actual content height, hiding blank tail of Frame47.
-            Grows with the expanded company list so nothing gets cut off. */}
-        <div
-          style={{
-            position: "relative",
-            width: `${FRAME_W}px`,
-            height: `${BASE_CONTENT_H + extraHeight}px`,
-            overflow: "hidden",
-          }}
-        >
-          <CertificateCompaniesContext.Provider value={companiesSlot}>
-            <DataCerts1 />
-          </CertificateCompaniesContext.Provider>
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="data-certs-detail-sb" style={{ position: "absolute", inset: 0, background: "#070707" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto" }}>
+        <div style={{ position: "relative", width: `${FRAME_W}px`, margin: "0 auto" }}>
+          {/* Inner frame clipped to actual content height, hiding blank tail of Frame47.
+              Grows with the expanded company list so nothing gets cut off. */}
+          <div
+            style={{
+              position: "relative",
+              width: `${FRAME_W}px`,
+              height: `${BASE_CONTENT_H + extraHeight}px`,
+              overflow: "hidden",
+            }}
+          >
+            <CertificateCompaniesContext.Provider value={companiesSlot}>
+              <DataCerts1 />
+            </CertificateCompaniesContext.Provider>
+          </div>
+
+          {/* Interactive "Done" button overlay — sits on top of the design's own Done button */}
+          <button
+            type="button"
+            onClick={onDone}
+            aria-label="Done"
+            style={{
+              position: "absolute",
+              top: "78px",
+              left: "calc(80% - 3px)",
+              transform: "translateX(-50%)",
+              width: "92px",
+              height: "48px",
+              borderRadius: "500px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 10,
+            }}
+          />
+        </div>
         </div>
 
-        {/* Interactive "Done" button overlay — sits on top of the design's own Done button */}
-        <button
-          type="button"
-          onClick={onDone}
-          aria-label="Done"
-          style={{
-            position: "absolute",
-            top: "78px",
-            left: "calc(80% - 3px)",
-            transform: "translateX(-50%)",
-            width: "92px",
-            height: "48px",
-            borderRadius: "500px",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            zIndex: 10,
-          }}
-        />
-      </div>
-      </div>
-
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab={activeTab} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
-      </div>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          <MainBottomNav activeTab={activeTab} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
+        </div>
+          </div>
+      <UnifiedStatusBar hostClass="data-certs-detail-sb" />
     </div>
   );
 }

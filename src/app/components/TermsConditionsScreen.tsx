@@ -1,5 +1,6 @@
 import TC from "@/imports/TC/index";
 import { TermsBackContext, TermsAcceptContext } from "@/imports/TC/back-context";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface TermsConditionsScreenProps {
   /** Called when the back arrow is pressed. */
@@ -12,12 +13,15 @@ interface TermsConditionsScreenProps {
  *  the plan detail page. Renders the read-only import as-is. */
 export function TermsConditionsScreen({ onBack, onAccept }: TermsConditionsScreenProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
-      <TermsBackContext.Provider value={onBack}>
-        <TermsAcceptContext.Provider value={onAccept}>
-          <TC />
-        </TermsAcceptContext.Provider>
-      </TermsBackContext.Provider>
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="terms-conditions-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+        <TermsBackContext.Provider value={onBack}>
+          <TermsAcceptContext.Provider value={onAccept}>
+            <TC />
+          </TermsAcceptContext.Provider>
+        </TermsBackContext.Provider>
+          </div>
+      <UnifiedStatusBar hostClass="terms-conditions-sb" />
     </div>
   );
 }

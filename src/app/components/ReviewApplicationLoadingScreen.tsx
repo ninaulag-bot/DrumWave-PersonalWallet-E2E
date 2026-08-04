@@ -1,52 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import svgPaths from "@/imports/UnnamedComponent-2/svg-cv63vqvbsh";
-
-/** Reused status bar from the read-only review-screen import (same SVG assets). */
-function StatusBarPro() {
-  return (
-    <div className="absolute bg-[#070707] h-[59px] left-0 top-0 w-full" data-name="Status Bar/Pro">
-      <div className="-translate-y-1/2 absolute content-stretch flex gap-[7.33px] items-center right-[32.67px] top-[calc(50%+0.33px)]" data-name="Status/Pro">
-        <div className="h-[12.333px] relative shrink-0 w-[19.333px]" data-name="Cellular">
-          <svg className="absolute block inset-0 size-full" fill="none" height="12.3333" preserveAspectRatio="none" viewBox="0 0 19.3333 12.3333" width="19.3333">
-            <g id="Cellular">
-              <path d={svgPaths.p8bdef00} fill="var(--fill-0, white)" />
-              <path d={svgPaths.p12dc6500} fill="var(--fill-0, white)" />
-              <path d={svgPaths.p5f0ea00} fill="var(--fill-0, white)" />
-              <path d={svgPaths.p189c4440} fill="var(--fill-0, white)" />
-            </g>
-          </svg>
-        </div>
-        <div className="h-[12.333px] relative shrink-0 w-[17px]" data-name="Wifi">
-          <svg className="absolute block inset-0 size-full" fill="none" height="12.3333" preserveAspectRatio="none" viewBox="0 0 17 12.3333" width="17">
-            <path clipRule="evenodd" d={svgPaths.p70af300} fill="var(--fill-0, white)" fillRule="evenodd" id="Wifi" />
-          </svg>
-        </div>
-        <div className="h-[13.667px] relative shrink-0 w-[27.333px]" data-name="Battery/Percentage">
-          <div className="-translate-y-1/2 absolute bg-white h-[9px] left-[2px] rounded-[2.667px] top-1/2 w-[10.333px]" data-name="percent" />
-          <div className="-translate-y-1/2 absolute h-[13px] left-0 top-1/2 w-[27.333px]" data-name="battery">
-            <svg className="absolute block inset-0 size-full" fill="none" height="13" preserveAspectRatio="none" viewBox="0 0 27.3333 13" width="27.3333">
-              <g id="battery" opacity="0.4">
-                <path clipRule="evenodd" d={svgPaths.p2b410900} fill="var(--fill-0, white)" fillRule="evenodd" />
-                <path d={svgPaths.p2c79ba00} fill="var(--fill-0, white)" />
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div className="-translate-y-1/2 absolute h-[12.592px] left-[54.87px] top-[calc(50%-0.1px)] w-[33.265px]" data-name="Time">
-        <svg className="absolute block inset-0 size-full" fill="none" height="12.5923" preserveAspectRatio="none" viewBox="0 0 33.2648 12.5923" width="33.2648">
-          <g id="Time">
-            <path d={svgPaths.p10408380} fill="var(--fill-0, white)" />
-            <path d={svgPaths.p1252ba00} fill="var(--fill-0, white)" />
-            <path d={svgPaths.p36383fe1} fill="var(--fill-0, white)" />
-            <path d={svgPaths.p1e7ac780} fill="var(--fill-0, white)" />
-          </g>
-        </svg>
-      </div>
-    </div>
-  );
-}
+import { StatusBar } from "@/app/components/ui/StatusBar";
 
 const STAGES = ["Reviewing your application", "Almost there", "Ready"] as const;
 
@@ -125,7 +79,9 @@ export function ReviewApplicationLoadingScreen({ onComplete }: ReviewApplication
       </div>
 
       <div className="absolute bg-[#070707] h-[115px] left-0 top-[733px] w-full" />
-      <StatusBarPro />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50, pointerEvents: "none" }}>
+        <StatusBar />
+      </div>
     </div>
   );
 }

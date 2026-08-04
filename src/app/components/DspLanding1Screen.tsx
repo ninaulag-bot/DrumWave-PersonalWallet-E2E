@@ -8,7 +8,9 @@ import { CashBalanceContext } from "@/imports/DspLanding-1/cash-balance-context"
 import { DataBalanceContext } from "@/imports/DspLanding-1/data-balance-context";
 import { ViewAllPlansContext } from "@/imports/DspLanding-1/view-all-plans-context";
 import { DataContributionContext } from "@/imports/DspLanding-1/data-contribution-context";
+import { BackToAllPlansContext } from "@/imports/DspLanding-1/back-to-all-plans-context";
 import { OfferVariantContext, type OfferVariant } from "@/imports/DspLanding-1/offer-variant-context";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface DspLanding1ScreenProps {
   onLearnMore?: () => void;
@@ -23,6 +25,10 @@ interface DspLanding1ScreenProps {
   /** Called when the "Data contribution" row is tapped. Only passed in the data
    *  certificates flow; left undefined elsewhere so the row stays inert. */
   onDataContribution?: () => void;
+  /** Called by the "Back to all plans" link. Only passed when this screen was
+   *  opened from the all-plans overview; left undefined elsewhere, which is what
+   *  keeps the link from rendering at all. */
+  onBackToAllPlans?: () => void;
   /** "receivingOffers" (after an offer is accepted) shows data balance 4 and the
    *  Rivian offer photo; "enrolled" keeps 0 and the original Tesla photos. */
   variant?: OfferVariant;
@@ -30,30 +36,35 @@ interface DspLanding1ScreenProps {
 
 /** "My Data Savings Plan" dashboard screen, reached after "Go to my plan"
  *  on the Welcome to your Data Savings Plan page. */
-export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, variant = "enrolled" }: DspLanding1ScreenProps) {
+export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, onBackToAllPlans, variant = "enrolled" }: DspLanding1ScreenProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-      <OfferVariantContext.Provider value={variant}>
-      <LearnMoreContext.Provider value={onLearnMore}>
-        <GoToHomeContext.Provider value={onGoHome}>
-          <MyDataContext.Provider value={onMyData}>
-            <OffersContext.Provider value={onOffers}>
-              <ManageMyPlanContext.Provider value={onManageMyPlan}>
-                <CashBalanceContext.Provider value={onCashBalance}>
-                  <DataBalanceContext.Provider value={onDataBalance}>
-                    <ViewAllPlansContext.Provider value={onViewAllPlans}>
-                      <DataContributionContext.Provider value={onDataContribution}>
-                        <DspLanding1 />
-                      </DataContributionContext.Provider>
-                    </ViewAllPlansContext.Provider>
-                  </DataBalanceContext.Provider>
-                </CashBalanceContext.Provider>
-              </ManageMyPlanContext.Provider>
-            </OffersContext.Provider>
-          </MyDataContext.Provider>
-        </GoToHomeContext.Provider>
-      </LearnMoreContext.Provider>
-      </OfferVariantContext.Provider>
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="dsp-landing1-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+        <OfferVariantContext.Provider value={variant}>
+        <LearnMoreContext.Provider value={onLearnMore}>
+          <GoToHomeContext.Provider value={onGoHome}>
+            <MyDataContext.Provider value={onMyData}>
+              <OffersContext.Provider value={onOffers}>
+                <ManageMyPlanContext.Provider value={onManageMyPlan}>
+                  <CashBalanceContext.Provider value={onCashBalance}>
+                    <DataBalanceContext.Provider value={onDataBalance}>
+                      <ViewAllPlansContext.Provider value={onViewAllPlans}>
+                        <DataContributionContext.Provider value={onDataContribution}>
+                          <BackToAllPlansContext.Provider value={onBackToAllPlans}>
+                            <DspLanding1 />
+                          </BackToAllPlansContext.Provider>
+                        </DataContributionContext.Provider>
+                      </ViewAllPlansContext.Provider>
+                    </DataBalanceContext.Provider>
+                  </CashBalanceContext.Provider>
+                </ManageMyPlanContext.Provider>
+              </OffersContext.Provider>
+            </MyDataContext.Provider>
+          </GoToHomeContext.Provider>
+        </LearnMoreContext.Provider>
+        </OfferVariantContext.Provider>
+          </div>
+      <UnifiedStatusBar hostClass="dsp-landing1-sb" />
     </div>
   );
 }

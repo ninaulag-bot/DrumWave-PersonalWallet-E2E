@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import DWCloud from "@/imports/DWCloud/index";
 import DWCloudDeleted from "@/imports/DWCloud-5/index";
 import dwSvg from "@/imports/DWCloud/svg-ze2s0rutt2";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface DWCloudScreenProps {
   /** Back arrow in the profile header. */
@@ -41,45 +42,48 @@ export function DWCloudScreen({ onBack, onUploadMore }: DWCloudScreenProps) {
   // After confirming a delete, show the post-delete screen exactly as designed.
   if (showDeleted) {
     return (
-      <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-        <DWCloudDeleted />
+            <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+        <div className="dwcloud-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+          <DWCloudDeleted />
 
-        {/* Back arrow tap-target (profile header, ~top:66px left:24px). */}
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Go back"
-          style={{
-            position: "absolute",
-            top: "66px",
-            left: "24px",
-            width: "44px",
-            height: "48px",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            zIndex: 5,
-          }}
-        />
+          {/* Back arrow tap-target (profile header, ~top:66px left:24px). */}
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Go back"
+            style={{
+              position: "absolute",
+              top: "66px",
+              left: "24px",
+              width: "44px",
+              height: "48px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 5,
+            }}
+          />
 
-        {/* "Upload more files" tap-target (bottom:45px, 342px wide, centered). */}
-        <button
-          type="button"
-          onClick={onUploadMore}
-          aria-label="Upload more files"
-          style={{
-            position: "absolute",
-            bottom: "45px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "342px",
-            height: "48px",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            zIndex: 5,
-          }}
-        />
+          {/* "Upload more files" tap-target (bottom:45px, 342px wide, centered). */}
+          <button
+            type="button"
+            onClick={onUploadMore}
+            aria-label="Upload more files"
+            style={{
+              position: "absolute",
+              bottom: "45px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "342px",
+              height: "48px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 5,
+            }}
+          />
+              </div>
+        <UnifiedStatusBar hostClass="dwcloud-sb" />
       </div>
     );
   }

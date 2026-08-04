@@ -1,5 +1,6 @@
 import ChoosePlans from "@/imports/ChoosePlans/index";
 import { FitnessDetailsContext, ChoosePlansCloseContext, SmartDetailsContext } from "@/imports/ChoosePlans/view-details-context";
+import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
 
 interface ChoosePlansScreenProps {
   /** Called when "View details" on the dSavings Fitness plan card is pressed. */
@@ -15,14 +16,17 @@ interface ChoosePlansScreenProps {
  *  it scrolls vertically. */
 export function ChoosePlansScreen({ onViewFitnessDetails, onViewSmartDetails, onClose }: ChoosePlansScreenProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
-      <ChoosePlansCloseContext.Provider value={onClose}>
-        <SmartDetailsContext.Provider value={onViewSmartDetails}>
-          <FitnessDetailsContext.Provider value={onViewFitnessDetails}>
-            <ChoosePlans />
-          </FitnessDetailsContext.Provider>
-        </SmartDetailsContext.Provider>
-      </ChoosePlansCloseContext.Provider>
+        <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="choose-plans-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+        <ChoosePlansCloseContext.Provider value={onClose}>
+          <SmartDetailsContext.Provider value={onViewSmartDetails}>
+            <FitnessDetailsContext.Provider value={onViewFitnessDetails}>
+              <ChoosePlans />
+            </FitnessDetailsContext.Provider>
+          </SmartDetailsContext.Provider>
+        </ChoosePlansCloseContext.Provider>
+          </div>
+      <UnifiedStatusBar hostClass="choose-plans-sb" />
     </div>
   );
 }
