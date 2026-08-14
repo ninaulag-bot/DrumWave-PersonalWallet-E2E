@@ -2856,7 +2856,7 @@ const RdStaticCatRow = ({ cat }: { cat: { id: string; icon: string; name: string
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { onBack: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
+function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { onBack?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
   const [rdTravelExpanded, setRdTravelExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   // Figma 207:48122 — confirmation dialog for the Travel & Transportation rows.
@@ -2923,14 +2923,16 @@ function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, 
       {/* Status bar */}
       <StatusBar />
 
-      {/* Back button — the design's own frame doesn't show a nav row (title now lives in
-          the heading below), but onBack still needs a visible trigger, so this keeps
-          just the chevron in the same top-left slot other screens use. */}
-      <button onClick={onBack} style={{ position: "absolute", top: 70, left: 24, background: "none", border: "none", cursor: "pointer", padding: 0, width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 10 }}>
-        <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
-          <path d={BACK} fill="var(--color-text-white)" />
-        </svg>
-      </button>
+      {/* Back arrow only when this screen was pushed by "Request more data".
+          Reached from the "My data" bottom-nav tab it's a tab destination, not
+          a pushed screen, so it shows no arrow and you leave via the nav. */}
+      {onBack && (
+        <button onClick={onBack} style={{ position: "absolute", top: 70, left: 24, background: "none", border: "none", cursor: "pointer", padding: 0, width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 10 }}>
+          <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
+            <path d={BACK} fill="var(--color-text-white)" />
+          </svg>
+        </button>
+      )}
 
       {/* Scrollable content */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
@@ -6448,6 +6450,14 @@ export default function App() {
     setDspVisible(false);
   };
 
+  // Request data (10) is a bottom-nav tab destination, so it normally shows no
+  // back arrow. Entering it via "Request more data" pushes it instead, and that
+  // entry gets an arrow. Cleared on the way out so the next tab visit is clean.
+  const [requestDataPushed, setRequestDataPushed] = useState(false);
+  useEffect(() => {
+    if (step !== 10 && requestDataPushed) setRequestDataPushed(false);
+  }, [step, requestDataPushed]);
+
   // Landing back on the pre-enrolment home ends whichever flow was running,
   // by any route (back arrow, bottom-nav Home, the switcher), and drops the
   // switcher back to Sign Up. Step 9 is only ever the pre-enrolment home — the
@@ -6658,7 +6668,7 @@ export default function App() {
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
-            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen name={homeProps.name} onAccountSettings={homeProps.onAccountSettings} variant="dataCertificates" hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
+            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen name={homeProps.name} onAccountSettings={homeProps.onAccountSettings} variant="dataCertificates" hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
             return <DashboardScreenOneDsp {...homeProps} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
           }
           return <DashboardScreen {...homeProps} />;
@@ -6686,7 +6696,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => goBack(9)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />
+          <RequestDataScreen onBack={requestDataPushed ? () => goBack(homeStep) : undefined} onHome={() => setStep(homeStep)} onMyData={() => { setRequestDataPushed(false); setStep(MY_DATA_STEP); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -6946,7 +6956,7 @@ export default function App() {
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => setStep(9)} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
         {/* Counter shows step+1 → "60 / N" is this screen (Manage my plan).
             Back always returns to the individual plan page that opened it
             (56 Smart / 80 certs Smart / 83 Fitness), via history + managePlanBackDest. */}
@@ -6968,7 +6978,7 @@ export default function App() {
         {step === 68 && <Success1Screen onDone={() => setStep(56)} onBack={() => setStep(56)} />}
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
-        {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} />}
+        {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} />}
         {/* Savings-plan tab destination for the noDsp state.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
@@ -6978,7 +6988,7 @@ export default function App() {
             onHome={() => setStep(homeStep)}
             onMyData={() => setStep(MY_DATA_STEP)}
             onOffers={() => setStep(OFFERS_STEP)}
-            onRequestMoreData={() => setStep(MY_DATA_STEP)}
+            onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }}
           />
         )}
         {/* Offers tab destination for the two pre-enrolment states. Figma frame
@@ -6986,7 +6996,7 @@ export default function App() {
             enrolled states route to step 85 instead, via OFFERS_STEP. */}
         {step === 61 && (
           <OffersNotEnrolledScreen
-            onRequestMoreData={() => setStep(10)}
+            onRequestMoreData={() => { setRequestDataPushed(true); setStep(10); }}
             onHome={() => setStep(homeStep)}
             onMyData={() => setStep(MY_DATA_STEP)}
             onSavingsPlan={() => setStep(savingsPlanStep)}
@@ -7044,7 +7054,7 @@ export default function App() {
             onCashBalance={() => { setCashBalanceBackDest(80); setStep(66); }}
             onDataBalance={() => setStep(81)}
             onDataContribution={() => setStep(74)}
-            onRequestMoreData={() => setStep(MY_DATA_STEP)}
+            onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }}
           />
         )}
         {/* Figma 9:94403 — Data Balance, opened by the Data balance card on step 80. */}
@@ -7158,6 +7168,15 @@ export default function App() {
                 key={opt.key}
                 type="button"
                 onClick={() => {
+                  // The DSP pill starts the flow on its first screen: the
+                  // "Apply for a Data Savings Plan" sheet over the pre-enrolment
+                  // home. Handled before the resets below so the sheet isn't
+                  // torn down and rebuilt in the same tick.
+                  if (opt.key === "oneDsp") {
+                    setStep(9);
+                    openDsp();
+                    return;
+                  }
                   // Without this, a DSP-enroll sheet left open (dspMounted/dspVisible)
                   // from a prior "Apply for DSP" tap keeps rendering as a zIndex:200
                   // overlay on top of whatever screen this jumps to, since that overlay
