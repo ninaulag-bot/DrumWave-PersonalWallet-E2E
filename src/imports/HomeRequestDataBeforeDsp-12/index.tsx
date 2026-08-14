@@ -992,9 +992,12 @@ function Frame103() {
 }
 
 function Frame107() {
+  // View Data Certificates has one of the seven requests accepted, so pending
+  // drops to 6; the enrolled and receiving-offers homes keep the original 7.
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex items-start justify-center relative shrink-0">
-      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">7</p>
+      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">{variant === "dataCertificates" ? "6" : "7"}</p>
     </div>
   );
 }
@@ -1009,9 +1012,12 @@ function Frame51() {
 }
 
 function Frame108() {
+  // View Data Certificates shows a single accepted request; the enrolled and
+  // receiving-offers homes keep the original 2.
+  const variant = useContext(OfferVariantContext);
   return (
     <div className="content-stretch flex items-start justify-center relative shrink-0">
-      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">2</p>
+      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">{variant === "dataCertificates" ? "1" : "2"}</p>
     </div>
   );
 }

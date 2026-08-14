@@ -47,6 +47,7 @@ import { DspManageContributionScreen } from "@/app/components/DspManageContribut
 import { OfferClaimSuccessScreen } from "@/app/components/OfferClaimSuccessScreen";
 import { ReviewApplicationLoadingScreen } from "@/app/components/ReviewApplicationLoadingScreen";
 import { AutoApprovedScreen } from "@/app/components/AutoApprovedScreen";
+import { DataRequestSuccessDialog } from "@/app/components/DataRequestSuccessDialog";
 import { ProfileHalo } from "@/app/components/ProfileHalo";
 import { MyPlanScreen } from "@/app/components/MyPlanScreen";
 import { DspLanding1Screen } from "@/app/components/DspLanding1Screen";
@@ -2855,9 +2856,12 @@ const RdStaticCatRow = ({ cat }: { cat: { id: string; icon: string; name: string
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsPlan, onOffers }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
+function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
   const [rdTravelExpanded, setRdTravelExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  // Figma 207:48122 — confirmation dialog for the Travel & Transportation rows.
+  // Holds the company name of the row that opened it; null when closed.
+  const [rdSuccessCo, setRdSuccessCo] = useState<string | null>(null);
 
   const tw = RD_TW;
   const os = RD_OS;
@@ -2998,8 +3002,8 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsP
                             {filteredTravelCos.map(co => (
                               <div
                                 key={co.name}
-                                onClick={co.name === "Spirit" ? onSpiritClick : undefined}
-                                style={{ background: "var(--color-bg-overlay)", borderRadius: "var(--radius-sm)", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 var(--space-3)", cursor: co.name === "Spirit" ? "pointer" : "default" }}
+                                onClick={co.name === "Spirit" ? onSpiritClick : () => setRdSuccessCo(co.name)}
+                                style={{ background: "var(--color-bg-overlay)", borderRadius: "var(--radius-sm)", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 var(--space-3)", cursor: "pointer" }}
                               >
                                 <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
                                   <div style={{ width: 28, height: 28, borderRadius: "50%", background: co.color, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -3008,10 +3012,16 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsP
                                   <span style={{ ...tw, fontWeight: 600, color: "var(--color-text-white)" }}>{co.name}</span>
                                 </div>
                                 <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
-                                  <span style={{ ...os, color: "var(--color-text-secondary)" }}>Request</span>
-                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d={SEND} fill="var(--color-text-white)" />
-                                  </svg>
+                                  {pendingCos.includes(co.name) ? (
+                                    <span style={{ ...os, color: "var(--color-text-secondary)" }}>Pending</span>
+                                  ) : (
+                                    <>
+                                      <span style={{ ...os, color: "var(--color-text-secondary)" }}>Request</span>
+                                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d={SEND} fill="var(--color-text-white)" />
+                                      </svg>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             ))}
@@ -3044,6 +3054,17 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsP
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
         <MainBottomNav activeTab="requests" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
+
+      {rdSuccessCo && (
+        <DataRequestSuccessDialog
+          company={rdSuccessCo}
+          onClose={() => setRdSuccessCo(null)}
+          onDone={() => {
+            onRequestConfirmed?.(rdSuccessCo);
+            setRdSuccessCo(null);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -5048,964 +5069,6 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
   );
 }
 
-function DashboardScreenEnrolledNoPlan({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onContinueEnrollment, onViewAllPlans, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onContinueEnrollment?: () => void; onViewAllPlans?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
-  const [snackbarDismissed, setSnackbarDismissed] = useState(false);
-  const [travelExpanded, setTravelExpanded] = useState(true);
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(
-    null,
-  );
-
-  const faqs = [
-    { q: "How does my Personal dWallet work?", multiline: false },
-    { q: "How does a data request work?", multiline: false },
-    { q: "What's a data certificate and how is\ndata value captured?", multiline: true },
-    { q: "What's a Data Savings Plan?", multiline: false },
-  ];
-
-  const travelCos = [
-    { initial: "N",  color: "#820AD1", name: "United",    darkText: false },
-    { initial: "I",  color: "#FF6F00", name: "American",  darkText: false },
-    { initial: "B",  color: "#EA200D", name: "Alaska",    darkText: false },
-    { initial: "BB", color: "#FFD500", name: "Greyhound", darkText: true  },
-    { initial: "S",  color: "#EC0000", name: "Spirit",    darkText: true  },
-  ];
-
-  const collapsedCats = [
-    {
-      e: "🏥",
-      name: "Healthcare & Medical",
-      sub: "Hospitals, Pharmacies, Clinics",
-    },
-    {
-      e: "🏦",
-      name: "Finance & Banking",
-      sub: "Banks, Credit Cards, Loans",
-    },
-    {
-      e: "📱",
-      name: "Technology & Social Media",
-      sub: "Apps, Platforms, Streaming",
-    },
-    {
-      e: "🛒",
-      name: "Retail & Shopping",
-      sub: "E-commerce, Grocery, Fashion",
-    },
-  ];
-
-  // "Choose a plan" cards. Design uses placehold.co images for the company
-  // logo and artwork photo — not substituted; logo uses the same
-  // initial-in-a-circle placeholder convention as CompanyAvatar elsewhere.
-  const plans = [
-    // Kaiser now uses the real Figma hero (photo + wash + glow + logo row), matching
-    // the same card on the DSP page. Best Buy keeps the placeholder treatment until
-    // its artwork is provided, so `heroPhoto` acts as the variant switch below.
-    {
-      initial: "K", company: "Kaiser Permanente", category: "Health", planName: "dSavings Health",
-      heroTitle: "Plan name B", heroPhoto: kaiserHeroPhoto, logo: kaiserLogo,
-    },
-    { initial: "BB", company: "Best Buy", category: "Gaming", planName: "dSavings Gaming" },
-  ] as Array<{
-    initial: string; company: string; category: string; planName: string;
-    heroTitle?: string; heroPhoto?: string; logo?: string;
-  }>;
-
-  const tw: React.CSSProperties = {
-    fontFamily: "var(--font-display)",
-  };
-  const os: React.CSSProperties = {
-    fontFamily: "var(--font-body)",
-  };
-
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        background: "var(--color-bg-base)",
-        overflow: "hidden",
-      }}
-    >
-      {/* Ambient blue glows (atmospheric, scatter across full height) */}
-      {[
-        { l: 40, t: 260, b: "rgba(0,55,255,0.13)", r: 110 },
-        { l: 320, t: 580, b: "rgba(32,103,209,0.10)", r: 90 },
-        { l: 80, t: 950, b: "rgba(0,55,255,0.10)", r: 100 },
-        { l: 310, t: 1400, b: "rgba(32,103,209,0.12)", r: 85 },
-        { l: 50, t: 1900, b: "rgba(0,55,255,0.09)", r: 95 },
-      ].map((g, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            width: "1px",
-            height: "1px",
-            left: g.l,
-            top: g.t,
-            boxShadow: `0 0 ${g.r}px ${Math.round(g.r * 0.65)}px ${g.b}`,
-            borderRadius: "50%",
-            pointerEvents: "none",
-          }}
-        />
-      ))}
-
-      <StatusBar />
-      <TopNav name={name} onAccountSettings={onAccountSettings} />
-
-      {/* Scrollable body */}
-<div
-  style={{
-    position: "absolute",
-    top: 0,
-    paddingTop: "117px",
-    left: 0,
-    right: 0,
-    bottom: "72px",
-    overflowY: "auto",
-    overflowX: "hidden",
-    scrollbarWidth: "none",
-  }}
-  className="[&::-webkit-scrollbar]:hidden"
->
-        {/* Confetti + Avatar block */}
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "360px",
-          }}
-        >
-          {/* Rings + gradient ring + photo halo (matches "Approved + not joined") */}
-          <ProfileHalo centerTop={170} />
-          {/* Company badges — positions from reference, sizes 28px.
-             left/top are the badge's top-left = centerX - 14, centerY - 14. */}
-         <MastercardLogo size={17} style={{ position: "absolute", left: "224.3px", top: "39.8px", zIndex: 4, pointerEvents: "none" }} />
-<VivoLogo       size={17} style={{ position: "absolute", left: "126.2px", top: "54.2px", zIndex: 4, pointerEvents: "none" }} />
-<ClaroLogo      size={17} style={{ position: "absolute", left: "82.2px",  top: "82.8px", zIndex: 4, pointerEvents: "none" }} />
-<NubankLogo     size={17} style={{ position: "absolute", left: "307.1px", top: "125.6px", zIndex: 4, pointerEvents: "none" }} />
-
-          {/* Title + subtitle */}
-          <div
-            style={{
-              position: "absolute",
-              left: "24px",
-              top: "281px",
-              width: "342px",
-              textAlign: "center",
-            }}
-          >
-            <p
-              style={{
-                ...tw,
-                margin: 0,
-                fontWeight: 600,
-                fontSize: "24px",
-                lineHeight: "28.8px",
-                color: "var(--color-text-primary)",
-              }}
-            >
-              My data requests
-            </p>
-            <p
-              style={{
-                ...os,
-                margin: "8px 0 0",
-                fontWeight: 400,
-                fontSize: "14px",
-                lineHeight: "1.4",
-                color: "var(--color-text-secondary)",
-              }}
-            >
-              Request data from the companies you have
-              relationships with
-            </p>
-          </div>
-        </div>
-
-        {/* Stats row */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "18px",
-            padding: "16px",
-          }}
-        >
-          {[
-            { n: "7", l: "Pending" },
-            { n: "2", l: "Accepted" },
-            { n: "0", l: "Rejected" },
-          ].map((s, i) => (
-            <React.Fragment key={s.l}>
-              {i > 0 && (
-                <div
-                  style={{
-                    width: "1px",
-                    height: "52px",
-                    background: "#3D3D3D",
-                    flexShrink: 0,
-                  }}
-                />
-              )}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "13px",
-                }}
-              >
-                <p
-                  style={{
-                    ...tw,
-                    margin: 0,
-                    fontWeight: s.n === "7" ? 600 : 275,
-                    fontSize: "40px",
-                    lineHeight: "48px",
-                    color: "var(--color-text-primary)",
-                  }}
-                >
-                  {s.n}
-                </p>
-                <p
-                  style={{
-                    ...tw,
-                    margin: 0,
-                    fontWeight: 600,
-                    fontSize: "14px",
-                    lineHeight: "16.8px",
-                    color: "var(--color-text-secondary)",
-                  }}
-                >
-                  {s.l}
-                </p>
-              </div>
-            </React.Fragment>
-          ))}
-        </div>
-
-        {/* Action buttons */}
-        <div
-          style={{
-            marginTop: "24px",
-            paddingLeft: "24px",
-            paddingRight: "24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          <button
-            type="button"
-            onClick={onRequestData}
-            style={{
-              height: "44px",
-              borderRadius: "500px",
-              padding: "10px 24px",
-              background: "var(--color-action-primary-bg)",
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span style={{ ...tw, fontWeight: 600, fontSize: "18px", lineHeight: "18px", color: "var(--color-action-primary-text)" }}>
-              Request more data
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={onViewRequests}
-            style={{
-              height: "44px",
-              borderRadius: "500px",
-              padding: "10px 24px",
-              background: "transparent",
-              border: "none",
-              boxShadow: "inset 0 0 0 1px var(--color-action-secondary-border)",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span style={{ ...tw, fontWeight: 600, fontSize: "18px", lineHeight: "18px", color: "var(--color-action-secondary-text)" }}>
-              View my requests
-            </span>
-          </button>
-        </div>
-
-        {/* Choose a plan. Buttons are decorative — no prop exists on this
-            component for plan navigation. "What happens next?" and "Offers"
-            were removed per instruction; onContinueEnrollment is now an
-            unused optional prop (still passed in from App.tsx, no call
-            site left in this component — flagged, not removed, since the
-            prop itself wasn't asked to be dropped from the signature). */}
-        <div style={{ marginTop: "36px" }}>
-          <p
-            style={{
-              ...tw,
-              margin: "0 0 16px",
-              padding: "0 24px",
-              fontWeight: 400,
-              fontSize: "24px",
-              lineHeight: "28.8px",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            Choose a plan
-          </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              overflowX: "auto",
-              padding: "0 24px 4px",
-              scrollbarWidth: "none",
-            }}
-            className="[&::-webkit-scrollbar]:hidden"
-          >
-            {plans.map((plan) => (
-              <div
-                key={plan.company}
-                style={{
-                  flexShrink: 0,
-                  width: "342px",
-                  background: "rgba(255, 255, 255, 0.05)",
-                  borderRadius: "24px",
-                  boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.10)",
-                  padding: "16px",
-                  boxSizing: "border-box",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "24px",
-                }}
-              >
-                {/* Logo + company name */}
-                <div style={{ display: "flex", alignItems: "center", gap: "11px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "50%",
-                      background: "#414141",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <span style={{ ...tw, fontWeight: 600, fontSize: "13px", color: "#FFFFFF" }}>{plan.initial}</span>
-                  </div>
-                  <span style={{ ...os, fontWeight: 700, fontSize: "16px", lineHeight: "24px", color: "#FFFFFF" }}>{plan.company}</span>
-                </div>
-
-                {/* Artwork card. Two variants: plans with a real Figma hero (heroPhoto)
-                    get the photo + wash + glow + wordmark + logo row; the rest keep the
-                    original flat-green placeholder so they're visually unchanged. */}
-                <div
-                  style={{
-                    width: "100%",
-                    height: "194px",
-                    borderRadius: "16px",
-                    background: "#17A530",
-                    boxShadow: plan.heroPhoto ? "inset 0 0 0 1px rgba(255,255,255,0.4)" : "inset 0 0 0 1px #FFFFFF",
-                    boxSizing: "border-box",
-                    position: "relative",
-                    overflow: "hidden",
-                    padding: "20px",
-                  }}
-                >
-                  {plan.heroPhoto && (
-                    <>
-                      <img
-                        src={plan.heroPhoto}
-                        alt=""
-                        style={{ position: "absolute", left: "-73.3px", top: "-13.81px", width: "388.71px", height: "259.171px", objectFit: "cover", opacity: 0.9, pointerEvents: "none" }}
-                      />
-                      <div style={{ position: "absolute", left: "-99.84px", right: "-30.29px", top: "-11.98px", height: "219.649px", background: "linear-gradient(-47.03deg, rgba(123,182,203,0.5) 26.413%, rgba(5,111,23,0.5) 103.65%)", pointerEvents: "none" }} />
-                      <div style={{ position: "absolute", left: "-181.3px", top: "-177.63px", width: "351.2px", height: "367.93px", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                        <div style={{ transform: "rotate(-51.64deg)", flex: "none" }}>
-                          <div style={{ width: "307.101px", height: "204.837px", background: "#35C237", filter: "blur(84.199px)", borderRadius: "9999px" }} />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  <div style={{ position: "relative", zIndex: 1, height: "100%" }}>
-                    {plan.heroPhoto && (
-                      <img src={dSavingsWordmark} alt="dSavings" style={{ display: "block", width: "38.712px", height: "10.543px", marginBottom: "4px" }} />
-                    )}
-                    <p style={{ ...tw, margin: 0, fontWeight: 600, fontSize: "28px", lineHeight: plan.heroPhoto ? "1.5" : "42px", color: "#FFFFFF" }}>
-                      {plan.heroTitle ?? plan.category}
-                    </p>
-                    {plan.heroPhoto ? (
-                      <>
-                        <p style={{ ...os, position: "absolute", left: 0, bottom: 0, margin: 0, fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-primary)" }}>
-                          23,391 members
-                        </p>
-                        <div style={{ position: "absolute", right: 0, bottom: 0, display: "flex", alignItems: "center", gap: "12px" }}>
-                          <DrumWaveLogo size={26} />
-                          <div style={{ width: "1px", height: "20.458px", background: "rgba(255,255,255,0.4)" }} />
-                          <div style={{ width: "26px", height: "26px", borderRadius: "100px", overflow: "hidden", flexShrink: 0 }}>
-                            <img src={plan.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <p style={{ ...os, margin: "0", fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-primary)" }}>
-                          23,391 members
-                        </p>
-                        <div style={{ position: "absolute", right: 0, top: 0 }}>
-                          <DrumWaveLogo size={26} />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {/* Plan name + description */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <p style={{ ...tw, margin: 0, fontWeight: 600, fontSize: "17.01px", lineHeight: "20.41px", color: "var(--color-text-primary)" }}>
-                    {plan.planName}
-                  </p>
-                  <p style={{ ...os, margin: 0, fontWeight: 400, fontSize: "14px", lineHeight: "21px", color: "var(--color-text-disabled, #666666)" }}>
-                    Lorem ipsum dolor sit amet consectetur. Vitae viverra sit enim volutpat malesuada.
-                  </p>
-                </div>
-
-                {/* Active through / Members / Fee */}
-                <div style={{ display: "flex", alignItems: "center", gap: "38px" }}>
-                  <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <span style={{ ...os, opacity: 0.7, fontWeight: 400, fontSize: "12px", lineHeight: "18px", color: "#FFFFFF" }}>Active through</span>
-                    <span style={{ ...os, fontWeight: 700, fontSize: "14px", lineHeight: "21px", color: "#FFFFFF" }}>Sept 30, 2027</span>
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <span style={{ ...os, opacity: 0.7, fontWeight: 400, fontSize: "12px", lineHeight: "18px", color: "#FFFFFF" }}>Members</span>
-                    <span style={{ ...os, fontWeight: 700, fontSize: "14px", lineHeight: "21px", color: "#FFFFFF" }}>498</span>
-                  </div>
-                  <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <span style={{ ...os, opacity: 0.7, fontWeight: 400, fontSize: "12px", lineHeight: "18px", color: "#FFFFFF" }}>Fee</span>
-                    <span style={{ ...os, fontWeight: 700, fontSize: "14px", lineHeight: "21px", color: "#FFFFFF" }}>No fees</span>
-                  </div>
-                </div>
-
-                {/* Buttons — decorative, no prop exists for plan navigation */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <div
-                    style={{
-                      height: "44px",
-                      borderRadius: "500px",
-                      boxShadow: "inset 0 0 0 1px #FFFFFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <span style={{ ...tw, fontWeight: 600, fontSize: "18px", color: "var(--color-text-primary)" }}>View details</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={onViewAllPlans}
-                    style={{
-                      height: "44px",
-                      borderRadius: "500px",
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <span style={{ ...tw, fontWeight: 600, fontSize: "18px", color: "var(--color-text-primary)" }}>View all plans</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-
-        {/* Request more data (design retitles "Recently added") */}
-        <div style={{ marginTop: "28px" }}>
-          <div style={{ padding: "0 24px", marginBottom: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <p
-              style={{
-                ...tw,
-                margin: 0,
-                fontWeight: 400,
-                fontSize: "24px",
-                color: "var(--color-text-primary)",
-              }}
-            >
-              Request more data
-            </p>
-            <p
-              style={{
-                ...os,
-                margin: 0,
-                fontWeight: 400,
-                fontSize: "14px",
-                lineHeight: "21px",
-                color: "var(--color-text-secondary)",
-              }}
-            >
-              Requesting data from additional companies can increase your account&rsquo;s value and unlock new offers.
-            </p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              overflowX: "auto",
-              padding: "0 24px 4px",
-              scrollbarWidth: "none",
-            }}
-          >
-            {/* Nubank */}
-            <div
-              style={{
-                flexShrink: 0,
-                width: "206px",
-                height: "186px",
-                borderRadius: "25px",
-                background:
-                  "linear-gradient(90deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.12) 100%), #181818",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "24px",
-                padding: "20px",
-              }}
-            >
-              {/* Top row: purple N badge + Banks label */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <div
-                  style={{
-                    background: "#820ad1",
-                    borderRadius: "50px",
-                    width: "25px",
-                    height: "25px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "6px",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <span
-                    style={{
-                      ...tw,
-                      fontWeight: 600,
-                      fontSize: "13px",
-                      lineHeight: 1.2,
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    N
-                  </span>
-                </div>
-                <p
-                  style={{
-                    ...tw,
-                    margin: 0,
-                    fontWeight: 400,
-                    fontSize: "14px",
-                    lineHeight: 1.2,
-                    opacity: 0.7,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  Banks
-                </p>
-              </div>
-              {/* Title */}
-              <p
-                style={{
-                  ...tw,
-                  margin: 0,
-                  fontWeight: 600,
-                  fontSize: "25px",
-                  lineHeight: 1.2,
-                  color: "#FFFFFF",
-                  textAlign: "center",
-                }}
-              >
-                Nubank
-              </p>
-              {/* Request button (full width) */}
-              <button
-                type="button"
-                onClick={onRequestData}
-                style={{
-                  background: "var(--color-action-primary-bg)",
-                  border: "none",
-                  borderRadius: "41px",
-                  height: "37px",
-                  width: "100%",
-                  padding: "10px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  ...tw,
-                  fontWeight: 600,
-                  fontSize: "18px",
-                  lineHeight: 1.2,
-                  color: "var(--color-action-primary-text)",
-                }}
-              >
-                Request
-              </button>
-            </div>
-            {/* Bradesco */}
-<div
-  style={{
-    flexShrink: 0,
-    width: "206px",
-    height: "186px",
-    borderRadius: "25px",
-    background: "#151515",
-    position: "relative",
-  }}
->
-  <div
-    style={{
-      position: "absolute",
-      left: "19px",
-      top: "14px",
-      width: "171px",
-      height: "155px",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      gap: "29px",
-    }}
-  >
-    {/* Badge + category */}
-    <div
-      style={{
-        alignSelf: "stretch",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-      }}
-    >
-      <div
-        style={{
-          width: "25px",
-          height: "25px",
-          borderRadius: "50%",
-          background: "#EA200D",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ ...tw, fontWeight: 600, fontSize: "13px", lineHeight: "15px", color: "#FFFFFF" }}>
-          B
-        </span>
-      </div>
-      <span style={{ ...tw, opacity: 0.7, fontWeight: 400, fontSize: "14px", lineHeight: "17px", color: "#FFFFFF" }}>
-        Financial
-      </span>
-    </div>
-
-    {/* Company name */}
-    <p style={{ ...tw, margin: 0, fontWeight: 600, fontSize: "25px", lineHeight: "30px", color: "#FFFFFF", textAlign: "center" }}>
-      Bradesco
-    </p>
-
-    {/* Request button */}
-    <button
-      type="button"
-      onClick={onRequestData}
-      style={{
-        alignSelf: "stretch",
-        height: "37px",
-        borderRadius: "41px",
-        background: "var(--color-action-primary-bg)",
-        border: "none",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        ...tw,
-        fontWeight: 600,
-        fontSize: "18px",
-        color: "var(--color-action-primary-text)",
-      }}
-    >
-      Request
-    </button>
-  </div>
-</div>
-          </div>
-        </div>
-
-        {/* All companies */}
-        <div style={{ marginTop: "28px", padding: "0 24px" }}>
-          <p
-            style={{
-              ...tw,
-              margin: "0 0 16px",
-              fontWeight: 400,
-              fontSize: "24px",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            All companies
-          </p>
-          {/* Search bar */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              background: "rgba(0, 0, 0, 0.70)",
-              border: "1px solid #232323",
-              borderRadius: "16px",
-              padding: "16px",
-              marginBottom: "12px",
-            }}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-                stroke="#666"
-                strokeWidth="2"
-              />
-              <path
-                d="M16.5 16.5L21 21"
-                stroke="#666"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span
-              style={{
-                ...os,
-                fontSize: "14px",
-                color: "#666666",
-              }}
-            >
-              Search company or category
-            </span>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-
-            <DashCategoryRow iconPath={categorySvgTech.p813af00} name="Technology & Social Media" sub="GM, BYD, Tesla and 8 others" />
-                  <DashCategoryRow iconPath={categorySvgTravel.p1692f180} name="Travel & Transportation" sub="United, American, and 3 others" expandable expanded={travelExpanded} onToggle={() => setTravelExpanded(v => !v)} companies={travelCos} />
-                  <DashCategoryRow iconPath={categorySvgFinance.p3ef00b80} name="Finance & Investments" sub="Chase, Wells Fargo, and 5 others" />
-                  <DashCategoryRow iconPath={categorySvgRetail.pc328900} name="Retail & Food" sub="McDonald's, Starbucks and 2 others" />
-                  <DashCategoryRow iconPath={categorySvgHealth.p7d33bf0} name="Health & Wellness" sub="Kimberly-Clark and 2 others" />
-                  <DashCategoryRow iconPath={categorySvgEntertainment.p7298e00} name="Entertainment & Gaming" sub="Gamestop, Infinity, and 4 others" />
-                  <DashCategoryRow iconPath={categorySvgInsurance.p36b5c480} name="Insurance & Utilities" sub="Enel, Raízen, Ultrapar and 6 others" />
-                  <DashCategoryRow iconPath={categorySvgCivic.p14710000} name="Civic & Government" sub="CNN, Globo, SBT and 9 others" />
-          </div>
-        </div>
-
-        {/* FAQs */}
-        <div style={{ marginTop: "32px", padding: "0 24px" }}>
-          <p
-            style={{
-              ...tw,
-              margin: "0 0 16px",
-              fontWeight: 400,
-              fontSize: "24px",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            FAQs
-          </p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "8px",
-            }}
-          >
-            {faqs.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                style={{
-                  width: "100%",
-                  minHeight: "60px",
-                  background: "#181818",
-                  border: "none",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "16px",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  boxSizing: "border-box",
-                }}
-              >
-                <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "space-between", gap: "8px", width: "100%", height: "100%" }}>
-                  <span
-                    style={{
-                      fontFamily: "var(--mobile-heading-small-font-family)",
-                      fontWeight: 600,
-                      fontSize: "16px",
-                      lineHeight: "1.2",
-                      color: "var(--color-text-primary)",
-                      flex: 1,
-                      whiteSpace: item.multiline ? "pre-wrap" : "nowrap",
-                    }}
-                  >
-                    {item.q}
-                  </span>
-                  <div
-                    style={{
-                      flexShrink: 0,
-                      width: "24px",
-                      height: "24px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transform: expandedFaq === i ? "rotate(180deg)" : "none",
-                      transition: "transform 200ms",
-                    }}
-                  >
-                    <svg width="12" height="8" viewBox="0 0 12 7.4" fill="none">
-                      <path d="M6 7.4L0 1.4L1.4 0L6 4.6L10.6 0L12 1.4L6 7.4Z" fill="#E3E3E3" />
-                    </svg>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div style={{ marginTop: "48px", paddingBottom: "48px", width: "100%" }}>
-          <DrumWaveFooter />
-        </div>
-      </div>
-
-      {/* Snackbar — replaces the welcome pill in this state */}
-      {!snackbarDismissed && (
-        <div
-          style={{
-            position: "absolute",
-            top: "64px",
-            left: "24px",
-            width: "342px",
-            minHeight: "69px",
-            background: "#2A2A2A",
-            borderRadius: "4px",
-            outline: "1px solid #3D3D3D",
-            outlineOffset: "-1px",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: "12px",
-            padding: "16px 12px",
-            boxSizing: "border-box",
-            zIndex: 100,
-          }}
-        >
-          {/* Red error bar */}
-          <div
-            style={{
-              flexShrink: 0,
-              width: "4px",
-              height: "28px",
-              background: "#DD5050",
-            }}
-          />
-
-          {/* Message + inline chevron */}
-          <p
-            style={{
-              ...tw,
-              flex: "1 1 0",
-              margin: 0,
-              fontWeight: 400,
-              fontSize: "16px",
-              lineHeight: "19.2px",
-              color: "#FFFFFF",
-            }}
-          >
-            Finish the Data Savings Plan enrollment to earn $1 cash
-            <span
-              style={{
-                display: "inline-block",
-                verticalAlign: "-2px",
-                marginLeft: "8px",
-              }}
-            >
-              <svg width="7" height="11" viewBox="0 0 7 11" fill="none">
-                <path
-                  d="M1 1L5.5 5.5L1 10"
-                  stroke="#FFFFFF"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </p>
-
-          {/* Close */}
-          <button
-            type="button"
-            onClick={() => setSnackbarDismissed(true)}
-            style={{
-              flexShrink: 0,
-              background: "none",
-              border: "none",
-              padding: "4px",
-              cursor: "pointer",
-              lineHeight: 0,
-            }}
-          >
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <path
-                d="M1 1L9 9M9 1L1 9"
-                stroke="#FFFFFF"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
-
-      {/* Persistent bottom nav */}
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-        <MainBottomNav activeTab="home" onHome={onHome} onMyData={onRequestData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
-      </div>
-    </div>
-  );
-}
-
 function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
@@ -7277,13 +6340,22 @@ export default function App() {
   // Controlled toggle state for the new TwoStepVerificationScreen (step 75).
   const [twoStepEnabled, setTwoStepEnabled] = useState(true);
   // Demo switcher: which standalone home screen is showing.
-  const [demoScreen, setDemoScreen] = useState<"noDsp" | "oneDsp" | "enrolledNoPlan" | "offer1" | "dataRequestAccepted">("noDsp");
+  const [demoScreen, setDemoScreen] = useState<"noDsp" | "requestData" | "uploadData" | "oneDsp" | "offer1" | "dataRequestAccepted">("noDsp");
   // Bottom-nav destinations that differ per account state, resolved once here and
   // passed to every screen's nav callbacks. Same read-demoScreen-at-the-call-site
   // pattern OneDspHomeScreen's savings-plan tab already used.
-  // Home: 9 dispatches to the noDsp / enrolledNoPlan dashboards; 69 is the
+  // Home: 9 dispatches to the noDsp dashboard; 69 is the
   // enrolled states' own home (OneDspHomeScreen, variant follows demoScreen).
-  const preEnrollment = demoScreen === "noDsp" || demoScreen === "enrolledNoPlan";
+  // "requestData" and "uploadData" are the same account state as noDsp — they
+  // only exist so the switcher lights up while the user is inside those flows.
+  const preEnrollment = demoScreen === "noDsp" || demoScreen === "requestData" || demoScreen === "uploadData";
+  // Landing back on the pre-enrolment home ends either flow, whichever route
+  // got there (back arrow, bottom-nav Home, the switcher). Step 9 is only ever
+  // the pre-enrolment home — the enrolled states use 69 — so this can't fire
+  // on them.
+  useEffect(() => {
+    if (step === 9 && (demoScreen === "requestData" || demoScreen === "uploadData")) setDemoScreen("noDsp");
+  }, [step, demoScreen]);
   const homeStep = preEnrollment ? 9 : 69;
   const savingsPlanStep = demoScreen === "dataRequestAccepted" ? 80 : preEnrollment ? 70 : 56;
   // Varies by account state: the two pre-enrolment states keep the not-enrolled
@@ -7305,6 +6377,10 @@ export default function App() {
   // "Data Savings Plans" label on the enrolled home, routes that section to the
   // all-plans overview (84), and shows "Back to all plans" on the Smart dashboard.
   const [hasSecondPlan, setHasSecondPlan] = useState(false);
+  // Travel & Transportation rows on Request data (step 10) whose confirmation
+  // dialog has been dismissed with "Done" — they show "Pending" instead of
+  // "Request". Held here so the state survives navigating away and back.
+  const [pendingRequestCos, setPendingRequestCos] = useState<string[]>([]);
   // Offer 1.0: when true, the sign-up flow ends on the "Claiming your Tesla data"
   // loading screen instead of the dashboard.
   const [claimFlow, setClaimFlow] = useState(false);
@@ -7564,15 +6640,16 @@ export default function App() {
               firstName && lastName
                 ? `${firstName} ${lastName}`
                 : "Carolina Smith",
-            onRequestData: () => setStep(10),
+            // Entering Request data flips the switcher to its own label; the
+            // screen's back arrow flips it back to Onboarding/Enrollment.
+            onRequestData: () => { setDemoScreen("requestData"); setStep(10); },
             onViewRequests: () => setStep(12),
             onApplyForDsp: openDsp,
             onAccountSettings: () => setStep(16),
             onHome: () => setStep(9),
           };
           if (DEMO_MODE) {
-            if (demoScreen === "noDsp") return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
-            if (demoScreen === "enrolledNoPlan") return <DashboardScreenEnrolledNoPlan {...homeProps} onContinueEnrollment={() => setStep(33)} onViewAllPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
+            if (preEnrollment) return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
@@ -7604,7 +6681,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -7621,9 +6698,9 @@ export default function App() {
   />
 )}
         {step === 12 && (
-          /* Nothing is accepted until a DSP is joined — Onboarding/Enrollment and
-             Approved-No-Plan both show the empty Accepted state. */
-          <MyDataRequestsScreen hasAccepted={demoScreen !== "noDsp" && demoScreen !== "enrolledNoPlan"} onBack={() => goBack(9)} onUploadManually={() => setStep(27)} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onViewCertificate={() => { setDemoScreen("dataRequestAccepted"); setStep(72); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
+          /* Nothing is accepted until a DSP is joined — the pre-enrolment states
+             show the empty Accepted state. */
+          <MyDataRequestsScreen hasAccepted={!preEnrollment} onBack={() => goBack(9)} onUploadManually={() => { setDemoScreen("uploadData"); setStep(27); }} onSeeHow={() => setStep(28)} onGoToDWCloud={() => setStep(31)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onViewCertificate={() => { setDemoScreen("dataRequestAccepted"); setStep(72); }} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />
         )}
         {step === 14 && (
           <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
@@ -7832,7 +6909,7 @@ export default function App() {
             that state's own home (Figma 123:52970). */}
         {step === 39 && <OfferClaimSuccessScreen onDone={() => { setDemoScreen("offer1"); setStep(56); }} />}
         {step === 40 && <ReviewApplicationLoadingScreen onComplete={() => setStep(41)} />}
-        {step === 41 && <AutoApprovedScreen onViewPlans={() => { setChoosePlansCloseDest(9); setDemoScreen("enrolledNoPlan"); setStep(42); }} />}
+        {step === 41 && <AutoApprovedScreen onViewPlans={() => { setChoosePlansCloseDest(9); setStep(42); }} />}
         {step === 42 && (
           <motion.div
             style={{ position: "absolute", inset: 0, zIndex: 10 }}
@@ -7849,10 +6926,10 @@ export default function App() {
             <ChoosePlansScreen onViewFitnessDetails={() => setStep(49)} onViewSmartDetails={() => setStep(43)} onClose={closeChoosePlans} />
           </motion.div>
         )}
-        {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => goBack(42)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
+        {step === 43 && <PlanDetailScreen onJoin={() => setStep(45)} onBack={() => goBack(42)} onClose={() => setStep(9)} />}
         {step === 44 && <DspPlanNotSelectedScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 45 && <TermsConditionsScreen onBack={() => goBack(43)} onAccept={() => { setDemoScreen("oneDsp"); setStep(47); }} />}
-        {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} />}
+        {step === 46 && <SuccessfullyJoinedScreen onGoToPlan={() => setStep(47)} onJoinAnother={() => setStep(48)} onClose={() => setStep(9)} />}
         {step === 47 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(56)} />}
         {step === 48 && <JoinAnotherPlanScreen onViewFitnessDetails={() => setStep(50)} />}
         {step === 49 && <SmartPlanDetailScreen onJoin={() => setStep(51)} onBack={() => goBack(42)} />}
@@ -7863,7 +6940,7 @@ export default function App() {
         {step === 52 && <SmartTermsConditionsScreen onAccept={() => { setDemoScreen("oneDsp"); setHasSecondPlan(true); setStep(54); }} onBack={() => goBack(51)} />}
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
-        {step === 55 && <MyPlanScreen onClose={() => { setDemoScreen("enrolledNoPlan"); setStep(9); }} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
+        {step === 55 && <MyPlanScreen onClose={() => setStep(9)} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
         {/* Counter shows step+1 → "60 / N" is this screen (Manage my plan).
             Back always returns to the individual plan page that opened it
@@ -7887,7 +6964,7 @@ export default function App() {
         {/* Step 69 is the home for both "Enrolled in a DSP" and the certificates
             flow (which routes Home here), so the variant follows demoScreen. */}
         {step === 69 && <OneDspHomeScreen name={firstName && lastName ? `${firstName} ${lastName}` : "Carolina Smith"} onAccountSettings={() => setStep(16)} variant={demoScreen === "offer1" ? "receivingOffers" : demoScreen === "dataRequestAccepted" ? "dataCertificates" : "enrolled"} hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => setStep(MY_DATA_STEP)} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} />}
-        {/* Savings-plan tab destination for the noDsp / "Approved, No Plan" states.
+        {/* Savings-plan tab destination for the noDsp state.
             Figma frame "Not enrolled" (node 16:82941). */}
         {step === 70 && (
           <MyDataSavingsScreen
@@ -8061,7 +7138,8 @@ export default function App() {
         >
           {([
             { key: "noDsp", label: "Onboarding/Enrollment", step: 9 },
-            { key: "enrolledNoPlan", label: "Approved, No Plan", step: 9 },
+            { key: "requestData", label: "Request Data", step: 10 },
+            { key: "uploadData", label: "Upload Data", step: 27 },
             { key: "oneDsp", label: "Enrolled in a DSP", step: 69 },
             { key: "offer1", label: "Receiving Offers", step: 34 },
             { key: "dataRequestAccepted", label: "View Data Certificates", step: 71 },
