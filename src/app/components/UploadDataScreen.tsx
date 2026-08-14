@@ -5,7 +5,7 @@ import uploadSvg from "@/imports/Upload3/svg-6h72v7eg5k";
 import { StatusBar } from "@/app/components/ui/StatusBar";
 
 // The first file is present as soon as files are selected…
-const INITIAL_FILE = { id: "tesla", name: "Tesladata.zip", size: "33.4 MB" };
+const INITIAL_FILE = { id: "23andme", name: "23_and_me_data.zip", size: "33.4 MB" };
 // …and these two fade in on the second "Select file(s) to upload" tap.
 const ADDITIONAL_FILES = [
   { id: "file2", name: "File2.zip", size: "18.2 MB" },

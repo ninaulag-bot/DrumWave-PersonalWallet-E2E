@@ -23,7 +23,7 @@ const FILTERS_SHEET_H = 960;
 
 const SPRING = { type: "spring" as const, damping: 30, stiffness: 260 };
 
-export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers, onOpenVehicleRegistration }: { onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; onOpenVehicleRegistration?: () => void } = {}) {
+export function MyCertificatesScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, onOpenVehicleRegistration }: { onBack?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; onOpenVehicleRegistration?: () => void } = {}) {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -43,6 +43,37 @@ export function MyCertificatesScreen({ onHome, onMyData, onSavingsPlan, onOffers
         <DataCertificates1 />
       </div>
       <UnifiedStatusBar hostClass="mycertificates-import" />
+
+      {/* Back chevron. This import draws no nav row (its heading block starts at
+          top 83), so — same as DataCertificatesScreen — we render just the
+          chevron in the top-left slot, sitting just above that heading. Absolute
+          on the frame, not inside the scrolling card list, so it stays put.
+          44x44 hit area centred on (36, 68). */}
+      <button
+        type="button"
+        onClick={onBack}
+        aria-label="Go back"
+        style={{
+          position: "absolute",
+          top: "46px",
+          left: "14px",
+          width: "44px",
+          height: "44px",
+          padding: 0,
+          background: "none",
+          border: "none",
+          cursor: onBack ? "pointer" : "default",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 10,
+        }}
+      >
+        <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
+          <path d="M10 20L0 10L10 0L11.775 1.775L3.55 10L11.775 18.225L10 20Z" fill="var(--color-text-white)" />
+        </svg>
+      </button>
+
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
         <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>

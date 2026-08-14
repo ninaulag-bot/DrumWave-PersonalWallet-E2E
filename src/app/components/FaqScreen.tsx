@@ -164,7 +164,9 @@ export function FaqScreen({ onBack }: FaqScreenProps) {
       {/* Status bar */}
       <StatusBar />
 
-      {/* Header: back arrow + title */}
+      {/* Header: back arrow + title — sticky so it stays put while the page
+          scrolls under it. The root is the scroll container, so sticky is the
+          only option here; absolute would scroll with the content. */}
       <div
         style={{
           display: "flex",
@@ -173,6 +175,10 @@ export function FaqScreen({ onBack }: FaqScreenProps) {
           height: "48px",
           width: "342px",
           margin: "71px auto 0",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          background: "var(--color-bg-base)",
         }}
       >
         <button

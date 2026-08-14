@@ -6967,9 +6967,15 @@ export default function App() {
             upload flow (30 → 62), and it resets the account state, so back has to
             leave the flow rather than re-enter its success screen. */}
         {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
-        {/* Slide 64 in the prototype counter. Back → slide 63 (step 62). */}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(62)} />}
-        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(63)} />}
+        {/* Slide 64 in the prototype counter. Back → slide 63 (step 62).
+            Hardcoded for the same reason as 64 below: coming back from the
+            certificates list re-pushes history, so popping would re-enter it. */}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(62)} />}
+        {/* Back returns to the company page (63) it was opened from. Hardcoded,
+            not goBack: opening a certificate (65) and pressing Done pushes 64
+            back onto the history, so popping lands on the certificates list
+            again instead of leaving it. */}
+        {step === 64 && <DataCertificatesScreen onCustomerProfile={() => setStep(65)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(63)} />}
         {step === 65 && <DataCertsScreen onDone={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
         {step === 66 && <CashBalanceUSScreen onAddPayoutMethod={() => setStep(67)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => goBack(cashBalanceBackDest)} />}
         {step === 67 && <Enroll6Screen onSaveChanges={() => setStep(68)} onBack={() => goBack(66)} />}
@@ -7010,7 +7016,7 @@ export default function App() {
             9 falls through to DashboardScreenOneDsp, whereas 69 is OneDspHomeScreen,
             the build of Figma frame 13:73059 and these states' home. */}
         {step === 73 && <DataCertsDetailScreen activeTab="home" onDone={() => setStep(74)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 74 && <MyCertificatesScreen onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onOpenVehicleRegistration={() => setStep(73)} />}
+        {step === 74 && <MyCertificatesScreen onBack={() => setStep(79)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onOpenVehicleRegistration={() => setStep(73)} />}
         {/* Figma 9:89701 — opened by the Tesla tile under "My relationships" on the
             certificates home. Back returns to the screen that opened it (69); the
             Tesla row opens the Tesla company page (79). */}

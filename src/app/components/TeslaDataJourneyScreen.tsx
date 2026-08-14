@@ -65,7 +65,9 @@ export function TeslaDataJourneyScreen({ onBack, onHome, onMyData, onViewCertifi
             <path d={BACK} fill="var(--color-text-white)" />
           </svg>
         </button>
-        <p style={{ ...tw, flex: 1, textAlign: "center", fontWeight: 600, fontSize: "var(--text-heading-md-size)", color: "var(--color-text-white)", margin: 0 }}>Tesla</p>
+        {/* Spacer where the nav title used to sit — the name already appears
+            under the brand disc below, so the header carries just the arrow. */}
+        <div style={{ flex: 1 }} />
         <div style={{ width: 24, height: 24, flexShrink: 0 }} />
       </div>
 

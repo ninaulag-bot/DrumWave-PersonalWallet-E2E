@@ -126,8 +126,10 @@ export function HowToGetDataScreen({ onBack, onGetData }: HowToGetDataScreenProp
     >
       <StatusBar />
 
-      {/* Back arrow */}
-      <div style={{ paddingLeft: "24px", paddingTop: "69px", flexShrink: 0 }}>
+      {/* Back arrow — sticky so it stays put while the page scrolls under it.
+          The root is the scroll container, so sticky is the only option here;
+          absolute would scroll with the content. */}
+      <div style={{ paddingLeft: "24px", paddingTop: "69px", paddingBottom: "12px", flexShrink: 0, position: "sticky", top: 0, zIndex: 10, background: "#070707" }}>
         <button type="button" onClick={onBack} aria-label="Go back" style={{ width: "24px", height: "24px", background: "transparent", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
           <svg width="11.775" height="20" viewBox="0 0 11.775 20" fill="none"><path d={svgPaths.p30d4a680} fill="white" /></svg>
         </button>
