@@ -2856,7 +2856,7 @@ const RdStaticCatRow = ({ cat }: { cat: { id: string; icon: string; name: string
 );
 // ─────────────────────────────────────────────────────────────────────────────
 
-function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { onBack: () => void; onSpiritClick?: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
+function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { onBack: () => void; onHome?: () => void; onMyData?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
   const [rdTravelExpanded, setRdTravelExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   // Figma 207:48122 — confirmation dialog for the Travel & Transportation rows.
@@ -3002,7 +3002,7 @@ function RequestDataScreen({ onBack, onSpiritClick, onHome, onMyData, onSavingsP
                             {filteredTravelCos.map(co => (
                               <div
                                 key={co.name}
-                                onClick={co.name === "Spirit" ? onSpiritClick : () => setRdSuccessCo(co.name)}
+                                onClick={() => setRdSuccessCo(co.name)}
                                 style={{ background: "var(--color-bg-overlay)", borderRadius: "var(--radius-sm)", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 var(--space-3)", cursor: "pointer" }}
                               >
                                 <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
@@ -6340,22 +6340,17 @@ export default function App() {
   // Controlled toggle state for the new TwoStepVerificationScreen (step 75).
   const [twoStepEnabled, setTwoStepEnabled] = useState(true);
   // Demo switcher: which standalone home screen is showing.
-  const [demoScreen, setDemoScreen] = useState<"noDsp" | "requestData" | "uploadData" | "oneDsp" | "offer1" | "dataRequestAccepted">("noDsp");
+  const [demoScreen, setDemoScreen] = useState<"noDsp" | "requestData" | "uploadData" | "enrollDsp" | "oneDsp" | "offer1" | "dataRequestAccepted">("noDsp");
   // Bottom-nav destinations that differ per account state, resolved once here and
   // passed to every screen's nav callbacks. Same read-demoScreen-at-the-call-site
   // pattern OneDspHomeScreen's savings-plan tab already used.
   // Home: 9 dispatches to the noDsp dashboard; 69 is the
   // enrolled states' own home (OneDspHomeScreen, variant follows demoScreen).
-  // "requestData" and "uploadData" are the same account state as noDsp — they
-  // only exist so the switcher lights up while the user is inside those flows.
-  const preEnrollment = demoScreen === "noDsp" || demoScreen === "requestData" || demoScreen === "uploadData";
-  // Landing back on the pre-enrolment home ends either flow, whichever route
-  // got there (back arrow, bottom-nav Home, the switcher). Step 9 is only ever
-  // the pre-enrolment home — the enrolled states use 69 — so this can't fire
-  // on them.
-  useEffect(() => {
-    if (step === 9 && (demoScreen === "requestData" || demoScreen === "uploadData")) setDemoScreen("noDsp");
-  }, [step, demoScreen]);
+  // "requestData", "uploadData" and "enrollDsp" are the same account state as
+  // noDsp — the user hasn't joined a plan yet. They exist only so the switcher
+  // lights up while the user is inside those flows; "enrollDsp" becomes the
+  // real "oneDsp" once the plan's terms are accepted.
+  const preEnrollment = demoScreen === "noDsp" || demoScreen === "requestData" || demoScreen === "uploadData" || demoScreen === "enrollDsp";
   const homeStep = preEnrollment ? 9 : 69;
   const savingsPlanStep = demoScreen === "dataRequestAccepted" ? 80 : preEnrollment ? 70 : 56;
   // Varies by account state: the two pre-enrolment states keep the not-enrolled
@@ -6442,6 +6437,7 @@ export default function App() {
   const [enrollEditLabel, setEnrollEditLabel] = useState<string | null>(null);
 
   const openDsp = () => {
+    setDemoScreen("enrollDsp");
     setDspMounted(true);
     // Let the DOM paint the element at y:100% before animating in
     requestAnimationFrame(() => setDspVisible(true));
@@ -6451,6 +6447,15 @@ export default function App() {
     // Trigger slide-down; setStep(9) fires inside onAnimationComplete
     setDspVisible(false);
   };
+
+  // Landing back on the pre-enrolment home ends whichever flow was running,
+  // by any route (back arrow, bottom-nav Home, the switcher), and drops the
+  // switcher back to Sign Up. Step 9 is only ever the pre-enrolment home — the
+  // enrolled states use 69 — so this can't fire on them. The dspMounted guard
+  // keeps it off the DSP enroll sheet, which is an overlay on step 9.
+  useEffect(() => {
+    if (step === 9 && !dspMounted && preEnrollment && demoScreen !== "noDsp") setDemoScreen("noDsp");
+  }, [step, demoScreen, preEnrollment, dspMounted]);
 
   // Prototype navigation — steps run 0..58
   // Highest step with a render branch is 77 (VerifyPhoneNumberScreen, part of the
@@ -6681,7 +6686,7 @@ export default function App() {
           </motion.div>
         )}
         {step === 10 && (
-          <RequestDataScreen onBack={() => goBack(9)} onSpiritClick={() => setStep(11)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />
+          <RequestDataScreen onBack={() => goBack(9)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />
         )}
         {step === 11 && (
   <SpiritDetailScreen
@@ -7137,14 +7142,17 @@ export default function App() {
           }}
         >
           {([
-            { key: "noDsp", label: "Onboarding/Enrollment", step: 9 },
+            { key: "noDsp", label: "Sign up", step: 9 },
             { key: "requestData", label: "Request Data", step: 10 },
             { key: "uploadData", label: "Upload Data", step: 27 },
-            { key: "oneDsp", label: "Enrolled in a DSP", step: 69 },
+            { key: "oneDsp", label: "Enroll in a DSP", step: 69 },
             { key: "offer1", label: "Receiving Offers", step: 34 },
             { key: "dataRequestAccepted", label: "View Data Certificates", step: 71 },
           ] as const).map((opt) => {
-            const active = demoScreen === opt.key;
+            // "enrollDsp" is the in-progress half of the DSP flow — it lights up
+            // the same pill, so the switcher moves the moment enrolment starts
+            // rather than waiting for terms to be accepted.
+            const active = demoScreen === opt.key || (opt.key === "oneDsp" && demoScreen === "enrollDsp");
             return (
               <button
                 key={opt.key}
