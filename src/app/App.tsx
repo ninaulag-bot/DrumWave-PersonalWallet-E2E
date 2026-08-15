@@ -3381,10 +3381,16 @@ const DashCategoryIcon = ({ path }: { path: string }) => (
 
 type DashCo = { initial: string; color: string; name: string; darkText?: boolean };
 
-const DashCategoryRow = ({ iconPath, name, sub, expandable, expanded, onToggle, companies }: {
+const DashCategoryRow = ({ iconPath, name, sub, expandable, expanded, onToggle, companies, onCompanyClick, pendingCos = [] }: {
   iconPath: string; name: string; sub: string;
   expandable?: boolean; expanded?: boolean; onToggle?: () => void;
   companies?: DashCo[];
+  /** Passed only where the company rows should open the data-request dialog;
+   *  left undefined elsewhere, which keeps those rows inert. */
+  onCompanyClick?: (company: string) => void;
+  /** Companies whose request has been confirmed — they read "Pending" with no
+   *  send icon instead of "Request". */
+  pendingCos?: string[];
 }) => (
   <div style={{ background: "var(--color-bg-overlay)", borderRadius: "var(--radius-lg)", position: "relative" }}>
     <div aria-hidden style={{ position: "absolute", inset: 0, border: "1px solid var(--color-border-subtle)", borderRadius: "var(--radius-lg)", pointerEvents: "none", zIndex: 0 }} />
@@ -3407,7 +3413,7 @@ const DashCategoryRow = ({ iconPath, name, sub, expandable, expanded, onToggle, 
         <div style={{ overflow: "hidden" }}>
           <div style={{ padding: "8px 16px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
             {companies.map((co) => (
-              <div key={co.name} style={{ background: "var(--color-bg-overlay)", borderRadius: 10, height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px" }}>
+              <div key={co.name} onClick={onCompanyClick ? () => onCompanyClick(co.name) : undefined} style={{ background: "var(--color-bg-overlay)", borderRadius: 10, height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", cursor: onCompanyClick ? "pointer" : "default" }}>
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <div style={{ width: 28, height: 28, borderRadius: "50%", background: co.color, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, color: co.darkText ? "#161616" : "white", lineHeight: "20px", letterSpacing: "-0.1504px" }}>{co.initial}</span>
@@ -3415,8 +3421,14 @@ const DashCategoryRow = ({ iconPath, name, sub, expandable, expanded, onToggle, 
                   <span style={{ fontFamily: "var(--mobile-subcategory-medium-font-family)", fontWeight: 600, fontSize: "16px", color: "#FFFFFF", lineHeight: "1.2" }}>{co.name}</span>
                 </div>
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <span style={{ fontFamily: "var(--font-body)", fontWeight: 400, fontSize: 16, color: "var(--color-text-secondary)" }}>Request</span>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3.5 19.25V4.75L20.7115 12L3.5 19.25ZM5 17L16.85 12L5 7V10.6923L10.423 12L5 13.3078V17Z" fill="white" /></svg>
+                  {pendingCos.includes(co.name) ? (
+                    <span style={{ fontFamily: "var(--font-body)", fontWeight: 400, fontSize: 16, color: "var(--color-text-secondary)" }}>Pending</span>
+                  ) : (
+                    <>
+                      <span style={{ fontFamily: "var(--font-body)", fontWeight: 400, fontSize: 16, color: "var(--color-text-secondary)" }}>Request</span>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3.5 19.25V4.75L20.7115 12L3.5 19.25ZM5 17L16.85 12L5 7V10.6923L10.423 12L5 13.3078V17Z" fill="white" /></svg>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -4287,8 +4299,11 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
   );
 }
 
-function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers, onHome, onSavingsPlan, onOffers }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void }) {
+function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForDsp, onAccountSettings, onLearnMoreOffers, onHome, onSavingsPlan, onOffers, pendingCos = [], onRequestConfirmed }: { name: string; onRequestData: () => void; onViewRequests?: () => void; onApplyForDsp?: () => void; onAccountSettings?: () => void; onLearnMoreOffers?: () => void; onHome?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; pendingCos?: string[]; onRequestConfirmed?: (company: string) => void }) {
   const [travelExpanded, setTravelExpanded] = useState(true);
+  // Figma 207:48122 — same confirmation dialog the Request data screen shows.
+  // Holds the company name of the row that opened it; null when closed.
+  const [homeSuccessCo, setHomeSuccessCo] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
   );
@@ -4957,7 +4972,7 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
 
             <DashCategoryRow iconPath={categorySvgTech.p813af00} name="Technology & Social Media" sub="GM, BYD, Tesla and 8 others" />
-                  <DashCategoryRow iconPath={categorySvgTravel.p1692f180} name="Travel & Transportation" sub="United, American, and 3 others" expandable expanded={travelExpanded} onToggle={() => setTravelExpanded(v => !v)} companies={travelCos} />
+                  <DashCategoryRow iconPath={categorySvgTravel.p1692f180} name="Travel & Transportation" sub="United, American, and 3 others" expandable expanded={travelExpanded} onToggle={() => setTravelExpanded(v => !v)} companies={travelCos} onCompanyClick={setHomeSuccessCo} pendingCos={pendingCos} />
                   <DashCategoryRow iconPath={categorySvgFinance.p3ef00b80} name="Finance & Investments" sub="Chase, Wells Fargo, and 5 others" />
                   <DashCategoryRow iconPath={categorySvgRetail.pc328900} name="Retail & Food" sub="McDonald's, Starbucks and 2 others" />
                   <DashCategoryRow iconPath={categorySvgHealth.p7d33bf0} name="Health & Wellness" sub="Kimberly-Clark and 2 others" />
@@ -5067,6 +5082,17 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
         <MainBottomNav onHome={onHome} onMyData={onRequestData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
       </div>
+
+      {homeSuccessCo && (
+        <DataRequestSuccessDialog
+          company={homeSuccessCo}
+          onClose={() => setHomeSuccessCo(null)}
+          onDone={() => {
+            onRequestConfirmed?.(homeSuccessCo);
+            setHomeSuccessCo(null);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -6664,7 +6690,7 @@ export default function App() {
             onHome: () => setStep(9),
           };
           if (DEMO_MODE) {
-            if (preEnrollment) return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} />;
+            if (preEnrollment) return <DashboardScreenNoDsp {...homeProps} onLearnMoreOffers={() => setStep(57)} onHome={() => setStep(9)} onSavingsPlan={() => setStep(70)} onOffers={() => setStep(61)} pendingCos={pendingRequestCos} onRequestConfirmed={co => setPendingRequestCos(cos => cos.includes(co) ? cos : [...cos, co])} />;
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
