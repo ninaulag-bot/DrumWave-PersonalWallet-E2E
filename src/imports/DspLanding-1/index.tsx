@@ -25,6 +25,7 @@ import dataDollarPaths from "../Frame2095588102/svg-n24lup08st";
 import { CompanyRequestCard } from "../../app/components/MyDataSavingsScreen";
 import imgTeslaMotorsSvg1 from "../PlanDetaillPage/6f7b9aaea511dd9be705bf5bbbda54b0cb503756.png";
 import { LearnMoreContext } from "./learn-more-context";
+import { RedeemOfferContext } from "./redeem-offer-context";
 import { GoToHomeContext } from "./go-to-home-context";
 import { MyDataContext } from "./my-data-context";
 import { OffersContext } from "./offers-context";
@@ -1640,8 +1641,13 @@ function TeslaOfferBenefitWrap() {
 }
 
 function TeslaOfferClaimButton() {
+  const onRedeemOffer = useContext(RedeemOfferContext);
   return (
-    <div className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]">
+    <div
+      onClick={onRedeemOffer}
+      style={onRedeemOffer ? { cursor: "pointer" } : undefined}
+      className="absolute bg-gradient-to-r content-stretch flex from-[#4b27ff] inset-0 items-center justify-center px-[17px] py-[5px] rounded-[56px] to-[#0091ff]"
+    >
       <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Titillium_Web:SemiBold',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[18px] text-white tracking-[0.36px] whitespace-nowrap">
         <p className="leading-[1.2]">Redeem offer</p>
       </div>

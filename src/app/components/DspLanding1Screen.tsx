@@ -1,5 +1,6 @@
 import DspLanding1 from "@/imports/DspLanding-1/index";
 import { LearnMoreContext } from "@/imports/DspLanding-1/learn-more-context";
+import { RedeemOfferContext } from "@/imports/DspLanding-1/redeem-offer-context";
 import { GoToHomeContext } from "@/imports/DspLanding-1/go-to-home-context";
 import { MyDataContext } from "@/imports/DspLanding-1/my-data-context";
 import { OffersContext } from "@/imports/DspLanding-1/offers-context";
@@ -32,6 +33,8 @@ interface DspLanding1ScreenProps {
    *  opened from the all-plans overview; left undefined elsewhere, which is what
    *  keeps the link from rendering at all. */
   onBackToAllPlans?: () => void;
+  /** "Redeem offer" on the Tesla offer card → the Claiming your Tesla data loader. */
+  onRedeemOffer?: () => void;
   /** "receivingOffers" (after an offer is accepted) shows data balance 4 and the
    *  Rivian offer photo; "enrolled" keeps 0 and the original Tesla photos. */
   variant?: OfferVariant;
@@ -39,7 +42,7 @@ interface DspLanding1ScreenProps {
 
 /** "My Data Savings Plan" dashboard screen, reached after "Go to my plan"
  *  on the Welcome to your Data Savings Plan page. */
-export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, onRequestMoreData, onBackToAllPlans, variant = "enrolled" }: DspLanding1ScreenProps) {
+export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, onManageMyPlan, onCashBalance, onDataBalance, onViewAllPlans, onDataContribution, onRequestMoreData, onBackToAllPlans, onRedeemOffer, variant = "enrolled" }: DspLanding1ScreenProps) {
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="dsp-landing1-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
@@ -55,7 +58,9 @@ export function DspLanding1Screen({ onLearnMore, onGoHome, onMyData, onOffers, o
                         <DataContributionContext.Provider value={onDataContribution}>
                           <RequestMoreDataContext.Provider value={onRequestMoreData}>
                           <BackToAllPlansContext.Provider value={onBackToAllPlans}>
-                            <DspLanding1 />
+                            <RedeemOfferContext.Provider value={onRedeemOffer}>
+                              <DspLanding1 />
+                            </RedeemOfferContext.Provider>
                           </BackToAllPlansContext.Provider>
                           </RequestMoreDataContext.Provider>
                         </DataContributionContext.Provider>

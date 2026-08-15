@@ -6956,7 +6956,7 @@ export default function App() {
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => setStep(9)} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} onRedeemOffer={() => setStep(36)} />}
         {/* Counter shows step+1 → "60 / N" is this screen (Manage my plan).
             Back always returns to the individual plan page that opened it
             (56 Smart / 80 certs Smart / 83 Fitness), via history + managePlanBackDest. */}
@@ -7034,11 +7034,13 @@ export default function App() {
             onOffers={() => setStep(OFFERS_STEP)}
           />
         )}
-        {/* Figma 9:6610 — Tesla company page. Back returns to the Accepted list
-            (78) that opened it; "View my data certificates" opens step 74. */}
+        {/* Figma 9:6610 — Tesla company page. "View my data certificates" opens
+            step 74. Back goes to the current state's home — hardcoded, not
+            goBack: returning here from 74 pushes this screen onto the history,
+            so popping would re-enter the certificates list. */}
         {step === 79 && (
           <TeslaDataJourneyScreen
-            onBack={() => goBack(78)}
+            onBack={() => setStep(homeStep)}
             onHome={() => setStep(homeStep)}
             onMyData={() => setStep(MY_DATA_STEP)}
             onViewCertificates={() => setStep(74)}

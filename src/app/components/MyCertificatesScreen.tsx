@@ -48,14 +48,15 @@ export function MyCertificatesScreen({ onBack, onHome, onMyData, onSavingsPlan, 
           top 83), so — same as DataCertificatesScreen — we render just the
           chevron in the top-left slot, sitting just above that heading. Absolute
           on the frame, not inside the scrolling card list, so it stays put.
-          44x44 hit area centred on (36, 68). */}
+          44x44 hit area centred on (36, 56), which leaves roughly even gaps
+          above (status bar) and below (the heading block at top 83). */}
       <button
         type="button"
         onClick={onBack}
         aria-label="Go back"
         style={{
           position: "absolute",
-          top: "46px",
+          top: "34px",
           left: "14px",
           width: "44px",
           height: "44px",
