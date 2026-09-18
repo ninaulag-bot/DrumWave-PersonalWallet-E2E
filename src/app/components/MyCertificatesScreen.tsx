@@ -48,15 +48,15 @@ export function MyCertificatesScreen({ onBack, onHome, onMyData, onSavingsPlan, 
           top 83), so — same as DataCertificatesScreen — we render just the
           chevron in the top-left slot, sitting just above that heading. Absolute
           on the frame, not inside the scrolling card list, so it stays put.
-          44x44 hit area centred on (36, 56), which leaves roughly even gaps
-          above (status bar) and below (the heading block at top 83). */}
+          44x44 hit area centred on (36, 68) — the same slot DataCertificatesScreen
+          uses — so the chevron clears the status bar instead of tucking under it. */}
       <button
         type="button"
         onClick={onBack}
         aria-label="Go back"
         style={{
           position: "absolute",
-          top: "34px",
+          top: "46px",
           left: "14px",
           width: "44px",
           height: "44px",
@@ -144,37 +144,10 @@ export function MyCertificatesScreen({ onBack, onHome, onMyData, onSavingsPlan, 
           cursor: "pointer",
           zIndex: 5,
         }}
-      >
-        {/* Corrected "1" badge — covers the import's over-padded badge (p-[10px] on a 20px circle) */}
-        <div
-          style={{
-            position: "absolute",
-            right: "10px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "20px",
-            height: "20px",
-            borderRadius: "100px",
-            background: "#ffffff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--font-family-secondary)",
-              fontWeight: 600,
-              fontSize: "12px",
-              lineHeight: 1,
-              color: "#070707",
-            }}
-          >
-            1
-          </span>
-        </div>
-      </button>
+      />
+      {/* The "1" badge is no longer redrawn here — this overlay used to cover the
+          import's over-padded badge, and with that fixed in the export the two
+          circles sat side by side and read as one oval. */}
 
       {/* ── Learn More sheet ── */}
       <AnimatePresence>

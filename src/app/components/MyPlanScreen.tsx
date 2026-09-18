@@ -3,6 +3,7 @@ import { CloseContext } from "@/imports/UnnamedComponent-4/close-context";
 import { GoToPlanContext } from "@/imports/UnnamedComponent-4/go-to-plan-context";
 import { MainBottomNav } from "./MainBottomNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /** "Welcome to your Data Savings Plan" landing page, reached from the
  *  "Go to my plan" button on the Approved + not joined home screen. */
@@ -15,8 +16,15 @@ export function MyPlanScreen({ onClose, onGoToPlan, onHome, onMyData, onOffers }
             className="my-plan-sb [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowX: "hidden", overflowY: "auto" }}
           >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
             <Component />
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
           <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
             <MainBottomNav activeTab="savingsPlan" onHome={onHome} onMyData={onMyData} onOffers={onOffers} />
           </div>

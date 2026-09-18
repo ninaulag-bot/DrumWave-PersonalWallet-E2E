@@ -5,6 +5,7 @@ import { CertificateCompaniesSection } from "@/app/components/CertificateCompani
 import { VEHICLE_REGISTRATION, type Certificate } from "@/app/data/certificates";
 import { MainBottomNav } from "@/app/components/MainBottomNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 const FRAME_W = 390;
 // Figma frame is 390×1925. Content (My data value card) ends at y=1831 with 94px breathing
@@ -63,6 +64,9 @@ export function DataCertsDetailScreen({
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="data-certs-detail-sb" style={{ position: "absolute", inset: 0, background: "#070707" }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto" }}>
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ position: "relative", width: `${FRAME_W}px`, margin: "0 auto" }}>
           {/* Inner frame clipped to actual content height, hiding blank tail of Frame47.
               Grows with the expanded company list so nothing gets cut off. */}
@@ -99,7 +103,11 @@ export function DataCertsDetailScreen({
             }}
           />
         </div>
-        </div>
+        
+      <MiniFooter />
+      
+      </div>
+      </div>
 
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           <MainBottomNav activeTab={activeTab} onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />

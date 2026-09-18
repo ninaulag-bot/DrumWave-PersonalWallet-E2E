@@ -992,12 +992,10 @@ function Frame103() {
 }
 
 function Frame107() {
-  // View Data Certificates has one of the seven requests accepted, so pending
-  // drops to 6; the enrolled and receiving-offers homes keep the original 7.
-  const variant = useContext(OfferVariantContext);
+  // 6 pending across every variant of this home.
   return (
     <div className="content-stretch flex items-start justify-center relative shrink-0">
-      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">{variant === "dataCertificates" ? "6" : "7"}</p>
+      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Titillium_Web:SemiBold',sans-serif] leading-[1.2] not-italic relative shrink-0 text-[#e3e3e3] text-[40px] text-center whitespace-nowrap">6</p>
     </div>
   );
 }
@@ -3238,14 +3236,11 @@ function Frame122() {
     /* In flow (was absolute top-[774px]) so the frame's height follows this
        column, and pt- rather than mt- so the offset can't collapse out through
        the root and shift the absolutely-positioned status bar / halo.
-       Component3 (DrumWave footer) is the last child instead of being pinned at
-       top-[3451px] independently of where the FAQ list actually ends. */
+       The DrumWave footer that used to close this column was removed; the
+       screen renders FooterLinks + SubFooter after this import instead. */
     <div className="content-stretch flex flex-col gap-[65px] items-start pb-[40px] pt-[774px] relative w-[839px]">
       <Frame121 />
       <Frame112 />
-      <div className="flex justify-center shrink-0 w-[390px]">
-        <Component3 />
-      </div>
     </div>
   );
 }

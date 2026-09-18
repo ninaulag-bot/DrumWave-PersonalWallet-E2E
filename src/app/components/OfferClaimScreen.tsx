@@ -1,5 +1,6 @@
 import OfferCampaignLandingPageUnauthenticatedV1 from "@/imports/OfferCampaignLandingPageUnauthenticated-1/index";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface OfferClaimScreenProps {
   /** "Sign up to claim now" CTA — starts the sign-up flow. */
@@ -16,6 +17,9 @@ export function OfferClaimScreen({ onContinue, onSignIn }: OfferClaimScreenProps
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="offer-claim-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         {/* The design's content is taller than the device frame; give it its full
             height so the wrapper scrolls instead of clipping. The CTA is anchored
             to the bottom of this container (import uses bottom-[45px]). */}
@@ -60,7 +64,11 @@ export function OfferClaimScreen({ onContinue, onSignIn }: OfferClaimScreenProps
             }}
           />
         </div>
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
       <UnifiedStatusBar hostClass="offer-claim-sb" />
     </div>
   );

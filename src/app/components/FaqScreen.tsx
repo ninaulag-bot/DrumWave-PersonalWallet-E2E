@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "@/imports/Faq-1/svg-j91kby9dq9";
 import { StatusBar } from "@/app/components/ui/StatusBar";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface FaqScreenProps {
   onBack: () => void;
@@ -161,6 +162,9 @@ export function FaqScreen({ onBack }: FaqScreenProps) {
         scrollbarWidth: "none",
       }}
     >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
       {/* Status bar */}
       <StatusBar />
 
@@ -264,6 +268,10 @@ export function FaqScreen({ onBack }: FaqScreenProps) {
           support@drumwave.com
         </p>
       </div>
-    </div>
+    
+      <MiniFooter />
+      
+      </div>
+      </div>
   );
 }

@@ -7,6 +7,7 @@ import ringsPng from "@/imports/tesla-certificates-circles.png";
 import model3Img from "@/imports/DataCertsSuccess/58fa28d3afb64afb3af10674263f1f23970861cf.png";
 import fullSelfDrivingImg from "@/imports/DataCertsSuccess/f3855eeaf675891208a6a8b617dc84d96cce491d.png";
 import solarImg from "@/imports/tesla-solar-roof.png";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /**
  * Tesla company page — Figma 9:6610. Opened by the Tesla row on the Accepted tab
@@ -73,6 +74,9 @@ export function TeslaDataJourneyScreen({ onBack, onHome, onMyData, onViewCertifi
 
       {/* Scrollable content */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 72, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ paddingTop: 118, paddingBottom: "var(--space-10)", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
           {/* Hero — rings behind a 140px brand disc */}
@@ -159,6 +163,10 @@ export function TeslaDataJourneyScreen({ onBack, onHome, onMyData, onViewCertifi
           </div>
 
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
 
       {/* Persistent bottom nav */}

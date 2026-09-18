@@ -5,6 +5,7 @@ import { TabGlow } from "./TabGlow";
 import { StatusBar } from "./ui/StatusBar";
 import { DrumWaveLogo } from "./DrumWaveLogo";
 import { DataRequestCard } from "./DataRequestCard";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 const TABS = [
   { key: "pending",  label: "Pending",  dot: "#FFB700" },
@@ -261,11 +262,21 @@ export function HomeRequestDataBeforeDspScreen({
   };
 
   return (
-    <div className="home-req-before-dsp-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "auto" }}>
+    <div className="home-req-before-dsp-sb" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <style>{`
         .home-req-before-dsp-sb [data-name="Status Bar - iPhone"],
         .home-req-before-dsp-sb [data-name="Status Bar"] { display: none !important; }
       `}</style>
+
+      {/* Scrolling canvas. The status bar and "My data requests" header used to
+          live in here and scrolled away with it; they are pinned below instead. */}
+      <div
+        className="[&::-webkit-scrollbar]:hidden"
+        style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
+      >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
       {/* Read-only baked import — always renders the pending state */}
       <HomeRequestDataBeforeDsp />
 
@@ -281,31 +292,6 @@ export function HomeRequestDataBeforeDspScreen({
           zIndex: 5,
         }}
       />
-
-      {/*
-       * Pending state renders the baked header (no OverlayHeader cover), so its
-       * back arrow is inert. Transparent tap-target at OverlayHeader's arrow
-       * coords (top 71 + 12 centering, left 24, 33×24) restores onBack.
-       */}
-      {!isAccepted && !isRejected && (
-        <button
-          type="button"
-          aria-label="Back"
-          onClick={onBack}
-          style={{
-            position: "absolute",
-            top: 83,
-            left: 24,
-            width: 33,
-            height: 24,
-            background: "none",
-            border: "none",
-            cursor: onBack ? "pointer" : "default",
-            padding: 0,
-            zIndex: 5,
-          }}
-        />
-      )}
 
       {/* ── Accepted state overlays ──────────────────────────────────────────── */}
       {isAccepted && (
@@ -344,9 +330,6 @@ export function HomeRequestDataBeforeDspScreen({
             mask2Top={121}
             zIndex={3}
           />
-
-          <OverlayStatusBar />
-          <OverlayHeader onBack={onBack} />
 
           {/* Stat: "0 accepted" — centered, matching pending layout */}
           <div
@@ -435,9 +418,6 @@ export function HomeRequestDataBeforeDspScreen({
             mask2Top={212}
             zIndex={3}
           />
-
-          <OverlayStatusBar />
-          <OverlayHeader onBack={onBack} />
 
           {/* Stat: "3 rejected" — left-aligned at left 24, top 219 */}
           <div style={{ position: "absolute", top: 219, left: 24, zIndex: 4 }}>
@@ -623,6 +603,17 @@ export function HomeRequestDataBeforeDspScreen({
           })}
         </div>
       </div>
+      
+      <MiniFooter />
+      
+      </div>
+      </div>
+
+      {/* Pinned chrome — sibling of the scrolling canvas, so it stays at the top.
+          Status bar only where the canvas used to draw one (the pending state
+          renders the baked import's own, which the <style> above hides). */}
+      {(isAccepted || isRejected) && <OverlayStatusBar />}
+      <OverlayHeader onBack={onBack} />
     </div>
   );
 }

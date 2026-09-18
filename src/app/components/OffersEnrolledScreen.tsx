@@ -9,6 +9,7 @@ import imgBestBuyOffers from "@/imports/DspLanding-1/best-buy-offers.png";
 import imgBestBuyLogo from "@/imports/DspLanding-1/best-buy-logo.png";
 import imgTeslaCarBg1 from "@/imports/PlanDetaillPage/f472d1b36845b43b2500d400f1df89646f59a9a3.png";
 import imgTeslaCarBg2 from "@/imports/PlanDetaillPage/d3215bd4f8237e9211ad92ca35aed46057bbaf54.png";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /**
  * "Offers" — the Offers tab destination for the three enrolled account states
@@ -367,7 +368,8 @@ export function OffersEnrolledScreen({
             }
           />
         </div>
-      </ScreenWithNavBar>
+        <MiniFooter />
+                    </ScreenWithNavBar>
 
       {/* Status bar — pinned at frame top */}
       <div className="absolute left-0 top-0 w-[390px]" style={{ zIndex: 10 }}>

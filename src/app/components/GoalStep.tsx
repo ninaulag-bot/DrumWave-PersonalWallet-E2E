@@ -4,6 +4,9 @@ function GoalGlow() {
   return null;
 }
 
+/** Top of the goal slider's range, in dollars/year. */
+const GOAL_MAX = 1000;
+
 function GoalSlider({
   value,
   disabled,
@@ -19,10 +22,11 @@ function GoalSlider({
     if (!trackRef.current) return;
     const rect = trackRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    onChangeValue(Math.round(pct * 50));
+    // Snap to $25 so the big number reads as a round figure at the top of the range.
+    onChangeValue(Math.round((pct * GOAL_MAX) / 25) * 25);
   };
 
-  const pct = value / 50;
+  const pct = value / GOAL_MAX;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>

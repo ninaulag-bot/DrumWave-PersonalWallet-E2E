@@ -1,6 +1,7 @@
 import TopText from "@/imports/TopText/index";
 import svgPaths from "@/imports/Legal/svg-djmc6kjkfh";
 import { StatusBar } from "@/app/components/ui/StatusBar";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface LegalScreenProps {
   onBack: () => void;
@@ -87,8 +88,15 @@ export function LegalScreen({ onBack }: LegalScreenProps) {
             boxSizing: "border-box",
           }}
         >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
           <TopText />
-        </div>
+        
+      <MiniFooter />
+      
+      </div>
+      </div>
 
         {/* Bottom fade — transparent → base background, matching the design */}
         <div

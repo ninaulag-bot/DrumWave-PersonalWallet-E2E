@@ -4,6 +4,7 @@ import { MainBottomNav } from "@/app/components/MainBottomNav";
 import offerCardAuto from "@/imports/OffersNotEnrolled/offer-card-auto.png";
 import offerCardTravel from "@/imports/OffersNotEnrolled/offer-card-travel.png";
 import offerCardRetail from "@/imports/OffersNotEnrolled/offer-card-retail.png";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /**
  * "Offers" — Offers tab destination for the onboarding / not-enrolled account
@@ -218,6 +219,9 @@ export function OffersNotEnrolledScreen({ onRequestMoreData, onHome, onMyData, o
           scrollbarWidth: "none",
         }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ position: "relative", width: "100%", height: `${CONTENT_H}px` }}>
           {/* Header + New/Claimed toggle */}
           <div
@@ -322,6 +326,10 @@ export function OffersNotEnrolledScreen({ onRequestMoreData, onHome, onMyData, o
             Request more data
           </button>
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>

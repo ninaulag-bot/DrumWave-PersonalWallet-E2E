@@ -2,6 +2,7 @@ import { StatusBar } from "@/app/components/ui/StatusBar";
 import { MainBottomNav } from "@/app/components/MainBottomNav";
 import { ApplyForDspCard } from "@/app/components/ApplyForDspCard";
 import noiseTexture from "@/imports/DspLanding-1/b1b492b467327e373268d8c777b3bb8b425c81c9.png";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /**
  * "My Data Savings" — Savings-plan tab destination for the onboarding /
@@ -320,6 +321,9 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyDa
           scrollbarWidth: "none",
         }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         {/* 94px top padding = status-bar overlay + gap to title (Figma y=94) */}
         <div style={{ display: "flex", flexDirection: "column", gap: "24px", padding: "94px 0 48px" }}>
           {/* Header */}
@@ -403,6 +407,10 @@ export function MyDataSavingsScreen({ onApplyForDsp, onLearnMore, onHome, onMyDa
             </div>
           </div>
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>

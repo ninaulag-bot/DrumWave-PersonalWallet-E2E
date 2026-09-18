@@ -1,6 +1,7 @@
 import PlanDetaillPage from "@/imports/PlanDetaillPage/index";
 import { JoinPlanContext, PlanDetailBackContext, PlanDetailCloseContext } from "@/imports/PlanDetaillPage/join-plan-context";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface PlanDetailScreenProps {
   /** Called when the "Join this plan" button is pressed. */
@@ -18,6 +19,9 @@ export function PlanDetailScreen({ onJoin, onBack, onClose }: PlanDetailScreenPr
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="plan-detail-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <PlanDetailCloseContext.Provider value={onClose}>
           <PlanDetailBackContext.Provider value={onBack}>
             <JoinPlanContext.Provider value={onJoin}>
@@ -25,7 +29,11 @@ export function PlanDetailScreen({ onJoin, onBack, onClose }: PlanDetailScreenPr
             </JoinPlanContext.Provider>
           </PlanDetailBackContext.Provider>
         </PlanDetailCloseContext.Provider>
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
       <UnifiedStatusBar hostClass="plan-detail-sb" />
     </div>
   );

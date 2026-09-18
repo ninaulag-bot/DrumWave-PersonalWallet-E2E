@@ -9,6 +9,8 @@ import { ScreenWithNavBar } from "./ScreenWithNavBar";
 import { MainBottomNav } from "./MainBottomNav";
 import { TopNav } from "./TopNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { FooterLinks } from "@/app/components/FooterLinks";
+import { SubFooter } from "@/app/components/SubFooter";
 
 // The import's main column (Frame122) runs in flow and carries the DrumWave
 // footer as its last child, so the frame sizes to its own content. It used to
@@ -76,6 +78,15 @@ export function OneDspHomeScreen({
               </ViewMyRequestsContext.Provider>
               </RequestMoreDataContext.Provider>
             </OfferVariantContext.Provider>
+          </div>
+
+          {/* Footer link accordion, at the end of the scrolling content */}
+          <div style={{ width: `${FRAME_W}px`, margin: "80px auto 0", paddingBottom: 48 }}>
+            <FooterLinks />
+            <div style={{ height: 60 }} />
+            <div style={{ padding: "0 24px" }}>
+              <SubFooter />
+            </div>
           </div>
         </ScreenWithNavBar>
         {/* Persistent top nav — sibling of ScreenWithNavBar so it stays pinned while content scrolls */}

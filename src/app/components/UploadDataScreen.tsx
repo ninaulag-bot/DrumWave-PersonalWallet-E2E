@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "@/imports/RequestData/svg-te9anx1ork";
 import uploadSvg from "@/imports/Upload3/svg-6h72v7eg5k";
 import { StatusBar } from "@/app/components/ui/StatusBar";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 // The first file is present as soon as files are selected…
 const INITIAL_FILE = { id: "23andme", name: "23_and_me_data.zip", size: "33.4 MB" };
@@ -233,6 +234,9 @@ export function UploadDataScreen({ onBack, onUpload }: UploadDataScreenProps) {
                   gap: `${ROW_GAP}px`,
                 }}
               >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
                 <FileCard name={INITIAL_FILE.name} size={INITIAL_FILE.size} />
                 <AnimatePresence>
                   {uploadStep >= MAX_STEP &&
@@ -249,7 +253,11 @@ export function UploadDataScreen({ onBack, onUpload }: UploadDataScreenProps) {
                       </motion.div>
                     ))}
                 </AnimatePresence>
-              </div>
+              
+      <MiniFooter />
+      
+      </div>
+      </div>
             </div>
           )}
 

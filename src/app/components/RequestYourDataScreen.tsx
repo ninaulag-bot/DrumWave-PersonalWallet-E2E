@@ -1,5 +1,6 @@
 import Component3RequestYourDAta from "@/imports/3RequestYourDAta-1/index";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 const FRAME_W = 390;
 const FRAME_H = 1095;
@@ -22,6 +23,9 @@ export function RequestYourDataScreen({ onBack }: RequestYourDataScreenProps) {
       }}
       className="[&::-webkit-scrollbar]:hidden request-your-data-sb"
     >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div
           style={{
             position: "relative",
@@ -33,7 +37,11 @@ export function RequestYourDataScreen({ onBack }: RequestYourDataScreenProps) {
         >
           <Component3RequestYourDAta onBack={onBack} />
         </div>
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
       <UnifiedStatusBar hostClass="request-your-data-sb" />
     </div>
   );

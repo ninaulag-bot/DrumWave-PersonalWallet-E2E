@@ -4,6 +4,7 @@ import Step1Open from "@/imports/Frame2095586464/index";
 import Step2Image from "@/imports/Frame2095586924/index";
 import Step3Open from "@/imports/Frame2095586466/index";
 import { StatusBar } from "@/app/components/ui/StatusBar";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface HowToGetDataScreenProps {
   onBack: () => void;
@@ -124,6 +125,9 @@ export function HowToGetDataScreen({ onBack, onGetData }: HowToGetDataScreenProp
         flexDirection: "column",
       }}
     >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
       <StatusBar />
 
       {/* Back arrow — sticky so it stays put while the page scrolls under it.
@@ -214,6 +218,10 @@ export function HowToGetDataScreen({ onBack, onGetData }: HowToGetDataScreenProp
           <span style={{ fontFamily: "var(--font-family-primary)", fontWeight: 600, fontSize: "18px", lineHeight: 1, color: "#1d2023" }}>I’ve got my data</span>
         </button>
       </div>
-    </div>
+    
+      <MiniFooter />
+      
+      </div>
+      </div>
   );
 }

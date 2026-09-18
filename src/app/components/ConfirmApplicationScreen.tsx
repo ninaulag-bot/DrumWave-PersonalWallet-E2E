@@ -8,6 +8,7 @@ import { StatusBar } from "@/app/components/ui/StatusBar";
 import dim2Icon from "@/imports/dim_2.png";
 import summarySvg from "@/imports/Summary/svg-z7xy8lpy3q";
 import contributeSvg from "@/imports/Contribute/svg-ffwivnx1yn";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 // Categories — mirrors DataContributionStep
 const CATEGORIES = [
@@ -371,6 +372,9 @@ export function ConfirmApplicationScreen({
           overflowY: "auto",
         }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         {/* Photo section: 430px container — fanned DSP cards matching the apply-screen hero */}
         <div style={{ position: "relative", height: "430px", width: "100%" }}>
           {/* Glow frame sits behind the cards */}
@@ -599,6 +603,10 @@ export function ConfirmApplicationScreen({
             )}
           </SummaryCard>
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
 
       {/* ── Fixed overlay: status bar backdrop ───────────────────────────── */}

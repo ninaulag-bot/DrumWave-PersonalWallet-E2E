@@ -33,6 +33,8 @@ export function ScreenWithNavBar({ children, navBar, navBarHeight = 72 }: Screen
             paddingBottom: `calc(${navBarHeight}px + env(safe-area-inset-bottom, 0px))`,
             minHeight: "100%",
             boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           {children}

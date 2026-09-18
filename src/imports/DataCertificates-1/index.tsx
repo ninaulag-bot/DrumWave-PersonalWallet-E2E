@@ -12,7 +12,7 @@ function Frame6() {
 
 function Frame7() {
   return (
-    <div className="absolute content-stretch flex flex-col gap-[12px] h-[86px] items-start left-[24px] top-[83px] w-[342px]">
+    <div className="absolute content-stretch flex flex-col gap-[12px] h-[86px] items-start left-[24px] top-[95px] w-[342px]">
       <Frame6 />
       <p className="[word-break:break-word] font-['Open_Sans:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#999] text-[0px] w-full whitespace-pre-wrap" style={{ fontVariationSettings: '"wdth" 100' }}>
         <span className="leading-[1.5] text-[14px]">{`Every purchase generates data. Every certificate proves you own it.  `}</span>
@@ -49,12 +49,14 @@ function Frame10() {
   );
 }
 
+/* 20px circle. The export had p-[10px] on a size-[20px] border-box, leaving a
+   0-wide content box that the digit pushed out of round and off-centre. */
 function Frame11() {
   return (
-    <div className="bg-white content-stretch flex flex-col items-center justify-center p-[10px] relative rounded-[100px] shrink-0 size-[20px]">
-      <div className="[word-break:break-word] flex flex-col font-['Open_Sans:SemiBold',sans-serif] font-semibold justify-center leading-[0] relative shrink-0 text-[#070707] text-[12px] text-center w-full" style={{ fontVariationSettings: '"wdth" 100' }}>
-        <p className="leading-[1.5]">1</p>
-      </div>
+    <div className="bg-white flex items-center justify-center relative rounded-[100px] shrink-0 size-[20px]">
+      <p className="font-['Open_Sans:SemiBold',sans-serif] font-semibold leading-none relative text-[#070707] text-[12px] text-center" style={{ fontVariationSettings: '"wdth" 100' }}>
+        1
+      </p>
     </div>
   );
 }

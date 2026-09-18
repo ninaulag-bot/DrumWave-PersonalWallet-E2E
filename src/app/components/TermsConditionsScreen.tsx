@@ -1,6 +1,7 @@
 import TC from "@/imports/TC/index";
 import { TermsBackContext, TermsAcceptContext } from "@/imports/TC/back-context";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface TermsConditionsScreenProps {
   /** Called when the back arrow is pressed. */
@@ -17,12 +18,19 @@ export function TermsConditionsScreen({ onBack, onAccept }: TermsConditionsScree
       {/* 54px top pad: UnifiedStatusBar hides the baked 54px status band, which
           collapsed the in-flow header up under the overlay. Keep that space. */}
       <div className="terms-conditions-sb" style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", paddingTop: 54, boxSizing: "border-box" }}>
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <TermsBackContext.Provider value={onBack}>
           <TermsAcceptContext.Provider value={onAccept}>
             <TC />
           </TermsAcceptContext.Provider>
         </TermsBackContext.Provider>
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
       <UnifiedStatusBar hostClass="terms-conditions-sb" />
     </div>
   );

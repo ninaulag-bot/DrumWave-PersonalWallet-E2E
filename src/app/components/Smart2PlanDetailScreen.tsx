@@ -1,6 +1,7 @@
 import PlanDetaillPage from "@/imports/PlanDetaillPage-2/index";
 import { Smart2JoinPlanContext, Smart2PlanDetailBackContext } from "@/imports/PlanDetaillPage-2/smart-plan-context";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface Smart2PlanDetailScreenProps {
   /** Called when "Join this plan" is pressed. */
@@ -19,11 +20,18 @@ export function Smart2PlanDetailScreen({ onJoin, onBack }: Smart2PlanDetailScree
         className="smart2-plan-detail-sb [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
         style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <Smart2PlanDetailBackContext.Provider value={onBack}>
           <Smart2JoinPlanContext.Provider value={onJoin}>
             <PlanDetaillPage />
           </Smart2JoinPlanContext.Provider>
         </Smart2PlanDetailBackContext.Provider>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
       <UnifiedStatusBar hostClass="smart2-plan-detail-sb" />
     </div>

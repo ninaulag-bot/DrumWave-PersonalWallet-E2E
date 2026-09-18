@@ -1,4 +1,5 @@
 import Savings from "@/imports/Savings/index";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface OfferSavingsScreenProps {
   /** "Go to my Data Savings Plan" CTA — advances the Offer 1.0 flow. */
@@ -16,6 +17,9 @@ export function OfferSavingsScreen({ onContinue, onClaim }: OfferSavingsScreenPr
       <div
         style={{ position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden" }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         {/* The Savings design is absolutely positioned. The black IMG_9143 screenshot
             begins at ~1118px; we clip it and place the email footer on top instead. */}
         <div style={{ position: "relative", width: "100%", height: "1600px", overflow: "hidden" }}>
@@ -113,6 +117,10 @@ export function OfferSavingsScreen({ onContinue, onClaim }: OfferSavingsScreenPr
             }}
           />
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
       {/* No UnifiedStatusBar — the Savings import's IMG_6075 chrome already
           paints time/wifi/battery at the top. */}

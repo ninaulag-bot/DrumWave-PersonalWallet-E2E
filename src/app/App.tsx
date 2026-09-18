@@ -1,6 +1,9 @@
 // Prototype entrypoint. (rebuild)
 import React, { useState, useEffect, useRef } from "react";
 import DrumWaveFooter from "@/imports/UnnamedComponent/index";
+import { FooterLinks } from "@/app/components/FooterLinks";
+import { MiniFooter } from "@/app/components/MiniFooter";
+import { SubFooter } from "@/app/components/SubFooter";
 import HomeRequestDataBeforeDsp from "@/imports/HomeRequestDataBeforeDsp-1/index";
 import NoResultsIcon from "@/imports/Frame/index";
 import NoResultsText from "@/imports/Frame2095587046/index";
@@ -68,7 +71,6 @@ import { PlanJoinedIntroScreen } from "@/app/components/PlanJoinedIntroScreen";
 import { SmartSuccessfullyJoinedScreen } from "@/app/components/SmartSuccessfullyJoinedScreen";
 import { RequestYourDataScreen } from "@/app/components/RequestYourDataScreen";
 import { DaHomeScreen } from "@/app/components/DaHomeScreen";
-import { HomeRequestDataBeforeDsp11Screen } from "@/app/components/HomeRequestDataBeforeDsp11Screen";
 import { DaHomeFullWidthOverview1Screen } from "@/app/components/DaHomeFullWidthOverview1Screen";
 import { DataCertificatesScreen } from "@/app/components/DataCertificatesScreen";
 import { DataCertsScreen } from "@/app/components/DataCertsScreen";
@@ -2936,7 +2938,7 @@ function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, 
 
       {/* Scrollable content */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 118, paddingBottom: "var(--space-12)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 118, minHeight: "100%", boxSizing: "border-box" }}>
 
           {/* Heading — design specifies Open Sans for this title, conflicting with
               CLAUDE.md's Titillium-Web-for-headers rule; following the design here
@@ -3040,15 +3042,8 @@ function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, 
             )}
           </div>
 
-          {/* DrumWave footer */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginTop: 146 }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)" }}>
-              <DrumWaveLogo size={28} />
-              <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 19.478, color: "var(--color-text-white)", letterSpacing: "-0.2922px", lineHeight: "1.2", textAlign: "center" }}>DrumWave</p>
-            </div>
-            <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 17.043, color: "var(--color-text-secondary)", letterSpacing: "-0.2557px", lineHeight: "1.2", textAlign: "center" }}>Your Life. Your Story. Your Data.</p>
-          </div>
 
+          <MiniFooter />
         </div>
       </div>
 
@@ -3077,7 +3072,7 @@ function RequestDataScreen({ onBack, onHome, onMyData, onSavingsPlan, onOffers, 
    that frame's caption, shows the accepted company as a tappable row with a
    chevron instead of a card with a "View certificate" button, drops the
    DrumWave footer, and keeps Home lit in the bottom nav. */
-function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome, onMyData, onViewCertificate, onSavingsPlan, onOffers, variant = "default", hasAccepted = true }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void; onMyData?: () => void; onViewCertificate?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; variant?: "default" | "certificates"; hasAccepted?: boolean }) {
+function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWCloud, onHome, onMyData, onViewCertificate, onOpenCompany, onSavingsPlan, onOffers, variant = "default", hasAccepted = true }: { onBack: () => void; onUploadManually?: () => void; onSeeHow?: () => void; onGoToDWCloud?: () => void; onHome?: () => void; onMyData?: () => void; onViewCertificate?: () => void; /** Pending 23andMe row opens that company's page (step 62 entry only). */ onOpenCompany?: () => void; onSavingsPlan?: () => void; onOffers?: () => void; variant?: "default" | "certificates"; hasAccepted?: boolean }) {
   const isCerts = variant === "certificates";
   const [activeTab, setActiveTab] = useState<"pending" | "accepted" | "rejected">(isCerts ? "accepted" : "pending");
 
@@ -3125,7 +3120,7 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
 
       {/* Scrollable content */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 138, paddingBottom: "var(--space-12)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", alignItems: "center", paddingTop: 138, minHeight: "100%", boxSizing: "border-box" }}>
 
           {/* Segmented control */}
           <div style={{ width: 342, height: 48, position: "relative", background: "var(--color-bg-overlay)", borderRadius: "var(--radius-md)" }}>
@@ -3192,8 +3187,12 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
           <div style={{ width: 342, display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
             {activeTab === "pending" && requests.map(req => (
               <div key={req.name} style={{ background: "var(--color-bg-surface)", borderRadius: "var(--radius-lg)", padding: "var(--space-6)", display: "flex", flexDirection: "column", gap: "var(--space-5)" }}>
-                {/* Top row */}
-                <div style={{ display: "flex", alignItems: "flex-end", gap: "var(--space-4)" }}>
+                {/* Top row. Where onOpenCompany is supplied (the post-upload entry,
+                    step 62), 23andMe's row opens that company's page. */}
+                <div
+                  onClick={req.name === "23andMe" ? onOpenCompany : undefined}
+                  style={{ display: "flex", alignItems: "flex-end", gap: "var(--space-4)", cursor: req.name === "23andMe" && onOpenCompany ? "pointer" : "default" }}
+                >
                   <div style={{ width: 40, height: 40, borderRadius: "50%", background: req.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <span style={{ ...tw, fontWeight: 600, fontSize: 20.57, color: req.fg, lineHeight: 1 }}>{req.badge}</span>
                   </div>
@@ -3340,17 +3339,8 @@ function MyDataRequestsScreen({ onBack, onUploadManually, onSeeHow, onGoToDWClou
             </>
           )}
 
-          {/* DrumWave footer — not in Figma 9:89701, which ends at the card */}
-          {!isCerts && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginTop: "var(--space-8)" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)" }}>
-                <DrumWaveLogo size={28} />
-                <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 19.478, color: "var(--color-text-white)", letterSpacing: "-0.2922px", lineHeight: "1.2", textAlign: "center" }}>DrumWave</p>
-              </div>
-              <p style={{ ...tw, margin: 0, fontWeight: 400, fontSize: 17.043, color: "var(--color-text-secondary)", letterSpacing: "-0.2557px", lineHeight: "1.2", textAlign: "center" }}>Your Life. Your Story. Your Data.</p>
-            </div>
-          )}
 
+          <MiniFooter />
         </div>
       </div>
 
@@ -4283,8 +4273,13 @@ function DashboardScreen({ name, onRequestData, onViewRequests, onApplyForDsp, o
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: "48px", paddingBottom: "48px", width: "100%" }}>
-          <DrumWaveFooter />
+        <div style={{ marginTop: "80px", paddingBottom: "48px", width: "100%" }}>
+          <FooterLinks />
+          <div style={{ height: 60 }} />
+          {/* 24px gutter to match FooterLinks, which pads itself */}
+          <div style={{ padding: "0 24px" }}>
+            <SubFooter />
+          </div>
         </div>
       </div>
 
@@ -4304,6 +4299,10 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
   // Figma 207:48122 — same confirmation dialog the Request data screen shows.
   // Holds the company name of the row that opened it; null when closed.
   const [homeSuccessCo, setHomeSuccessCo] = useState<string | null>(null);
+  // "Recently added" cards flip their Request button to a disabled "Pending"
+  // once the confirmation dialog for that company has been dismissed.
+  const nubankPending = pendingCos.includes("Nubank");
+  const bradescoPending = pendingCos.includes("Bradesco");
   const [expandedFaq, setExpandedFaq] = useState<number | null>(
     null,
   );
@@ -4803,15 +4802,16 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
               {/* Request button (full width) */}
               <button
                 type="button"
-                onClick={onRequestData}
+                disabled={nubankPending}
+                onClick={() => setHomeSuccessCo("Nubank")}
                 style={{
-                  background: "var(--color-action-primary-bg)",
+                  background: nubankPending ? "#2A2A2A" : "var(--color-action-primary-bg)",
                   border: "none",
                   borderRadius: "41px",
                   height: "37px",
                   width: "100%",
                   padding: "10px",
-                  cursor: "pointer",
+                  cursor: nubankPending ? "default" : "pointer",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -4819,10 +4819,10 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
                   fontWeight: 600,
                   fontSize: "18px",
                   lineHeight: 1.2,
-                  color: "var(--color-action-primary-text)",
+                  color: nubankPending ? "var(--color-text-disabled)" : "var(--color-action-primary-text)",
                 }}
               >
-                Request
+                {nubankPending ? "Pending" : "Request"}
               </button>
             </div>
             {/* Bradesco */}
@@ -4888,24 +4888,25 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
     {/* Request button */}
     <button
       type="button"
-      onClick={onRequestData}
+      disabled={bradescoPending}
+      onClick={() => setHomeSuccessCo("Bradesco")}
       style={{
         alignSelf: "stretch",
         height: "37px",
         borderRadius: "41px",
-        background: "var(--color-action-primary-bg)",
+        background: bradescoPending ? "#2A2A2A" : "var(--color-action-primary-bg)",
         border: "none",
-        cursor: "pointer",
+        cursor: bradescoPending ? "default" : "pointer",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         ...tw,
         fontWeight: 600,
         fontSize: "18px",
-        color: "var(--color-action-primary-text)",
+        color: bradescoPending ? "var(--color-text-disabled)" : "var(--color-action-primary-text)",
       }}
     >
-      Request
+      {bradescoPending ? "Pending" : "Request"}
     </button>
   </div>
 </div>
@@ -5070,8 +5071,13 @@ function DashboardScreenNoDsp({ name, onRequestData, onViewRequests, onApplyForD
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: "48px", paddingBottom: "48px", width: "100%" }}>
-          <DrumWaveFooter />
+        <div style={{ marginTop: "80px", paddingBottom: "48px", width: "100%" }}>
+          <FooterLinks />
+          <div style={{ height: 60 }} />
+          {/* 24px gutter to match FooterLinks, which pads itself */}
+          <div style={{ padding: "0 24px" }}>
+            <SubFooter />
+          </div>
         </div>
       </div>
 
@@ -5940,8 +5946,13 @@ function DashboardScreenOneDsp({ name, onRequestData, onViewRequests, onApplyFor
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: "48px", paddingBottom: "48px", width: "100%" }}>
-          <DrumWaveFooter />
+        <div style={{ marginTop: "80px", paddingBottom: "48px", width: "100%" }}>
+          <FooterLinks />
+          <div style={{ height: 60 }} />
+          {/* 24px gutter to match FooterLinks, which pads itself */}
+          <div style={{ padding: "0 24px" }}>
+            <SubFooter />
+          </div>
         </div>
       </div>
 
@@ -6082,6 +6093,8 @@ function EnrollInfoScreen({ onBack, onRequestData }: { onBack?: () => void; onRe
         className="enroll-info-sb [&::-webkit-scrollbar]:hidden"
         style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
       >
+        {/* Full-height column so the footer can sit at the bottom */}
+        <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
         <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
           <Enroll4 />
           {/* Back arrow overlay — covers the back arrow icon in Frame29 */}
@@ -6099,6 +6112,8 @@ function EnrollInfoScreen({ onBack, onRequestData }: { onBack?: () => void; onRe
             style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
           />
         </div>
+        <MiniFooter />
+        </div>
       </div>
       <UnifiedStatusBar hostClass="enroll-info-sb" />
     </div>
@@ -6112,6 +6127,8 @@ function EnrollOffersScreen({ onBack, onRequestData }: { onBack?: () => void; on
         className="enroll-offers-sb [&::-webkit-scrollbar]:hidden"
         style={{ background: "#070707", position: "relative", width: "100%", height: "100%", overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }}
       >
+        {/* Full-height column so the footer can sit at the bottom */}
+        <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
         <div style={{ position: "relative", width: "390px", height: "1800px", margin: "0 auto" }}>
           <Enroll5 />
           {/* Back arrow overlay */}
@@ -6128,6 +6145,8 @@ function EnrollOffersScreen({ onBack, onRequestData }: { onBack?: () => void; on
             aria-label="Request more data"
             style={{ position: "absolute", top: "1620px", left: "24px", width: "343px", height: "48px", background: "transparent", border: "none", cursor: "pointer", zIndex: 30 }}
           />
+        </div>
+        <MiniFooter />
         </div>
       </div>
       <UnifiedStatusBar hostClass="enroll-offers-sb" />
@@ -6324,7 +6343,7 @@ const NO_HISTORY_STEPS = [19, 29, 36, 40, 47, 54, 72];
 
 export default function App() {
   // Entry point: Landing screen. Reset to 0 before committing/sharing.
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(29);
 
   // ── Back history ────────────────────────────────────────────────────────────
   // Back arrows mean "the screen I actually came from", not a fixed step number.
@@ -6694,7 +6713,7 @@ export default function App() {
             // "View Data Certificates" home — OneDspHomeScreen is the build of Figma
             // frame 13:73059. Takes no homeProps; variant is passed explicitly so a
             // change to the component's default can't silently retheme this state.
-            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen name={homeProps.name} onAccountSettings={homeProps.onAccountSettings} variant="dataCertificates" hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => setStep(36)} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
+            if (demoScreen === "dataRequestAccepted") return <OneDspHomeScreen name={homeProps.name} onAccountSettings={homeProps.onAccountSettings} variant="dataCertificates" hasSecondPlan={hasSecondPlan} onHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onViewMyRequests={() => setStep(12)} onTeslaRelationship={() => setStep(78)} onSavingsPlanSection={() => setStep(hasSecondPlan ? 84 : savingsPlanStep)} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} onSavingsPlan={() => setStep(80)} onOffers={() => setStep(OFFERS_STEP)} />;
             return <DashboardScreenOneDsp {...homeProps} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} />;
           }
           return <DashboardScreen {...homeProps} />;
@@ -6911,7 +6930,7 @@ export default function App() {
           <HowToGetDataScreen onBack={() => goBack(12)} onGetData={() => setStep(27)} />
         )}
         {step === 29 && (
-          <RequestDataProgressScreen onComplete={() => setStep(30)} />
+          <RequestDataProgressScreen />
         )}
         {step === 30 && (
           <UploadSuccessScreen onContinue={() => setStep(62)} />
@@ -6982,7 +7001,7 @@ export default function App() {
         {step === 54 && <PlanJoinedIntroScreen name={firstName} onComplete={() => setStep(83)} planImage={dsavingsFitnessCard} showPartnerMarks />}
         {step === 53 && <SmartSuccessfullyJoinedScreen />}
         {step === 55 && <MyPlanScreen onClose={() => setStep(9)} onGoToPlan={() => setStep(56)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} />}
-        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} onRedeemOffer={() => setStep(36)} />}
+        {step === 56 && <DspLanding1Screen variant={demoScreen === "offer1" ? "receivingOffers" : "enrolled"} onLearnMore={() => setStep(58)} onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onManageMyPlan={() => { setManagePlan("smart"); setManagePlanBackDest(56); setStep(59); }} onCashBalance={() => setStep(66)} onViewAllPlans={() => setStep(48)} onRequestMoreData={() => { setRequestDataPushed(true); setStep(MY_DATA_STEP); }} onBackToAllPlans={hasSecondPlan ? () => setStep(84) : undefined} onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} />}
         {/* Counter shows step+1 → "60 / N" is this screen (Manage my plan).
             Back always returns to the individual plan page that opened it
             (56 Smart / 80 certs Smart / 83 Fitness), via history + managePlanBackDest. */}
@@ -6992,11 +7011,26 @@ export default function App() {
             Deliberately not referrer-based: this is entered at the end of the
             upload flow (30 → 62), and it resets the account state, so back has to
             leave the flow rather than re-enter its success screen. */}
-        {step === 62 && <HomeRequestDataBeforeDsp11Screen onView23andMe={() => setStep(63)} onBack={() => { setDemoScreen("noDsp"); setStep(9); }} />}
+        {/* Same screen as step 12 — the post-upload entry just has nothing accepted
+            yet, and 23andMe's pending row opens the 23andMe page (63). */}
+        {step === 62 && (
+          <MyDataRequestsScreen
+            hasAccepted={false}
+            onBack={() => { setDemoScreen("noDsp"); setStep(9); }}
+            onOpenCompany={() => setStep(63)}
+            onUploadManually={() => setStep(27)}
+            onSeeHow={() => setStep(28)}
+            onGoToDWCloud={() => setStep(31)}
+            onHome={() => setStep(homeStep)}
+            onMyData={() => setStep(MY_DATA_STEP)}
+            onSavingsPlan={() => setStep(savingsPlanStep)}
+            onOffers={() => setStep(OFFERS_STEP)}
+          />
+        )}
         {/* Slide 64 in the prototype counter. Back → slide 63 (step 62).
             Hardcoded for the same reason as 64 below: coming back from the
             certificates list re-pushes history, so popping would re-enter it. */}
-        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(62)} />}
+        {step === 63 && <DaHomeFullWidthOverview1Screen onViewDataCertificates={() => setStep(64)} onGoToDWCloud={() => setStep(31)} onUploadMoreFiles={() => setStep(27)} onHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onOffers={() => setStep(OFFERS_STEP)} onBack={() => setStep(62)} />}
         {/* Back returns to the company page (63) it was opened from. Hardcoded,
             not goBack: opening a certificate (65) and pressing Done pushes 64
             back onto the history, so popping lands on the certificates list
@@ -7095,12 +7129,12 @@ export default function App() {
         {step === 81 && <DataBalanceScreen onBack={() => goBack(80)} onTransaction={() => setStep(82)} />}
         {/* Figma 9:94266 — the Tesla Model 3 (+Ð 0.08) transaction on step 81. */}
         {step === 82 && <DataTransactionScreen onBack={() => goBack(81)} />}
-        {step === 83 && <DspLandingFitnessScreen onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {step === 83 && <DspLandingFitnessScreen onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} onBackToAllPlans={() => setStep(84)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(83); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {/* Figma 15:34974 — "My Data Savings" all-plans overview, reached from "Back to all plans" on step 83. */}
         {/* No "Manage my plan" control renders on 84 (see DspActivePlansScreen —
             Frame49 isn't in its subtree), so onManageMyPlan here is unreachable;
             "fitness" matches where this screen's card taps already lead (83). */}
-        {step === 84 && <DspActivePlansScreen onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(56)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
+        {step === 84 && <DspActivePlansScreen onRedeemOffer={() => { setDemoScreen("offer1"); setStep(36); }} onSavingsPlan={() => setStep(83)} onFitnessPlan={() => setStep(83)} onSmartPlan={() => setStep(56)} onManageMyPlan={() => { setManagePlan("fitness"); setManagePlanBackDest(84); setStep(59); }} onCashBalance={() => setStep(66)} onLearnMore={() => setStep(58)} onGoHome={() => setStep(69)} onMyData={() => setStep(MY_DATA_STEP)} onOffers={() => setStep(OFFERS_STEP)} onViewAllPlans={() => setStep(48)} />}
         {/* Figma 16:83035 — the Offers frame authored for the enrolled states; OFFERS_STEP routes oneDsp/offer1/dataRequestAccepted here instead of 61. */}
         {step === 85 && <OffersEnrolledScreen onGoHome={() => setStep(homeStep)} onMyData={() => setStep(MY_DATA_STEP)} onSavingsPlan={() => setStep(savingsPlanStep)} onClaimOffer={() => setStep(36)} />}
         {step === 33 && (

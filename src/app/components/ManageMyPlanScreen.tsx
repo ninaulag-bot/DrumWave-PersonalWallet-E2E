@@ -6,6 +6,7 @@ import { AutoRenewStateContext } from "@/imports/HomeRequestDataBeforeDsp-9/auto
 import { PlanContext, type ManagedPlan } from "@/imports/HomeRequestDataBeforeDsp-9/plan-context";
 import { MainBottomNav } from "./MainBottomNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 const NAV_H = 72;
 // The import's main column (Frame34) now runs in flow and carries the DrumWave
@@ -155,6 +156,9 @@ export function ManageMyPlanScreen({ plan = "fitness", onBack, onHome, onMyData,
             scrollbarWidth: "none",
           }}
         >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
           {/* overflow:hidden so the import's remaining absolute leftovers (the
               #2067d1 glows at top 1458/2088, the home indicator at bottom -21)
               can't extend the scroll height past the content. Height stays auto —
@@ -170,7 +174,11 @@ export function ManageMyPlanScreen({ plan = "fitness", onBack, onHome, onMyData,
               </PlanContext.Provider>
             </GoBackContext.Provider>
           </div>
-        </div>
+        
+      <MiniFooter />
+      
+      </div>
+      </div>
 
         {showCancelModal && (
           <CancelAutoRenewModal

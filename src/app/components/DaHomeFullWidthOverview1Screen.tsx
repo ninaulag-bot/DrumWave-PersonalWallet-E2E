@@ -1,12 +1,15 @@
 import DaHomeFullWidthOverview from "@/imports/DaHomeFullWidthOverview-1/index";
 import { MainBottomNav } from "./MainBottomNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 const FRAME_W = 390;
 const FRAME_H = 844;
 
 interface DaHomeFullWidthOverview1ScreenProps {
   onViewDataCertificates?: () => void;
+  onGoToDWCloud?: () => void;
+  onUploadMoreFiles?: () => void;
   onHome?: () => void;
   onMyData?: () => void;
   onSavingsPlan?: () => void;
@@ -14,7 +17,7 @@ interface DaHomeFullWidthOverview1ScreenProps {
   onBack?: () => void;
 }
 
-export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome, onMyData, onSavingsPlan, onOffers, onBack }: DaHomeFullWidthOverview1ScreenProps = {}) {
+export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onGoToDWCloud, onUploadMoreFiles, onHome, onMyData, onSavingsPlan, onOffers, onBack }: DaHomeFullWidthOverview1ScreenProps = {}) {
   return (
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       <div className="da-home-full-width-overview1-sb" style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#070707" }}>
@@ -33,6 +36,9 @@ export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome,
             scrollbarWidth: "none",
           }}
         >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
           <div
             style={{
               position: "relative",
@@ -42,7 +48,7 @@ export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome,
               overflow: "hidden",
             }}
           >
-            <DaHomeFullWidthOverview onViewDataCertificates={onViewDataCertificates} />
+            <DaHomeFullWidthOverview onViewDataCertificates={onViewDataCertificates} onGoToDWCloud={onGoToDWCloud} onUploadMoreFiles={onUploadMoreFiles} />
 
             {/* Transparent tap target over the back arrow the import already draws in its
                 "Profile header" (header at top 66px, 342-wide row inset 24px, 48px tall,
@@ -64,7 +70,11 @@ export function DaHomeFullWidthOverview1Screen({ onViewDataCertificates, onHome,
               }}
             />
           </div>
-        </div>
+        
+      <MiniFooter />
+      
+      </div>
+      </div>
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           <MainBottomNav activeTab="home" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} onOffers={onOffers} />
         </div>

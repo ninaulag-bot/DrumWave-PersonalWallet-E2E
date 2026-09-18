@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import AccountProfile from "@/imports/Profile/index";
 import svgPaths from "@/imports/Name-1/svg-nk770tkaph";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface AccountSettingsScreenProps {
   onBack: () => void;
@@ -136,6 +137,9 @@ export function AccountSettingsScreen({ onBack, onCarolinaClick, onChangePasswor
           scrollbarWidth: "none",
         }}
       >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
       {/* Inner canvas is taller than 852px so absolutely-positioned content
           (the DrumWave logo at the bottom) isn't clipped */}
       <div style={{ position: "relative", width: "100%", height: "940px" }}>
@@ -282,6 +286,10 @@ export function AccountSettingsScreen({ onBack, onCarolinaClick, onChangePasswor
       {/* Success toasts — slide in from above, auto-hide after 3s */}
       <SuccessToast show={showPasswordToast} message="Password successfully updated!" onDismiss={onDismissPasswordToast} />
       <SuccessToast show={showReportToast} message="Your report has been sent!" onDismiss={onDismissReportToast} />
+      
+      <MiniFooter />
+      
+      </div>
       </div>
       <UnifiedStatusBar hostClass="account-settings-sb" />
     </div>

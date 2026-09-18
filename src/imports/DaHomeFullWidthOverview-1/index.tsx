@@ -1031,9 +1031,11 @@ function Component1() {
 
 interface DaHomeFullWidthOverviewProps {
   onViewDataCertificates?: () => void;
+  onGoToDWCloud?: () => void;
+  onUploadMoreFiles?: () => void;
 }
 
-export default function DaHomeFullWidthOverview({ onViewDataCertificates }: DaHomeFullWidthOverviewProps = {}) {
+export default function DaHomeFullWidthOverview({ onViewDataCertificates, onGoToDWCloud, onUploadMoreFiles }: DaHomeFullWidthOverviewProps = {}) {
   return (
     <div className="bg-[#070707] relative size-full" style={{ overflow: "hidden" }} data-name="DA home - full width overview">
 
@@ -1068,6 +1070,19 @@ export default function DaHomeFullWidthOverview({ onViewDataCertificates }: DaHo
             onClick={onViewDataCertificates}
             style={{ position: "absolute", top: 992, left: 24, width: 342, height: 48, background: "transparent", border: "none", cursor: "pointer", padding: 0 }}
             aria-label="View my data certificates"
+          />
+          {/* Tap target: "Upload more files" (second button, 8px gap below the first) */}
+          <button
+            onClick={onUploadMoreFiles}
+            style={{ position: "absolute", top: 1048, left: 24, width: 342, height: 48, background: "transparent", border: "none", cursor: "pointer", padding: 0 }}
+            aria-label="Upload more files"
+          />
+          {/* Tap target: "Go to dWCloud" pill (Frame4 at top 553, 343 wide with 16px
+              side padding, so the pill is 311 wide at left 40) */}
+          <button
+            onClick={onGoToDWCloud}
+            style={{ position: "absolute", top: 553, left: 40, width: 311, height: 36, background: "transparent", border: "none", cursor: "pointer", padding: 0, zIndex: 20 }}
+            aria-label="Go to dWCloud"
           />
           <div className="absolute left-[-61px] size-[217px] top-[213px]">
             <div className="absolute inset-[-92.17%]">

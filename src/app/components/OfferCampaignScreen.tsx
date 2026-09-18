@@ -1,6 +1,7 @@
 import OfferCampaignLandingPageUnauthenticated from "@/imports/OfferCampaignLandingPageUnauthenticated/index";
 import { MainBottomNav } from "./MainBottomNav";
 import { UnifiedStatusBar } from "@/app/components/ui/StatusBarOverlay";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface OfferCampaignScreenProps {
   /** Back arrow in the profile header. */
@@ -29,6 +30,9 @@ export function OfferCampaignScreen({ onBack, onContinue, onHome, onMyData, onSa
         {/* The imported page is taller than the phone frame (CTA sits at ~top 1319px).
             Give it its full height so the wrapper can scroll instead of clipping. */}
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: "72px", overflowY: "auto", overflowX: "hidden" }}>
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ position: "relative", width: "100%", height: "1400px" }}>
           <OfferCampaignLandingPageUnauthenticated />
 
@@ -71,7 +75,11 @@ export function OfferCampaignScreen({ onBack, onContinue, onHome, onMyData, onSa
             zIndex: 5,
           }}
         />
-        </div>
+        
+      <MiniFooter />
+      
+      </div>
+      </div>
 
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           <MainBottomNav activeTab="offers" onHome={onHome} onMyData={onMyData} onSavingsPlan={onSavingsPlan} />

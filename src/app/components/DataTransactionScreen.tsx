@@ -1,5 +1,6 @@
 import { StatusBar } from "./ui/StatusBar";
 import dataDollarPaths from "@/imports/Frame2095588102/svg-n24lup08st";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /**
  * Transaction detail — Figma 9:94266. Opened by the Tesla Model 3 (+Ð 0.08) row
@@ -39,6 +40,9 @@ export function DataTransactionScreen({ onBack }: { onBack?: () => void }) {
       </div>
 
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflowY: "auto", overflowX: "hidden", scrollbarWidth: "none" }} className="[&::-webkit-scrollbar]:hidden">
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ paddingTop: 138, paddingBottom: "var(--space-10)" }}>
 
           {/* Amount */}
@@ -68,6 +72,10 @@ export function DataTransactionScreen({ onBack }: { onBack?: () => void }) {
           </div>
 
         </div>
+      
+      <MiniFooter />
+      
+      </div>
       </div>
 
       {/* Home indicator — the frame's only bottom chrome */}

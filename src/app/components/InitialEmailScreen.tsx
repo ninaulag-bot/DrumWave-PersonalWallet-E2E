@@ -1,4 +1,5 @@
 import InitialEmail from "@/imports/InitialEmail/index";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 interface InitialEmailScreenProps {
   /** Fired when the "View my data certificates" CTA is tapped. */
@@ -23,6 +24,9 @@ export function InitialEmailScreen({ onViewCertificates }: InitialEmailScreenPro
       style={{ position: "absolute", inset: 0, overflowY: "auto", overflowX: "hidden", background: "var(--color-bg-base)" }}
       className="[&::-webkit-scrollbar]:hidden"
     >
+      {/* Full-height column so the footer can sit at the bottom on short screens */}
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+
         <div style={{ position: "relative", width: `${FRAME_W}px`, height: `${CONTENT_H}px`, margin: "0 auto", overflow: "hidden" }}>
           <InitialEmail />
 
@@ -46,7 +50,11 @@ export function InitialEmailScreen({ onViewCertificates }: InitialEmailScreenPro
             }}
           />
         </div>
-          </div>
+          
+      <MiniFooter />
+      
+      </div>
+      </div>
       {/* No UnifiedStatusBar — InitialEmail's IMG_6075 chrome already paints
           time/wifi/battery at the top. */}
     </div>

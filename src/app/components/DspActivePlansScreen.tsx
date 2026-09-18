@@ -10,10 +10,12 @@ import { ManageMyPlanContext } from "@/imports/DspLanding-1/manage-my-plan-conte
 import { CashBalanceContext } from "@/imports/DspLanding-1/cash-balance-context";
 import { DataBalanceContext } from "@/imports/DspLanding-1/data-balance-context";
 import { ViewAllPlansContext } from "@/imports/DspLanding-1/view-all-plans-context";
+import { RedeemOfferContext } from "@/imports/DspLanding-1/redeem-offer-context";
 import { OfferVariantContext } from "@/imports/DspLanding-1/offer-variant-context";
 import imgFitnessCard from "@/imports/dsavings-fitness-card.png";
 import imgKaiserLogo from "@/imports/DspLanding-1/kaiser-logo.png";
 import { DrumWaveLogo } from "./DrumWaveLogo";
+import { MiniFooter } from "@/app/components/MiniFooter";
 
 /* Figma 15:34974 "DSP LANDING" — the all-plans overview reached from
    "Back to all plans" on the step-83 screen. */
@@ -221,6 +223,8 @@ interface DspActivePlansScreenProps {
   onCashBalance?: () => void;
   onDataBalance?: () => void;
   onViewAllPlans?: () => void;
+  /** "Redeem offer" on the Tesla offer card (Frame83) → the claiming loader. */
+  onRedeemOffer?: () => void;
 }
 
 /** "My Data Savings" all-plans overview — Figma 15:34974. Reached from
@@ -238,6 +242,7 @@ export function DspActivePlansScreen({
   onCashBalance,
   onDataBalance,
   onViewAllPlans,
+  onRedeemOffer,
 }: DspActivePlansScreenProps) {
   return (
     <div className="bg-[#070707] relative size-full overflow-hidden" data-name="DSP LANDING">
@@ -251,6 +256,7 @@ export function DspActivePlansScreen({
               <CashBalanceContext.Provider value={onCashBalance}>
                 <DataBalanceContext.Provider value={onDataBalance}>
                   <ViewAllPlansContext.Provider value={onViewAllPlans}>
+                  <RedeemOfferContext.Provider value={onRedeemOffer}>
                     <ScreenWithNavBar
                       navBar={
                         <MainBottomNav
@@ -285,7 +291,9 @@ export function DspActivePlansScreen({
                       <div style={{ marginTop: "64px", marginLeft: "24px" }}>
                         <Frame83 />
                       </div>
+                      <MiniFooter />
                     </ScreenWithNavBar>
+                  </RedeemOfferContext.Provider>
                   </ViewAllPlansContext.Provider>
                 </DataBalanceContext.Provider>
               </CashBalanceContext.Provider>
